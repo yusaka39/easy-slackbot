@@ -25,7 +25,7 @@ internal fun String.convertTo(kType: KType): Any? {
             "true" -> true
             "false" -> false
             else -> null
-        }
+        }.validateNullability(isNullable)
         String::class -> this
         else -> throw IllegalArgumentException("${kType.classifier} is not allowed as parameter")
     }
