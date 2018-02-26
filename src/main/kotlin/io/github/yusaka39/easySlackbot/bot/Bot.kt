@@ -13,7 +13,6 @@ import org.riversun.xternal.simpleslackapi.SlackAttachment
 import kotlin.reflect.KAnnotatedElement
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
-import kotlin.reflect.KType
 import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.primaryConstructor
 import kotlin.reflect.full.valueParameters
@@ -50,6 +49,7 @@ private data class Command(val responseType: ResponseType,
     }
 }
 
+
 private enum class ResponseType {
     ListenTo, RespondTo;
 
@@ -68,10 +68,8 @@ private enum class ResponseType {
 }
 
 
+private inline fun <reified T: Annotation> KAnnotatedElement.isAnnotatedWith() = this.annotations.any { it is T }
 
-private inline fun <reified T: Annotation> KAnnotatedElement.isAnnotatedWith() = this.annotations.any {
-    it is T
-}
 
 class Bot(slackToken: String, searchPackage: String) {
 
