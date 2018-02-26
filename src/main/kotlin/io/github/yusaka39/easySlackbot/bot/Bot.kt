@@ -4,6 +4,7 @@ import com.google.common.reflect.ClassPath
 import io.github.yusaka39.easySlackbot.annotations.GroupParam
 import io.github.yusaka39.easySlackbot.annotations.ListenTo
 import io.github.yusaka39.easySlackbot.annotations.RespondTo
+import io.github.yusaka39.easySlackbot.lib.convertTo
 import org.riversun.slacklet.Slacklet
 import org.riversun.slacklet.SlackletRequest
 import org.riversun.slacklet.SlackletResponse
@@ -46,29 +47,6 @@ private data class Command(val responseType: ResponseType,
                 "Classes contains commands must have primary constructor with no arguments"
         )
         return this.kCallable.call(instance, *parameters)
-    }
-}
-
-fun String.convertTo(kType: KType): Any? {
-    val isNullable = kType.isMarkedNullable
-
-    fun Any?.validateNullability(isNullable: Boolean): Any? =
-            this ?: if (isNullable) null else throw IllegalStateException()
-
-    return when (kType.classifier) {
-        Byte::class -> this.toByteOrNull().validateNullability(isNullable)
-        Short::class -> this.toShortOrNull().validateNullability(isNullable)
-        Int::class -> this.toIntOrNull().validateNullability(isNullable)
-        Long::class -> this.toLongOrNull().validateNullability(isNullable)
-        Float::class -> this.toFloatOrNull().validateNullability(isNullable)
-        Double::class -> this.toDoubleOrNull().validateNullability(isNullable)
-        Boolean::class -> when (this) {
-            "true" -> true
-            "false" -> false
-            else -> null
-        }
-        String::class -> this
-        else -> throw IllegalStateException("${kType.classifier} is not allowed as parameter")
     }
 }
 
