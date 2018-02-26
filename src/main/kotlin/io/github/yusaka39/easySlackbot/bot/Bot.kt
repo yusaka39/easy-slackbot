@@ -89,37 +89,31 @@ private enum class ResponseType {
     }?.toRegex() ?: throw IllegalStateException("Given annotation is not a '${this.name}'")
 }
 
-private val classPath by lazy {
-    ClassPath.from(ClassLoader.getSystemClassLoader())
-}
 
-private val commands: Sequence<Command> by lazy {
-    classPath.allClasses.asSequence()
-            .mapNotNull(ClassPath.ClassInfo::loadOrNull)
-            .flatMap { kClass ->
-                kClass.members.asSequence()
-                        .filter {
-                            it.isAnnotatedWith<ListenTo>() or it.isAnnotatedWith<RespondTo>()
-                        }.map {
-                            val annotation = it.annotations.first { it is ListenTo || it is RespondTo }
-                            val type = ResponseType.from(annotation)!!
-                            val regex = type.getRegexFromAnnotation(annotation)
-                            Command(type, regex, kClass, it)
-                        }
-            }
-}
 
 private inline fun <reified T: Annotation> KAnnotatedElement.isAnnotatedWith() = this.annotations.any {
     it is T
 }
 
-private fun ClassPath.ClassInfo.loadOrNull(): KClass<*>? = try {
-    this.load().kotlin
-} catch (e: Exception) {
-    null
-}
+class Bot(slackToken: String, searchPackage: String) {
 
-class Bot(slackToken: String) {
+    private val commands: List<Command> by lazy {
+        ClassPath.from(ClassLoader.getSystemClassLoader()).getTopLevelClassesRecursive(searchPackage)
+                .flatMap { clazz ->
+                    clazz.load()?.kotlin?.let { kClass ->
+                        kClass.members
+                                .filter {
+                                    it.isAnnotatedWith<ListenTo>() or it.isAnnotatedWith<RespondTo>()
+                                }.map {
+                                    val annotation = it.annotations.first { it is ListenTo || it is RespondTo }
+                                    val type = ResponseType.from(annotation)!!
+                                    val regex = type.getRegexFromAnnotation(annotation)
+                                    Command(type, regex, kClass, it)
+                                }
+                    } ?: emptyList()
+                }
+    }
+
     val slack: SlackletService by lazy {
         SlackletService(slackToken).apply {
             this.addSlacklet(object : Slacklet() {
