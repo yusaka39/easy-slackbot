@@ -7,9 +7,12 @@ import kotlin.reflect.full.starProjectedType
 import kotlin.reflect.full.withNullability
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 
 class ExtensionsTest {
+
     private val KClass<*>.type: KType
         get() = this.starProjectedType
 
@@ -134,4 +137,31 @@ class ExtensionsTest {
         class Foobar
         assertFailsWith<IllegalArgumentException> { "foobar".convertTo(Foobar::class.type) }
     }
+
+    @Retention(AnnotationRetention.RUNTIME)
+    @Target(AnnotationTarget.CLASS)
+    annotation class AnnotationForTesting1
+
+    @Test
+    fun isAnnotatedWithReturnsTrueWhenReceiverIsAnnotated() {
+        @AnnotationForTesting1
+        class Foo
+        assertTrue(Foo::class.isAnnotatedWith<AnnotationForTesting1>())
+    }
+
+    @Retention(AnnotationRetention.SOURCE)
+    @Target(AnnotationTarget.CLASS)
+    annotation class AnnotationForTesting2
+
+    @Test
+    fun isAnnotatedWithReturnFalseWhenReceiverIsNotAnnotated() {
+        class Foo
+        assertFalse { Foo::class.isAnnotatedWith<AnnotationForTesting2>() }
+
+        @AnnotationForTesting2
+        class Bar
+        assertFalse { Bar::class.isAnnotatedWith<AnnotationForTesting2>() }
+    }
 }
+
+

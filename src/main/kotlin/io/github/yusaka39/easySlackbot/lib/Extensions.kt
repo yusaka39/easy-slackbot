@@ -1,5 +1,6 @@
 package io.github.yusaka39.easySlackbot.lib
 
+import kotlin.reflect.KAnnotatedElement
 import kotlin.reflect.KType
 
 private inline fun <reified T> T?.validateNullability(isNullable: Boolean): T? {
@@ -30,3 +31,5 @@ internal fun String.convertTo(kType: KType): Any? {
         else -> throw IllegalArgumentException("${kType.classifier} is not allowed as parameter")
     }
 }
+
+internal inline fun <reified T: Annotation> KAnnotatedElement.isAnnotatedWith() = this.annotations.any { it is T }

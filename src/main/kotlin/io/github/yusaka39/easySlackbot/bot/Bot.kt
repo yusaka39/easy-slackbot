@@ -5,12 +5,12 @@ import io.github.yusaka39.easySlackbot.annotations.GroupParam
 import io.github.yusaka39.easySlackbot.annotations.ListenTo
 import io.github.yusaka39.easySlackbot.annotations.RespondTo
 import io.github.yusaka39.easySlackbot.lib.convertTo
+import io.github.yusaka39.easySlackbot.lib.isAnnotatedWith
 import org.riversun.slacklet.Slacklet
 import org.riversun.slacklet.SlackletRequest
 import org.riversun.slacklet.SlackletResponse
 import org.riversun.slacklet.SlackletService
 import org.riversun.xternal.simpleslackapi.SlackAttachment
-import kotlin.reflect.KAnnotatedElement
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
 import kotlin.reflect.full.findAnnotation
@@ -68,7 +68,7 @@ private enum class ResponseType {
 }
 
 
-private inline fun <reified T: Annotation> KAnnotatedElement.isAnnotatedWith() = this.annotations.any { it is T }
+
 
 
 class Bot(slackToken: String, searchPackage: String) {
