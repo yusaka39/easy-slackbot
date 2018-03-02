@@ -13,7 +13,7 @@ class AnnotationBasedHandlerSetFactory(private val packageName: String) : Handle
                 kClass.members.flatMap inner@ { kCallable ->
                     val annotation = kCallable.findAnnotation<HandlerFunction>() ?: return@inner emptyList<Handler>()
                     annotation.type.map {
-                        Handler(kClass, kCallable, annotation.regex.toRegex(), it)
+                        Handler(kClass, kCallable, annotation.regex.toRegex(annotation.regexOption.toSet()), it)
                     }
                 }
             }.toSet()
