@@ -2,6 +2,7 @@ package io.github.yusaka39.easySlackbot.slack.impl
 
 import io.github.yusaka39.easySlackbot.lib.getMessage
 import io.github.yusaka39.easySlackbot.lib.toChannel
+import io.github.yusaka39.easySlackbot.lib.toSlackAttachment
 import io.github.yusaka39.easySlackbot.slack.*
 import org.riversun.slacklet.Slacklet
 import org.riversun.slacklet.SlackletRequest
@@ -44,9 +45,11 @@ class SlackletSlack(slackToken: String) : Slack {
     }
 
     private val usernameToDmChannel: Map<UserName, SlackChannel> by lazy {
-        val userIds = this.service.slackSession.users.map { it.userName }
-        val channels = this.service.slackSession.channels.filter { it.id.startsWith("D") }
-        userIds.zip(channels).toMap()
+        // TODO: more effective way
+        val users = this.service.slackSession.users.map { it.userName to it}
+        users.map { (name, user) ->
+            name to this.service.getDirectMessageChannel(user)
+        }.toMap()
     }
 
     override fun sendTo(channelId: String, text: String) {
@@ -54,7 +57,7 @@ class SlackletSlack(slackToken: String) : Slack {
     }
 
     override fun putAttachmentTo(channelId: String, attachment: Attachment) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        this.service.sendMessageTo(this.idToChannel[channelId], null, attachment.toSlackAttachment())
     }
 
     override fun putReactionTo(channelId: String, timestamp: String, emoticonName: String) {
