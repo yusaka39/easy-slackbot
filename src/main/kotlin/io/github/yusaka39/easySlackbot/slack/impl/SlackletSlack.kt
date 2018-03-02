@@ -11,6 +11,7 @@ import org.riversun.xternal.simpleslackapi.SlackChannel
 
 private typealias ChannelId = String
 private typealias ChannelName = String
+private typealias UserName = String
 
 class SlackletSlack(slackToken: String) : Slack {
     private val service = SlackletService(slackToken).apply {
@@ -42,6 +43,12 @@ class SlackletSlack(slackToken: String) : Slack {
         this.service.slackSession.channels.map { it.name to it }.toMap()
     }
 
+    private val usernameToDmChannel: Map<UserName, SlackChannel> by lazy {
+        val userIds = this.service.slackSession.users.map { it.userName }
+        val channels = this.service.slackSession.channels.filter { it.id.startsWith("D") }
+        userIds.zip(channels).toMap()
+    }
+
     override fun sendTo(channelId: String, text: String) {
         this.service.sendMessageTo(this.idToChannel[channelId], text)
     }
@@ -50,18 +57,15 @@ class SlackletSlack(slackToken: String) : Slack {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun putAttachmentTo(user: User, attachment: Attachment) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
     override fun putReactionTo(channelId: String, timestamp: String, emoticonName: String) {
+        print(this.nameToChannel)
         this.service.slackSession.addReactionToMessage(this.idToChannel[channelId],
                                                        timestamp,
                                                        emoticonName)
     }
 
-    override fun sendDirectMessageTo(user: User, text: String) {
-        this.service.sendDirectMessageTo(user.userName, text)
+    override fun sendDirectMessageTo(username: String, text: String) {
+        this.service.sendDirectMessageTo(username, text)
     }
 
     override fun onReceiveMessage(handler: (message: Message, slack: Slack) -> Unit) {
@@ -76,8 +80,14 @@ class SlackletSlack(slackToken: String) : Slack {
         this.onReceiveRepliedMessage = handler
     }
 
-    override fun getChannelOrNullByName(channelName: ChannelName): Channel? =
+    private fun  getChannelOrNullByName(channelName: ChannelName): Channel? =
             this.nameToChannel[channelName]?.toChannel()
+
+    override fun getChannelIdOrNullByName(channelName: ChannelName): String? = getChannelOrNullByName(channelName)?.id
+
+
+    override fun getDmChannelIdOrNullByUserName(username: String): String? =
+            this.usernameToDmChannel[username]?.toChannel()?.id
 
     override fun startService() {
         this.service.start()

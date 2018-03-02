@@ -1,9 +1,11 @@
 package io.github.yusaka39.easySlackbot.lib
 
+import io.github.yusaka39.easySlackbot.slack.Attachment
 import io.github.yusaka39.easySlackbot.slack.Channel
 import io.github.yusaka39.easySlackbot.slack.Message
 import io.github.yusaka39.easySlackbot.slack.User
 import org.riversun.slacklet.SlackletRequest
+import org.riversun.xternal.simpleslackapi.SlackAttachment
 import org.riversun.xternal.simpleslackapi.SlackChannel
 import org.riversun.xternal.simpleslackapi.SlackUser
 import kotlin.reflect.KAnnotatedElement
@@ -50,4 +52,26 @@ internal fun SlackletRequest.getMessage(): Message {
     val user = this.sender.toUser()
     val timestamp = this.rawPostedMessage.timestamp
     return Message(user, text, channel, timestamp)
+}
+
+internal fun Attachment.toSlackAttachment(): SlackAttachment {
+    return SlackAttachment(this.title, this.fallback, this.text, this.preText).apply {
+        val attachment = this@toSlackAttachment
+        attachment.actions.forEach {
+            this.addAction(null, it.url, it.text, it.type)
+        }
+        attachment.fields.forEach {
+            this.addField(it.title, it.value, it.isShort)
+        }
+
+        this.titleLink = attachment.titleLink
+        this.thumbUrl = attachment.thumbnailUrl
+        this.authorName = attachment.authorName
+        this.authorLink = attachment.authorLink
+        this.authorIcon = attachment.authorIcon
+        this.footer = attachment.footer
+        this.footerIcon = attachment.footerIcon
+        this.imageUrl = attachment.imageUrl
+        this.color = attachment.color
+    }
 }
