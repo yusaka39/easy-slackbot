@@ -1,6 +1,7 @@
 package io.github.yusaka39.easySlackbot.slack.impl
 
 import io.github.yusaka39.easySlackbot.lib.getMessage
+import io.github.yusaka39.easySlackbot.lib.toChannel
 import io.github.yusaka39.easySlackbot.slack.*
 import org.riversun.slacklet.Slacklet
 import org.riversun.slacklet.SlackletRequest
@@ -9,6 +10,7 @@ import org.riversun.slacklet.SlackletService
 import org.riversun.xternal.simpleslackapi.SlackChannel
 
 private typealias ChannelId = String
+private typealias ChannelName = String
 
 class SlackletSlack(slackToken: String) : Slack {
     private val service = SlackletService(slackToken).apply {
@@ -35,6 +37,10 @@ class SlackletSlack(slackToken: String) : Slack {
         this.service.slackSession.channels.map { it.id to it }.toMap()
     }
 
+    private val nameToChannel: Map<ChannelName, SlackChannel> by lazy {
+        this.service.slackSession.channels.map { it.name to it }.toMap()
+    }
+
     override fun sendTo(channelId: String, text: String) {
         this.service.sendMessageTo(this.idToChannel[channelId], text)
     }
@@ -43,8 +49,12 @@ class SlackletSlack(slackToken: String) : Slack {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun putReactionTo(message: Message, emoticonName: String) {
+    override fun putAttachmentTo(user: User, attachment: Attachment) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun putReactionTo(message: Message, emoticonName: String) {
+        TODO("putReactionTo is not implemented")
     }
 
     override fun sendDirectMessageTo(user: User, text: String) {
@@ -63,9 +73,8 @@ class SlackletSlack(slackToken: String) : Slack {
         this.onReceiveRepliedMessage = handler
     }
 
-    override fun getChannelIdByName(channelName: String): String {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun getChannelOrNullByName(channelName: ChannelName): Channel? =
+            this.nameToChannel[channelName]?.toChannel()
 
     override fun startService() {
         this.service.start()
