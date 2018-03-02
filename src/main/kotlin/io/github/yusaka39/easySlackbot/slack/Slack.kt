@@ -7,7 +7,10 @@ interface Slack {
     fun putAttachmentTo(channel: Channel, attachment: Attachment)
     fun putReactionTo(message: Message, emoticonName: String)
     fun sendDirectMessageTo(user: User, text: String)
-    fun onReceiveMessage(handler: (message: Message) -> Unit, slack: Slack)
-    fun onReceiveDirectMessage(handler: (message: Message) -> Unit, slack: Slack)
-    fun onReceiveRepliedMessage(handler: (message: Message) -> Unit, slack: Slack)
+    fun onReceiveMessage(handler: (message: Message, slack: Slack) -> Unit)
+    fun onReceiveDirectMessage(handler: (message: Message, slack: Slack) -> Unit)
+    fun onReceiveRepliedMessage(handler: (message: Message, slack: Slack) -> Unit)
+    fun getChannelIdByName(channelName: String): String
+    fun startService()
+    fun stopService()
 }
