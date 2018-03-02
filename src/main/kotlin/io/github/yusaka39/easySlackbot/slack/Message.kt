@@ -4,5 +4,5 @@ data class Message(
         val user: User,
         val text: String,
         val channel: Channel,
-        val timestamp: Long
+        val timestamp: String
 )

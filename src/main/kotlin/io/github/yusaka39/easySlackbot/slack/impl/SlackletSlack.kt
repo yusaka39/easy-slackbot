@@ -54,9 +54,9 @@ class SlackletSlack(slackToken: String) : Slack {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun putReactionTo(channelId: String, timestamp: Long, emoticonName: String) {
+    override fun putReactionTo(channelId: String, timestamp: String, emoticonName: String) {
         this.service.slackSession.addReactionToMessage(this.idToChannel[channelId],
-                                                       timestamp.toString(),
+                                                       timestamp,
                                                        emoticonName)
     }
 
