@@ -5,6 +5,6 @@ import io.github.yusaka39.easySlackbot.slack.Slack
 
 class PostAction(private val channel: Channel, private val text: String) : Action {
     override fun run(slack: Slack) {
-        slack.sendTo(this.channel, this.text)
+        slack.sendTo(this.channel.id, this.text)
     }
 }

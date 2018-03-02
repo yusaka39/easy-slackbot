@@ -1,7 +1,7 @@
 package io.github.yusaka39.easySlackbot.bot
 
 import io.github.yusaka39.easySlackbot.router.AnnotationBasedMessageRouterFactory
-import io.github.yusaka39.easySlackbot.router.Handler
+import io.github.yusaka39.easySlackbot.router.HandlerType
 import io.github.yusaka39.easySlackbot.router.MessageRouterFactory
 import io.github.yusaka39.easySlackbot.slack.Message
 import io.github.yusaka39.easySlackbot.slack.SlackFactory
@@ -17,7 +17,7 @@ class Bot internal constructor(
             this(slackToken, AnnotationBasedMessageRouterFactory(searchPackage), SlackletSlackFactory())
     private val messageRouter = messageRouterFactory.create()
     private val slack = slackFactory.create(slackToken).apply {
-        fun runActionForMessage(message: Message, type: Handler.HandlerType) {
+        fun runActionForMessage(message: Message, type: HandlerType) {
             try {
                 val handler = this@Bot.messageRouter.findHandlerFor(message, type) ?: return
                 handler.generateActionForMessage(message).run(this)
@@ -26,13 +26,13 @@ class Bot internal constructor(
             }
         }
         this.onReceiveMessage { message, slack ->
-            runActionForMessage(message, Handler.HandlerType.ListenTo)
+            runActionForMessage(message, HandlerType.ListenTo)
         }
         this.onReceiveRepliedMessage { message, slack ->
-            runActionForMessage(message, Handler.HandlerType.RespondTo)
+            runActionForMessage(message, HandlerType.RespondTo)
         }
         this.onReceiveDirectMessage { message, slack ->
-            runActionForMessage(message, Handler.HandlerType.RespondTo)
+            runActionForMessage(message, HandlerType.RespondTo)
         }
     }
 

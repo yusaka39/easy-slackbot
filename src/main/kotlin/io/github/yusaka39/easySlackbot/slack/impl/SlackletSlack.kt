@@ -6,6 +6,9 @@ import org.riversun.slacklet.Slacklet
 import org.riversun.slacklet.SlackletRequest
 import org.riversun.slacklet.SlackletResponse
 import org.riversun.slacklet.SlackletService
+import org.riversun.xternal.simpleslackapi.SlackChannel
+
+private typealias ChannelId = String
 
 class SlackletSlack(slackToken: String) : Slack {
     private val service = SlackletService(slackToken).apply {
@@ -28,11 +31,15 @@ class SlackletSlack(slackToken: String) : Slack {
     private var onReceiveRepliedMessage: (Message, Slack) -> Unit = { _, _ -> }
     private var onReceiveMessage: (Message, Slack) -> Unit = { _, _ -> }
 
-    override fun sendTo(channel: Channel, text: String) {
-        this.service.sendMessageTo(channel.name, text)
+    private val idToChannel: Map<ChannelId, SlackChannel> by lazy {
+        this.service.slackSession.channels.map { it.id to it }.toMap()
     }
 
-    override fun putAttachmentTo(channel: Channel, attachment: Attachment) {
+    override fun sendTo(channelId: String, text: String) {
+        this.service.sendMessageTo(this.idToChannel[channelId], text)
+    }
+
+    override fun putAttachmentTo(channelId: String, attachment: Attachment) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
@@ -67,5 +74,4 @@ class SlackletSlack(slackToken: String) : Slack {
     override fun stopService() {
         this.service.stop()
     }
-
 }

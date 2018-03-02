@@ -11,12 +11,13 @@ import kotlin.reflect.full.isSubclassOf
 import kotlin.reflect.full.primaryConstructor
 import kotlin.reflect.full.valueParameters
 
+enum class HandlerType {
+    RespondTo, ListenTo
+}
 
 class Handler(private val kClass: KClass<*>, private val kCallable: KCallable<*>,
               private val regex: Regex, private val handlerType: HandlerType) {
-    enum class HandlerType {
-        RespondTo, ListenTo
-    }
+
     fun isMatchTo(message: Message, type: HandlerType): Boolean =
             this.handlerType == type && regex.matches(message.text)
 
