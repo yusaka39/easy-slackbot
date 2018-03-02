@@ -7,11 +7,12 @@ import io.github.yusaka39.easySlackbot.slack.Message
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
 import kotlin.reflect.full.findAnnotation
+import kotlin.reflect.full.isSubclassOf
 import kotlin.reflect.full.primaryConstructor
 import kotlin.reflect.full.valueParameters
 
 
-class Handler(private val kClass: KClass<*>, private val kCallable: KCallable<Action>,
+class Handler(private val kClass: KClass<*>, private val kCallable: KCallable<*>,
               private val regex: Regex, private val handlerType: HandlerType) {
     enum class HandlerType {
         RespondTo, ListenTo
@@ -20,12 +21,17 @@ class Handler(private val kClass: KClass<*>, private val kCallable: KCallable<Ac
             this.handlerType == type && regex.matches(message.text)
 
     fun generateActionForMessage(message: Message): Action = this.kCallable.call(
-            instantiateWithPrimaryConstructor(this.kClass),
-            *this.getArgumentsFromTargetMessage(message).toTypedArray()
-    )
+                instantiateWithPrimaryConstructor(this.kClass, message),
+                *this.getArgumentsFromTargetMessage(message).toTypedArray()
+        ) as? Action ?: throw IllegalStateException("Handler functions must return Action")
 
-    private fun instantiateWithPrimaryConstructor(kClass: KClass<*>): Any = try {
-        this.kClass.primaryConstructor?.call() ?: throw IllegalStateException(
+    private fun instantiateWithPrimaryConstructor(kClass: KClass<*>, message: Message): Any = try {
+        if (!kClass.isSubclassOf(HandlerPack::class)) {
+            throw IllegalStateException("Classes contains handler must extends HandlerPack")
+        }
+        kClass.primaryConstructor?.call()?.apply {
+            (this as HandlerPack)._receivedMessage = message
+        } ?: throw IllegalStateException(
                 "Classes contains handler function must have primary constructor"
         )
     } catch (e: IllegalArgumentException) {
@@ -43,22 +49,3 @@ class Handler(private val kClass: KClass<*>, private val kCallable: KCallable<Ac
         return params.map { (param, index) -> group[index].convertTo(param.type) }
     }
 }
-
-/*
-private enum class ResponseType {
-    ListenTo, RespondTo;
-
-    companion object {
-        fun from(annotation: Annotation): ResponseType? = when (annotation) {
-            is io.github.yusaka39.easySlackbot.annotations.ListenTo -> ListenTo
-            is io.github.yusaka39.easySlackbot.annotations.RespondTo -> RespondTo
-            else -> null
-        }
-    }
-
-    fun getRegexFromAnnotation(annotation: Annotation): Regex = when (this) {
-            ResponseType.ListenTo -> (annotation as? io.github.yusaka39.easySlackbot.annotations.ListenTo)?.regexp
-            ResponseType.RespondTo -> (annotation as? io.github.yusaka39.easySlackbot.annotations.RespondTo)?.regexp
-    }?.toRegex() ?: throw IllegalStateException("Given annotation is not a '${this.name}'")
-}
- */

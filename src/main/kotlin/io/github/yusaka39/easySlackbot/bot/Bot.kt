@@ -18,8 +18,12 @@ class Bot internal constructor(
     private val messageRouter = messageRouterFactory.create()
     private val slack = slackFactory.create(slackToken).apply {
         fun runActionForMessage(message: Message, type: Handler.HandlerType) {
-            val handler = this@Bot.messageRouter.findHandlerFor(message, type) ?: return
-            handler.generateActionForMessage(message).run(this)
+            try {
+                val handler = this@Bot.messageRouter.findHandlerFor(message, type) ?: return
+                handler.generateActionForMessage(message).run(this)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
         this.onReceiveMessage { message, slack ->
             runActionForMessage(message, Handler.HandlerType.ListenTo)
