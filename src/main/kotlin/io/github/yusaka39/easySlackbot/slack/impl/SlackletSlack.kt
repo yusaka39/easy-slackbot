@@ -16,6 +16,7 @@ class SlackletSlack(slackToken: String) : Slack {
     private val service = SlackletService(slackToken).apply {
         this.addSlacklet(object : Slacklet() {
             override fun onMentionedMessagePosted(req: SlackletRequest, resp: SlackletResponse) {
+                req.rawPostedMessage.timestamp
                 this@SlackletSlack.onReceiveRepliedMessage(req.getMessage(), this@SlackletSlack)
             }
 
@@ -53,8 +54,10 @@ class SlackletSlack(slackToken: String) : Slack {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun putReactionTo(message: Message, emoticonName: String) {
-        TODO("putReactionTo is not implemented")
+    override fun putReactionTo(channelId: String, timestamp: Long, emoticonName: String) {
+        this.service.slackSession.addReactionToMessage(this.idToChannel[channelId],
+                                                       timestamp.toString(),
+                                                       emoticonName)
     }
 
     override fun sendDirectMessageTo(user: User, text: String) {

@@ -48,5 +48,6 @@ internal fun SlackletRequest.getMessage(): Message {
     val channel = this.channel.toChannel()
     val text = this.content
     val user = this.sender.toUser()
-    return Message(user, text, channel)
+    val timestamp = this.rawPostedMessage.timestamp.toLong()
+    return Message(user, text, channel, timestamp)
 }
