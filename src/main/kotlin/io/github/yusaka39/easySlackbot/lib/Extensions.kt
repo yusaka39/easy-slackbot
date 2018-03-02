@@ -1,5 +1,11 @@
 package io.github.yusaka39.easySlackbot.lib
 
+import io.github.yusaka39.easySlackbot.slack.Channel
+import io.github.yusaka39.easySlackbot.slack.Message
+import io.github.yusaka39.easySlackbot.slack.User
+import org.riversun.slacklet.SlackletRequest
+import org.riversun.xternal.simpleslackapi.SlackChannel
+import org.riversun.xternal.simpleslackapi.SlackUser
 import kotlin.reflect.KAnnotatedElement
 import kotlin.reflect.KType
 
@@ -33,3 +39,14 @@ internal fun String.convertTo(kType: KType): Any? {
 }
 
 internal inline fun <reified T: Annotation> KAnnotatedElement.isAnnotatedWith() = this.annotations.any { it is T }
+
+internal fun SlackChannel.toChannel(): Channel = Channel(this.id, this.name)
+
+internal fun SlackUser.toUser(): User = User(this.id, this.userName, this.realName)
+
+internal fun SlackletRequest.getMessage(): Message {
+    val channel = this.channel.toChannel()
+    val text = this.content
+    val user = this.sender.toUser()
+    return Message(user, text, channel)
+}
