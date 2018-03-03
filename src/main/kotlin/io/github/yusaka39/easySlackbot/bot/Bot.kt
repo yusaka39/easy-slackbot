@@ -1,5 +1,6 @@
 package io.github.yusaka39.easySlackbot.bot
 
+import io.github.yusaka39.easySlackbot.lib.Log
 import io.github.yusaka39.easySlackbot.router.AnnotationBasedMessageRouterFactory
 import io.github.yusaka39.easySlackbot.router.HandlerType
 import io.github.yusaka39.easySlackbot.router.MessageRouterFactory
@@ -26,22 +27,24 @@ class Bot internal constructor(
                 e.printStackTrace()
             }
         }
-        this.onReceiveMessage { message, slack ->
+        this.onReceiveMessage { message, _ ->
             runActionForMessage(message, HandlerType.ListenTo)
         }
-        this.onReceiveRepliedMessage { message, slack ->
+        this.onReceiveRepliedMessage { message, _ ->
             runActionForMessage(message, HandlerType.RespondTo)
         }
-        this.onReceiveDirectMessage { message, slack ->
+        this.onReceiveDirectMessage { message, _ ->
             runActionForMessage(message, HandlerType.RespondTo)
         }
     }
 
     fun run() {
         this.slack.startService()
+        Log.i("Bot service is started")
     }
 
     fun kill() {
         this.slack.stopService()
+        Log.i("Bot service is killed")
     }
 }
