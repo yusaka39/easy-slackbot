@@ -2,10 +2,11 @@ package io.github.yusaka39.easySlackbot.router
 
 import com.google.common.reflect.ClassPath
 import io.github.yusaka39.easySlackbot.annotations.HandlerFunction
-import io.github.yusaka39.easySlackbot.lib.Log
+import io.github.yusaka39.easySlackbot.lib.logger
 import kotlin.reflect.full.findAnnotation
 
 class AnnotationBasedHandlerSetFactory(private val packageName: String) : HandlerSetFactory {
+    private val logger by this.logger()
     @Suppress("unchecked_cast")
     override fun create(): Set<Handler> =
         ClassPath.from(ClassLoader.getSystemClassLoader()).getTopLevelClassesRecursive(this.packageName).flatMap {
@@ -19,7 +20,7 @@ class AnnotationBasedHandlerSetFactory(private val packageName: String) : Handle
                     }
                 }
             } catch (e: UnsupportedOperationException) {
-                Log.w("Failed to parse class ${it.name}.", e)
+                this.logger.warn("Failed to parse class ${it.name}.", e)
                 emptyList<Handler>()
             }
         }.toSet()
