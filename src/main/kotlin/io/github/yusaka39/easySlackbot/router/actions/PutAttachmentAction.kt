@@ -38,8 +38,8 @@ fun putAttachmentToUserAction(targetUser: User, initializer: AttachmentBuilder.(
 
 fun putAttachmentToChannelAction(targetChannelId: String, initializer: AttachmentBuilder.() -> Unit) =
     PutAttachmentAction(
-        targetChannelId,
         null,
+        targetChannelId,
         AttachmentBuilder(initializer).build()
     )
 
