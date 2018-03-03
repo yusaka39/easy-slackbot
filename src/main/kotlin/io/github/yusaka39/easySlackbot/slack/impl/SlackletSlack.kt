@@ -76,7 +76,6 @@ class SlackletSlack(slackToken: String) : Slack {
     }
 
     override fun putReactionTo(channelId: String, timestamp: String, emoticonName: String) {
-        print(this.nameToChannel)
         this.service.slackSession.addReactionToMessage(
             this.idToChannel[channelId],
             timestamp,
