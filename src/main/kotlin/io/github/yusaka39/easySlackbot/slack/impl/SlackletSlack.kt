@@ -1,5 +1,6 @@
 package io.github.yusaka39.easySlackbot.slack.impl
 
+import io.github.yusaka39.easySlackbot.lib.LazyMap
 import io.github.yusaka39.easySlackbot.lib.getMessage
 import io.github.yusaka39.easySlackbot.lib.toChannel
 import io.github.yusaka39.easySlackbot.lib.toSlackAttachment
@@ -36,20 +37,31 @@ class SlackletSlack(slackToken: String) : Slack {
     private var onReceiveRepliedMessage: (Message, Slack) -> Unit = { _, _ -> }
     private var onReceiveMessage: (Message, Slack) -> Unit = { _, _ -> }
 
-    private val idToChannel: Map<ChannelId, SlackChannel> by lazy {
-        this.service.slackSession.channels.map { it.id to it }.toMap()
+    private val idToChannel: LazyMap<ChannelId, SlackChannel> by lazy {
+        LazyMap(
+            { this.service.slackSession.channels.map { it.id to it }.toMap() },
+            { key -> this.service.slackSession.channels.firstOrNull { it.id == key } }
+        )
     }
 
-    private val nameToChannel: Map<ChannelName, SlackChannel> by lazy {
-        this.service.slackSession.channels.map { it.name to it }.toMap()
+    private val nameToChannel: LazyMap<ChannelName, SlackChannel> by lazy {
+        LazyMap(
+            { this.service.slackSession.channels.map { it.name to it }.toMap() },
+            { key -> this.service.slackSession.channels.firstOrNull { it.name == key }}
+        )
     }
 
-    private val usernameToDmChannel: Map<UserName, SlackChannel> by lazy {
-        // TODO: more effective way
-        val users = this.service.slackSession.users.map { it.userName to it}
-        users.map { (name, user) ->
-            name to this.service.getDirectMessageChannel(user)
-        }.toMap()
+    private fun createDbChannelMap(): Map<UserName, SlackChannel> {
+        val userNames = this.service.slackSession.users.map { it.userName }
+        val channels = this.service.slackSession.channels
+        return userNames.zip(channels).toMap()
+    }
+
+    private val usernameToDmChannel: LazyMap<UserName, SlackChannel> by lazy {
+        LazyMap(
+            this::createDbChannelMap,
+            { it -> this.createDbChannelMap()[it] }
+        )
     }
 
     override fun sendTo(channelId: String, text: String) {
@@ -86,8 +98,8 @@ class SlackletSlack(slackToken: String) : Slack {
     private fun  getChannelOrNullByName(channelName: ChannelName): Channel? =
             this.nameToChannel[channelName]?.toChannel()
 
-    override fun getChannelIdOrNullByName(channelName: ChannelName): String? = getChannelOrNullByName(channelName)?.id
-
+    override fun getChannelIdOrNullByName(channelName: ChannelName): String? =
+            getChannelOrNullByName(channelName)?.id
 
     override fun getDmChannelIdOrNullByUserName(username: String): String? =
             this.usernameToDmChannel[username]?.toChannel()?.id
