@@ -39,7 +39,7 @@ internal class Handler(
         )
     } catch (e: IllegalArgumentException) {
         throw IllegalStateException(
-            "Classes contains handler function must have primary constructor without any arguments"
+            "Classes contains handler function must have primary constructor without any arguments", e
         )
     }
 
@@ -49,7 +49,9 @@ internal class Handler(
                 "All params of methods annotated by ListenTo or RespondTo must be annotated by GroupParam."
             ))
         }
-        val group = this.regex.find(message.text)?.groupValues!!
+        val group = this.regex.find(message.text)?.groupValues ?: throw IllegalStateException(
+            "Given message $message is not match to $this"
+        )
         return params.map { (param, index) -> group[index].convertTo(param.type) }
     }
 
