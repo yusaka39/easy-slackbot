@@ -24,27 +24,30 @@ class Bot internal constructor(
                 val handler = this@Bot.messageRouter.findHandlerFor(message, type) ?: return
                 handler.generateActionForMessage(message).run(this)
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.w("Exception is caused while executing handler for message: \"${message.text}\".", e)
             }
         }
         this.onReceiveMessage { message, _ ->
+            Log.d("Received message \"${message.text}\".")
             runActionForMessage(message, HandlerType.ListenTo)
         }
         this.onReceiveRepliedMessage { message, _ ->
+            Log.d("Received message \"${message.text}\".")
             runActionForMessage(message, HandlerType.RespondTo)
         }
         this.onReceiveDirectMessage { message, _ ->
+            Log.d("Received message \"${message.text}\".")
             runActionForMessage(message, HandlerType.RespondTo)
         }
     }
 
     fun run() {
         this.slack.startService()
-        Log.i("Bot service is started")
+        Log.i("Bot service is started.")
     }
 
     fun kill() {
         this.slack.stopService()
-        Log.i("Bot service is killed")
+        Log.i("Bot service is killed.")
     }
 }

@@ -2,6 +2,7 @@ package io.github.yusaka39.easySlackbot.router
 
 import com.google.common.reflect.ClassPath
 import io.github.yusaka39.easySlackbot.annotations.HandlerFunction
+import io.github.yusaka39.easySlackbot.lib.Log
 import kotlin.reflect.full.findAnnotation
 
 class AnnotationBasedHandlerSetFactory(private val packageName: String) : HandlerSetFactory {
@@ -18,7 +19,7 @@ class AnnotationBasedHandlerSetFactory(private val packageName: String) : Handle
                     }
                 }
             } catch (e: UnsupportedOperationException) {
-                // TODO: Show warning
+                Log.w("Failed to parse class ${it.name}.", e)
                 emptyList<Handler>()
             }
         }.toSet()

@@ -22,7 +22,6 @@ class SlackletSlack(slackToken: String) : Slack {
     private val service = SlackletService(slackToken).apply {
         this.addSlacklet(object : Slacklet() {
             override fun onMentionedMessagePosted(req: SlackletRequest, resp: SlackletResponse) {
-                req.rawPostedMessage.timestamp
                 this@SlackletSlack.onReceiveRepliedMessage(req.getMessage(), this@SlackletSlack)
             }
 

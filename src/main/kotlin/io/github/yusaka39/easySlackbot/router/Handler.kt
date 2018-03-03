@@ -52,4 +52,6 @@ class Handler(
         val group = this.regex.find(message.text)?.groupValues!!
         return params.map { (param, index) -> group[index].convertTo(param.type) }
     }
+
+    override fun toString(): String = "Handler[regex: $regex, function: $kCallable]"
 }
