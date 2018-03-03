@@ -9,7 +9,9 @@ internal class AnnotationBasedHandlerSetFactory(private val packageName: String)
     private val logger by this.logger()
     @Suppress("unchecked_cast")
     override fun create(): Set<Handler> =
-        ClassPath.from(ClassLoader.getSystemClassLoader()).getTopLevelClassesRecursive(this.packageName).flatMap {
+        ClassPath.from(ClassLoader.getSystemClassLoader()).allClasses.filter {
+            it.packageName.startsWith(this.packageName)
+        }.flatMap {
             try {
                 val kClass = it.load().kotlin
                 kClass.members.flatMap inner@{ kCallable ->

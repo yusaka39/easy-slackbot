@@ -10,6 +10,7 @@ import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.isSubclassOf
 import kotlin.reflect.full.primaryConstructor
 import kotlin.reflect.full.valueParameters
+import kotlin.reflect.jvm.isAccessible
 
 enum class HandlerType {
     RespondTo, ListenTo
@@ -23,7 +24,9 @@ internal class Handler(
     fun isMatchTo(message: Message, type: HandlerType): Boolean =
         this.handlerType == type && regex.matches(message.text)
 
-    fun generateActionForMessage(message: Message): Action = this.kCallable.call(
+    fun generateActionForMessage(message: Message): Action = this.kCallable.apply {
+        this.isAccessible = true
+    }.call(
         instantiateWithPrimaryConstructor(this.kClass, message),
         *this.getArgumentsFromTargetMessage(message).toTypedArray()
     ) as? Action ?: throw IllegalStateException("Handler functions must return Action")
@@ -32,7 +35,9 @@ internal class Handler(
         if (!kClass.isSubclassOf(HandlerPack::class)) {
             throw IllegalStateException("Classes contains handler must extends HandlerPack")
         }
-        kClass.primaryConstructor?.call()?.apply {
+        kClass.primaryConstructor?.apply {
+            this.isAccessible = true
+        }?.call()?.apply {
             (this as HandlerPack)._receivedMessage = message
         } ?: throw IllegalStateException(
             "Classes contains handler function must have primary constructor"
