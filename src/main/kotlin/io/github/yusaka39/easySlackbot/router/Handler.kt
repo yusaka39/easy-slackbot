@@ -22,7 +22,7 @@ internal class Handler(
 ) {
 
     fun isMatchTo(message: Message, type: HandlerType): Boolean =
-        this.handlerType == type && regex.matches(message.text)
+        this.handlerType == type && regex.find(message.text) != null
 
     fun generateActionForMessage(message: Message): Action = this.kCallable.apply {
         this.isAccessible = true
