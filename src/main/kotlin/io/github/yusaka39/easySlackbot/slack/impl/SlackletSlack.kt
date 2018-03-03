@@ -18,7 +18,7 @@ private typealias ChannelId = String
 private typealias ChannelName = String
 private typealias UserName = String
 
-class SlackletSlack(slackToken: String) : Slack {
+internal class SlackletSlack(slackToken: String) : Slack {
     private val service = SlackletService(slackToken).apply {
         this.addSlacklet(object : Slacklet() {
             override fun onMentionedMessagePosted(req: SlackletRequest, resp: SlackletResponse) {

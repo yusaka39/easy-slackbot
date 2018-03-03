@@ -5,7 +5,7 @@ import io.github.yusaka39.easySlackbot.annotations.HandlerFunction
 import io.github.yusaka39.easySlackbot.lib.logger
 import kotlin.reflect.full.findAnnotation
 
-class AnnotationBasedHandlerSetFactory(private val packageName: String) : HandlerSetFactory {
+internal class AnnotationBasedHandlerSetFactory(private val packageName: String) : HandlerSetFactory {
     private val logger by this.logger()
     @Suppress("unchecked_cast")
     override fun create(): Set<Handler> =

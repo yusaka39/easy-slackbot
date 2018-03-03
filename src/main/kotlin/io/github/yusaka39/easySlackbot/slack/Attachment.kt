@@ -32,10 +32,11 @@ data class Attachment(
 
 @DslMarker
 @Target(AnnotationTarget.CLASS)
-annotation class Builder
+@Retention(AnnotationRetention.BINARY)
+internal annotation class Builder
 
 @Builder
-class AttachmentBuilder(initializer: AttachmentBuilder.() -> Unit) {
+class AttachmentBuilder internal constructor(initializer: AttachmentBuilder.() -> Unit) {
     var fallback: String? = null
     var color: String? = null
     var authorName: String? = null
@@ -72,7 +73,7 @@ class AttachmentBuilder(initializer: AttachmentBuilder.() -> Unit) {
 }
 
 @Builder
-class FieldBuilder(initializer: FieldBuilder.() -> Unit) {
+class FieldBuilder internal constructor(initializer: FieldBuilder.() -> Unit) {
     var title: String = ""
     var value: String = ""
     var isShort: Boolean = false
@@ -85,7 +86,7 @@ class FieldBuilder(initializer: FieldBuilder.() -> Unit) {
 }
 
 @Builder
-class ActionBuilder(initializer: ActionBuilder.() -> Unit) {
+class ActionBuilder internal constructor(initializer: ActionBuilder.() -> Unit) {
     var type: String = ""
     var text: String = ""
     var url: String = ""

@@ -3,7 +3,7 @@ package io.github.yusaka39.easySlackbot.router
 import io.github.yusaka39.easySlackbot.lib.logger
 import io.github.yusaka39.easySlackbot.slack.Message
 
-class MessageRouter(handlerSetFactory: HandlerSetFactory) {
+internal class MessageRouter(handlerSetFactory: HandlerSetFactory) {
     private val logger by this.logger()
     private val handlers: Set<Handler> = handlerSetFactory.create()
 

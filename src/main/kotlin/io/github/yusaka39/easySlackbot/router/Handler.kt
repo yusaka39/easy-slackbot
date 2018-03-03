@@ -15,7 +15,7 @@ enum class HandlerType {
     RespondTo, ListenTo
 }
 
-class Handler(
+internal class Handler(
     private val kClass: KClass<*>, private val kCallable: KCallable<*>,
     private val regex: Regex, private val handlerType: HandlerType
 ) {
