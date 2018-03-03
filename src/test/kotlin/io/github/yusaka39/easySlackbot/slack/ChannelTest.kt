@@ -1,6 +1,6 @@
 package io.github.yusaka39.easySlackbot.slack
 
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class ChannelTest {

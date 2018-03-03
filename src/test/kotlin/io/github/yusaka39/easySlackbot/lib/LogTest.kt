@@ -1,7 +1,7 @@
 package io.github.yusaka39.easySlackbot.lib
 
-import org.junit.Test
 import org.slf4j.LoggerFactory
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class LogTest {

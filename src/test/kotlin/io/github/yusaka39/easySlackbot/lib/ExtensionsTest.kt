@@ -4,7 +4,6 @@ import io.github.yusaka39.easySlackbot.slack.Attachment
 import io.github.yusaka39.easySlackbot.slack.Channel
 import io.github.yusaka39.easySlackbot.slack.Message
 import io.github.yusaka39.easySlackbot.slack.User
-import org.junit.Test
 import org.riversun.slacklet.SlackletRequest
 import org.riversun.xternal.simpleslackapi.SlackAttachment
 import org.riversun.xternal.simpleslackapi.SlackBot
@@ -20,6 +19,7 @@ import kotlin.reflect.KType
 import kotlin.reflect.full.starProjectedType
 import kotlin.reflect.full.withNullability
 import kotlin.reflect.jvm.isAccessible
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
