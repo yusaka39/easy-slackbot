@@ -4,7 +4,10 @@ import io.github.yusaka39.easySlackbot.lib.LazyMap
 import io.github.yusaka39.easySlackbot.lib.getMessage
 import io.github.yusaka39.easySlackbot.lib.toChannel
 import io.github.yusaka39.easySlackbot.lib.toSlackAttachment
-import io.github.yusaka39.easySlackbot.slack.*
+import io.github.yusaka39.easySlackbot.slack.Attachment
+import io.github.yusaka39.easySlackbot.slack.Channel
+import io.github.yusaka39.easySlackbot.slack.Message
+import io.github.yusaka39.easySlackbot.slack.Slack
 import org.riversun.slacklet.Slacklet
 import org.riversun.slacklet.SlackletRequest
 import org.riversun.slacklet.SlackletResponse
@@ -47,7 +50,7 @@ class SlackletSlack(slackToken: String) : Slack {
     private val nameToChannel: LazyMap<ChannelName, SlackChannel> by lazy {
         LazyMap(
             { this.service.slackSession.channels.map { it.name to it }.toMap() },
-            { key -> this.service.slackSession.channels.firstOrNull { it.name == key }}
+            { key -> this.service.slackSession.channels.firstOrNull { it.name == key } }
         )
     }
 
@@ -74,9 +77,11 @@ class SlackletSlack(slackToken: String) : Slack {
 
     override fun putReactionTo(channelId: String, timestamp: String, emoticonName: String) {
         print(this.nameToChannel)
-        this.service.slackSession.addReactionToMessage(this.idToChannel[channelId],
-                                                       timestamp,
-                                                       emoticonName)
+        this.service.slackSession.addReactionToMessage(
+            this.idToChannel[channelId],
+            timestamp,
+            emoticonName
+        )
     }
 
     override fun sendDirectMessageTo(username: String, text: String) {
@@ -95,14 +100,14 @@ class SlackletSlack(slackToken: String) : Slack {
         this.onReceiveRepliedMessage = handler
     }
 
-    private fun  getChannelOrNullByName(channelName: ChannelName): Channel? =
-            this.nameToChannel[channelName]?.toChannel()
+    private fun getChannelOrNullByName(channelName: ChannelName): Channel? =
+        this.nameToChannel[channelName]?.toChannel()
 
     override fun getChannelIdOrNullByName(channelName: ChannelName): String? =
-            getChannelOrNullByName(channelName)?.id
+        getChannelOrNullByName(channelName)?.id
 
     override fun getDmChannelIdOrNullByUserName(username: String): String? =
-            this.usernameToDmChannel[username]?.toChannel()?.id
+        this.usernameToDmChannel[username]?.toChannel()?.id
 
     override fun startService() {
         this.service.start()

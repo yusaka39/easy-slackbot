@@ -40,7 +40,7 @@ internal fun String.convertTo(kType: KType): Any? {
     }
 }
 
-internal inline fun <reified T: Annotation> KAnnotatedElement.isAnnotatedWith() = this.annotations.any { it is T }
+internal inline fun <reified T : Annotation> KAnnotatedElement.isAnnotatedWith() = this.annotations.any { it is T }
 
 internal fun SlackChannel.toChannel(): Channel = Channel(this.id, this.name)
 

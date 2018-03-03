@@ -1,32 +1,32 @@
 package io.github.yusaka39.easySlackbot.slack
 
 data class Attachment(
-        val fallback: String?,
-        val color: String?,
-        val authorName: String?,
-        val authorLink: String?,
-        val authorIcon: String?,
-        val title: String?,
-        val titleLink: String?,
-        val text: String?,
-        val preText: String?,
-        val imageUrl: String?,
-        val thumbnailUrl: String?,
-        val footer: String?,
-        val footerIcon: String?,
-        val fields: List<Field>,
-        val actions: List<Action>
+    val fallback: String?,
+    val color: String?,
+    val authorName: String?,
+    val authorLink: String?,
+    val authorIcon: String?,
+    val title: String?,
+    val titleLink: String?,
+    val text: String?,
+    val preText: String?,
+    val imageUrl: String?,
+    val thumbnailUrl: String?,
+    val footer: String?,
+    val footerIcon: String?,
+    val fields: List<Field>,
+    val actions: List<Action>
 ) {
     data class Field(
-            val title: String,
-            val value: String,
-            val isShort: Boolean
+        val title: String,
+        val value: String,
+        val isShort: Boolean
     )
 
     data class Action(
-            val type: String,
-            val text: String,
-            val url: String
+        val type: String,
+        val text: String,
+        val url: String
     )
 }
 
@@ -65,9 +65,9 @@ class AttachmentBuilder(initializer: AttachmentBuilder.() -> Unit) {
     }
 
     fun build(): Attachment = Attachment(
-            this.fallback, this.color, this.authorName, this.authorLink, this.authorIcon, this.title, this.titleLink,
-            this.text, this.preText, this.imageUrl, this.thumbnailUrl, this.footer, this.footerIcon, this.fields,
-            this.actions
+        this.fallback, this.color, this.authorName, this.authorLink, this.authorIcon, this.title, this.titleLink,
+        this.text, this.preText, this.imageUrl, this.thumbnailUrl, this.footer, this.footerIcon, this.fields,
+        this.actions
     )
 }
 

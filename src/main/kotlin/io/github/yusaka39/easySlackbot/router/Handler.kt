@@ -15,16 +15,18 @@ enum class HandlerType {
     RespondTo, ListenTo
 }
 
-class Handler(private val kClass: KClass<*>, private val kCallable: KCallable<*>,
-              private val regex: Regex, private val handlerType: HandlerType) {
+class Handler(
+    private val kClass: KClass<*>, private val kCallable: KCallable<*>,
+    private val regex: Regex, private val handlerType: HandlerType
+) {
 
     fun isMatchTo(message: Message, type: HandlerType): Boolean =
-            this.handlerType == type && regex.matches(message.text)
+        this.handlerType == type && regex.matches(message.text)
 
     fun generateActionForMessage(message: Message): Action = this.kCallable.call(
-                instantiateWithPrimaryConstructor(this.kClass, message),
-                *this.getArgumentsFromTargetMessage(message).toTypedArray()
-        ) as? Action ?: throw IllegalStateException("Handler functions must return Action")
+        instantiateWithPrimaryConstructor(this.kClass, message),
+        *this.getArgumentsFromTargetMessage(message).toTypedArray()
+    ) as? Action ?: throw IllegalStateException("Handler functions must return Action")
 
     private fun instantiateWithPrimaryConstructor(kClass: KClass<*>, message: Message): Any = try {
         if (!kClass.isSubclassOf(HandlerPack::class)) {
@@ -33,18 +35,19 @@ class Handler(private val kClass: KClass<*>, private val kCallable: KCallable<*>
         kClass.primaryConstructor?.call()?.apply {
             (this as HandlerPack)._receivedMessage = message
         } ?: throw IllegalStateException(
-                "Classes contains handler function must have primary constructor"
+            "Classes contains handler function must have primary constructor"
         )
     } catch (e: IllegalArgumentException) {
         throw IllegalStateException(
-                "Classes contains handler function must have primary constructor without any arguments"
+            "Classes contains handler function must have primary constructor without any arguments"
         )
     }
 
     private fun getArgumentsFromTargetMessage(message: Message): List<Any?> {
         val params = this.kCallable.valueParameters.map {
             it to (it.findAnnotation<GroupParam>()?.group ?: throw IllegalStateException(
-                    "All params of methods annotated by ListenTo or RespondTo must be annotated by GroupParam."))
+                "All params of methods annotated by ListenTo or RespondTo must be annotated by GroupParam."
+            ))
         }
         val group = this.regex.find(message.text)?.groupValues!!
         return params.map { (param, index) -> group[index].convertTo(param.type) }

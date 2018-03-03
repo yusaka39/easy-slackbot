@@ -3,9 +3,11 @@ package io.github.yusaka39.easySlackbot.router
 import io.github.yusaka39.easySlackbot.router.actions.Action
 import io.github.yusaka39.easySlackbot.slack.*
 
-class PutAttachmentAction internal constructor(private val targetUserName: String?,
-                                              private val targetChannelId: String?,
-                                              private val attachment: Attachment): Action {
+class PutAttachmentAction internal constructor(
+    private val targetUserName: String?,
+    private val targetChannelId: String?,
+    private val attachment: Attachment
+) : Action {
     override fun run(slack: Slack) = when {
         this.targetUserName != null -> {
             val channelId = slack.getDmChannelIdOrNullByUserName(this.targetUserName)
@@ -22,13 +24,13 @@ class PutAttachmentAction internal constructor(private val targetUserName: Strin
 }
 
 fun putAttachmentToUserAction(targetUserName: String, initializer: AttachmentBuilder.() -> Unit) =
-        PutAttachmentAction(targetUserName, null, AttachmentBuilder(initializer).build())
+    PutAttachmentAction(targetUserName, null, AttachmentBuilder(initializer).build())
 
 fun putAttachmentToUserAction(targetUser: User, initializer: AttachmentBuilder.() -> Unit) =
-        putAttachmentToUserAction(targetUser.userName, initializer)
+    putAttachmentToUserAction(targetUser.userName, initializer)
 
 fun putAttachmentToChannelAction(targetChannelId: String, initializer: AttachmentBuilder.() -> Unit) =
-        PutAttachmentAction(targetChannelId, null, AttachmentBuilder(initializer).build())
+    PutAttachmentAction(targetChannelId, null, AttachmentBuilder(initializer).build())
 
 fun putAttachmentToChannelAction(targetChannel: Channel, initializer: AttachmentBuilder.() -> Unit) =
-        putAttachmentToChannelAction(targetChannel.id, initializer)
+    putAttachmentToChannelAction(targetChannel.id, initializer)

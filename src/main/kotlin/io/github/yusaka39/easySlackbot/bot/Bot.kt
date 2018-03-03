@@ -9,12 +9,13 @@ import io.github.yusaka39.easySlackbot.slack.impl.SlackletSlackFactory
 
 
 class Bot internal constructor(
-        slackToken: String,
-        messageRouterFactory: MessageRouterFactory,
-        slackFactory: SlackFactory
+    slackToken: String,
+    messageRouterFactory: MessageRouterFactory,
+    slackFactory: SlackFactory
 ) {
     constructor(slackToken: String, searchPackage: String) :
             this(slackToken, AnnotationBasedMessageRouterFactory(searchPackage), SlackletSlackFactory())
+
     private val messageRouter = messageRouterFactory.create()
     private val slack = slackFactory.create(slackToken).apply {
         fun runActionForMessage(message: Message, type: HandlerType) {

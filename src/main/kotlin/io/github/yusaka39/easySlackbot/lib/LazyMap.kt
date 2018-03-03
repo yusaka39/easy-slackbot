@@ -6,6 +6,7 @@ internal class LazyMap<K, V> private constructor(
 ) : Map<K, V> by cache {
     constructor(cacheInitializer: () -> Map<K, V>, getter: (key: K) -> V?) :
             this(cacheInitializer() as LinkedHashMap<K, V>, getter)
+
     constructor(getter: (key: K) -> V?) : this(mutableMapOf(), getter)
 
     override operator fun get(key: K): V? {
