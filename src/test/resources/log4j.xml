@@ -3,7 +3,7 @@
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
     <appender name="stderr" class="org.apache.log4j.ConsoleAppender">
-        <param name="Target" value="System.err" />
+        <param name="Target" value="System.err"/>
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern"
                    value="[%d{dd/MMM/yy-HH:mm:ss} %5p -- %c]: %m%n"/>
@@ -11,6 +11,6 @@
     </appender>
 
     <logger name="io.github.yusaka39.easySlackbot">
-        <appender-ref ref="stderr" />
+        <appender-ref ref="stderr"/>
     </logger>
 </log4j:configuration>
