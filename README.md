@@ -1,2 +1,4 @@
 # easy-slackbot
-Annotation based slack bot library
+[![CircleCI Build Status](https://img.shields.io/circleci/project/github/yusaka39/easy-slackbot/master.svg)](https://circleci.com/gh/yusaka39/easy-slackbot)
+![Codecov Coverage](https://img.shields.io/codecov/c/github/yusaka39/easy-slackbot/master.svg)
+An easy way to build your own slack bot.
