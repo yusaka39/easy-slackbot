@@ -41,7 +41,7 @@ import io.github.yusaka39.easySlackbot.router.HandlerPack
 import io.github.yusaka39.easySlackbot.router.actions.PostAction
 
 fun main(args: Array<String>) {
-    Bot(args[0], "io.github.yusaka39.easySlackbot.sample").run()
+    Bot(args[0], "io.github.yusaka39.easySlackbot.sample" /* Package name to search handler functions */).run()
 }
 
 // Classes contains handler functions must extend HandlerPack and have a primary constructor without arguments
