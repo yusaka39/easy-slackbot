@@ -56,6 +56,10 @@ class Handlers : HandlerPack() {
     fun congrats() =
         // Actions can be composed
         PutReactionAction(this.receivedMessage, "tada") compose PostAction(this.receivedMessage.channel, "Congrats!")
+
+    @HandlerFunction("""^plus\s+(\d+)\s+(\d+)""")
+    fun plus(@GroupParam(1) a: Int /* String will be converted automatically */, @GroupParam(2) b: Int) = 
+        PostAction(this.receivedMessage.channel, "${ a + b }")
 }
 ```
 
