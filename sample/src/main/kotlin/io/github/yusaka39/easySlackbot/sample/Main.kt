@@ -19,4 +19,7 @@ class Handlers : HandlerPack() {
     @HandlerFunction("is released", regexOption = [RegexOption.IGNORE_CASE])
     fun congrats() =
         PutReactionAction(this.receivedMessage, "tada") compose PostAction(this.receivedMessage.channel, "Congrats!")
+
+    @HandlerFunction("""^plus\s+(\d+)\s+(\d+)""")
+    fun plus(@GroupParam(1) a: Int, @GroupParam(2) b: Int) = PostAction(this.receivedMessage.channel, "${ a + b }")
 }
