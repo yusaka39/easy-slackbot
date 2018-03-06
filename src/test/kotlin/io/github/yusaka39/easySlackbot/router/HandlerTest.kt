@@ -53,7 +53,7 @@ class HandlerTest {
             LegalHandlerPack::class, LegalHandlerPack::returnsActionWithoutArgument,
             "^This.*".toRegex(), HandlerType.ListenTo
         ).generateActionForMessage(this.testMessage)
-        assertTrue(action === action)
+        assertTrue(action === aInstance)
 
         action = Handler(
             LegalHandlerPack::class, LegalHandlerPack::returnsActionWithArguments,
@@ -63,6 +63,13 @@ class HandlerTest {
             assertEquals(100, it.a)
             assertEquals(200, it.b)
         } ?: assertTrue(false)
+
+        action = Handler(
+            HandlerPackWithoutPrimaryConstructor::class,
+            HandlerPackWithoutPrimaryConstructor::returnsActionWithoutArgument,
+            "^This.*".toRegex(), HandlerType.ListenTo
+        ).generateActionForMessage(this.testMessage)
+        assertTrue(action === aInstance)
     }
 
     @Test
@@ -93,13 +100,6 @@ class HandlerTest {
         }
         assertFailsWith<IllegalStateException> {
             Handler(
-                IllegalHandlerPackWithoutPrimaryConstructor::class,
-                IllegalHandlerPackWithoutPrimaryConstructor::returnsActionWithoutArgument,
-                "^This.*".toRegex(), HandlerType.ListenTo
-            ).generateActionForMessage(this.testMessage)
-        }
-        assertFailsWith<IllegalStateException> {
-            Handler(
                 YetAnotherHandlerPack::class, YetAnotherHandlerPack::returnsActionWithoutArgument,
                 "^This.*".toRegex(), HandlerType.ListenTo
             ).generateActionForMessage(this.testMessage)
@@ -115,11 +115,11 @@ private class ActionWithInts(val a: Int, val b: Int): Action {
     override fun run(slack: Slack) {}
 }
 
-private val action = NopAction()
+private val aInstance = NopAction()
 
 class LegalHandlerPack : HandlerPack() {
     fun returnsActionWithoutArgument(): Action {
-        return action
+        return aInstance
     }
 
     fun returnsActionWithArguments(@GroupParam(1) a: Int, @GroupParam(2) b: Int): Action {
@@ -135,19 +135,19 @@ class LegalHandlerPack : HandlerPack() {
 
 class IllegalHandlerPack(id: String) : HandlerPack() {
     fun returnsActionWithoutArgument(): Action {
-        return action
+        return aInstance
     }
 }
 
-class IllegalHandlerPackWithoutPrimaryConstructor : HandlerPack {
-    constructor() : super()
+class HandlerPackWithoutPrimaryConstructor(val id: String) : HandlerPack() {
+    constructor() : this("id")
     fun returnsActionWithoutArgument(): Action {
-        return action
+        return aInstance
     }
 }
 
 class YetAnotherHandlerPack {
     fun returnsActionWithoutArgument(): Action {
-        return action
+        return aInstance
     }
 }
