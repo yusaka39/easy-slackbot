@@ -8,7 +8,6 @@ import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
 import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.isSubclassOf
-import kotlin.reflect.full.primaryConstructor
 import kotlin.reflect.full.valueParameters
 import kotlin.reflect.jvm.isAccessible
 
@@ -31,20 +30,16 @@ internal class Handler(
         *this.getArgumentsFromTargetMessage(message).toTypedArray()
     ) as? Action ?: throw IllegalStateException("Handler functions must return Action")
 
-    private fun instantiateWithPrimaryConstructor(kClass: KClass<*>, message: Message): Any = try {
+    private fun instantiateWithPrimaryConstructor(kClass: KClass<*>, message: Message): Any {
         if (!kClass.isSubclassOf(HandlerPack::class)) {
             throw IllegalStateException("Classes contains handler must extends HandlerPack")
         }
-        kClass.primaryConstructor?.apply {
+        return kClass.constructors.firstOrNull { it.parameters.isEmpty() }?.apply {
             this.isAccessible = true
         }?.call()?.apply {
             (this as HandlerPack)._receivedMessage = message
         } ?: throw IllegalStateException(
-            "Classes contains handler function must have primary constructor"
-        )
-    } catch (e: IllegalArgumentException) {
-        throw IllegalStateException(
-            "Classes contains handler function must have primary constructor without any arguments", e
+            "Classes contains handler function must have constructor with no args"
         )
     }
 
