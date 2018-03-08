@@ -93,6 +93,6 @@ class Handlers : HandlerPack() {
 }
 ```
 
-![ScreenShot](./doc/screenshot.png)
+<img src="./doc/screenshot.png" width="400" />
 
 You can see more sample [here](./sample/src/main/kotlin/io/github/yusaka39/easySlackbot/sample/Main.kt)
