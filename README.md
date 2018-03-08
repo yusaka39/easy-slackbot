@@ -36,9 +36,12 @@ package io.github.yusaka39.easySlackbot.sample
 
 import io.github.yusaka39.easySlackbot.annotations.GroupParam
 import io.github.yusaka39.easySlackbot.annotations.HandlerFunction
+import io.github.yusaka39.easySlackbot.annotations.RunWithInterval
 import io.github.yusaka39.easySlackbot.bot.Bot
 import io.github.yusaka39.easySlackbot.router.HandlerPack
 import io.github.yusaka39.easySlackbot.router.actions.PostAction
+import io.github.yusaka39.easySlackbot.router.actions.PostWithChannelNameAction
+
 
 fun main(args: Array<String>) {
     Bot(
@@ -63,6 +66,10 @@ class Handlers : HandlerPack() {
     @HandlerFunction("""^plus\s+(\d+)\s+(\d+)""")
     fun plus(@GroupParam(1) a: Int /* String will be converted automatically */, @GroupParam(2) b: Int) = 
         PostAction(this.receivedMessage.channel, "${ a + b }")
+
+    // The bot says "Are you still working? Would you like to take a nap?" every 00:00 UTC
+    @get:RunWithInterval(0, 0, "UTC", 24, TimeUnit.HOURS)
+    val takeANap = PostWithChannelNameAction("general", "Are you still working? Would you like to take a nap?")
 }
 ```
 
