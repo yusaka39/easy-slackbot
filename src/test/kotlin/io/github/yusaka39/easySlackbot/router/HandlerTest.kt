@@ -111,7 +111,7 @@ private class NopAction : Action {
     override fun run(slack: Slack) {}
 }
 
-private class ActionWithInts(val a: Int, val b: Int): Action {
+private class ActionWithInts(val a: Int, val b: Int) : Action {
     override fun run(slack: Slack) {}
 }
 
@@ -141,6 +141,7 @@ class IllegalHandlerPack(id: String) : HandlerPack() {
 
 class HandlerPackWithoutPrimaryConstructor(val id: String) : HandlerPack() {
     constructor() : this("id")
+
     fun returnsActionWithoutArgument(): Action {
         return aInstance
     }

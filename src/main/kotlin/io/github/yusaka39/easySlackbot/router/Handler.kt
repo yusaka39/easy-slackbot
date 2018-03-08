@@ -8,7 +8,6 @@ import io.github.yusaka39.easySlackbot.slack.Message
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
 import kotlin.reflect.full.findAnnotation
-import kotlin.reflect.full.isSubclassOf
 import kotlin.reflect.full.valueParameters
 import kotlin.reflect.jvm.isAccessible
 

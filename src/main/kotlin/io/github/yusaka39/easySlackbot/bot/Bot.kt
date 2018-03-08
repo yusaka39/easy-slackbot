@@ -10,7 +10,6 @@ import io.github.yusaka39.easySlackbot.scheduler.SchedulerServiceFactory
 import io.github.yusaka39.easySlackbot.slack.Message
 import io.github.yusaka39.easySlackbot.slack.SlackFactory
 import io.github.yusaka39.easySlackbot.slack.impl.SlackletSlackFactory
-import java.util.concurrent.CountDownLatch
 
 
 class Bot internal constructor(
@@ -23,7 +22,8 @@ class Bot internal constructor(
         slackToken,
         AnnotationBasedMessageRouterFactory(searchPackage),
         AnnotationBasedSchedulerServiceFactory(searchPackage),
-        SlackletSlackFactory())
+        SlackletSlackFactory()
+    )
 
     private val logger by this.logger()
 

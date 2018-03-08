@@ -18,7 +18,8 @@ class AnnotationBasedHandlerSetFactoryTest {
             "io.github.yusaka39.easySlackbot.router.testHandlerPack"
         ).create().map {
             val regex = Handler::class.memberProperties.first { it.name == "regex" }.apply { this.isAccessible = true }
-            val type = Handler::class.memberProperties.first { it.name == "handlerType" }.apply { this.isAccessible = true }
+            val type =
+                Handler::class.memberProperties.first { it.name == "handlerType" }.apply { this.isAccessible = true }
             regex.call(it).toString() to (type.call(it) as HandlerType)
         }
         assertTrue(result.containsAll(set) && set.containsAll(result))

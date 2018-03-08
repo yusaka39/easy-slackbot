@@ -3,7 +3,6 @@ package io.github.yusaka39.easySlackbot.bot
 import io.github.yusaka39.easySlackbot.router.AnnotationBasedMessageRouterFactory
 import io.github.yusaka39.easySlackbot.scheduler.SchedulerService
 import io.github.yusaka39.easySlackbot.scheduler.SchedulerServiceFactory
-import io.github.yusaka39.easySlackbot.scheduler.SchedulerServiceImpl
 import io.github.yusaka39.easySlackbot.slack.Attachment
 import io.github.yusaka39.easySlackbot.slack.Channel
 import io.github.yusaka39.easySlackbot.slack.Message
@@ -104,7 +103,8 @@ class BotTest {
             "token",
             this.testMessageRouterFactory,
             TestSchedulerFactory(startHook = { isSchedulerStarted = true }),
-            TestSlackFactory(startHook = { isStartCalled = true }))
+            TestSlackFactory(startHook = { isStartCalled = true })
+        )
         bot.run()
         assertTrue(isStartCalled)
         assertTrue(isSchedulerStarted)
