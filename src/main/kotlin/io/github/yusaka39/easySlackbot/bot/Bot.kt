@@ -4,22 +4,31 @@ import io.github.yusaka39.easySlackbot.lib.logger
 import io.github.yusaka39.easySlackbot.router.AnnotationBasedMessageRouterFactory
 import io.github.yusaka39.easySlackbot.router.HandlerType
 import io.github.yusaka39.easySlackbot.router.MessageRouterFactory
+import io.github.yusaka39.easySlackbot.scheduler.AnnotationBasedSchedulerServiceFactory
+import io.github.yusaka39.easySlackbot.scheduler.SchedulerService
+import io.github.yusaka39.easySlackbot.scheduler.SchedulerServiceFactory
 import io.github.yusaka39.easySlackbot.slack.Message
 import io.github.yusaka39.easySlackbot.slack.SlackFactory
 import io.github.yusaka39.easySlackbot.slack.impl.SlackletSlackFactory
+import java.util.concurrent.CountDownLatch
 
 
 class Bot internal constructor(
     slackToken: String,
     messageRouterFactory: MessageRouterFactory,
+    schedulerServiceFactory: SchedulerServiceFactory,
     slackFactory: SlackFactory
 ) {
-    constructor(slackToken: String, searchPackage: String) :
-            this(slackToken, AnnotationBasedMessageRouterFactory(searchPackage), SlackletSlackFactory())
+    constructor(slackToken: String, searchPackage: String) : this(
+        slackToken,
+        AnnotationBasedMessageRouterFactory(searchPackage),
+        AnnotationBasedSchedulerServiceFactory(searchPackage),
+        SlackletSlackFactory())
 
     private val logger by this.logger()
 
     private val messageRouter = messageRouterFactory.create()
+    private val scheduler: SchedulerService = schedulerServiceFactory.create()
     private val slack = slackFactory.create(slackToken).apply {
         fun runActionForMessage(message: Message, type: HandlerType) {
             try {
@@ -45,10 +54,12 @@ class Bot internal constructor(
 
     fun run() {
         this.slack.startService()
+        this.scheduler.start(this.slack)
         this.logger.info("Bot service is started.")
     }
 
     fun kill() {
+        this.scheduler.stop()
         this.slack.stopService()
         this.logger.info("Bot service is killed.")
     }
