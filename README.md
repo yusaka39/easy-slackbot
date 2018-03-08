@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.yusaka39:easy-slackbot:0.0.2-2'
+    compile 'com.github.yusaka39:easy-slackbot:0.1.0'
     compile 'org.slf4j:slf4j-api:1.7.25' // Required
     compile 'org.slf4j:slf4j-simple:1.7.25' // Optional
 }
