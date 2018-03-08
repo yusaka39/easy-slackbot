@@ -4,7 +4,7 @@ import io.github.yusaka39.easySlackbot.router.HandlerType
 
 
 @Retention(AnnotationRetention.RUNTIME)
-@Target(AnnotationTarget.FUNCTION)
+@Target(AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY_GETTER)
 annotation class HandlerFunction(
     val regex: String,
     val type: Array<HandlerType> = [HandlerType.ListenTo, HandlerType.RespondTo],
