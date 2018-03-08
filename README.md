@@ -41,10 +41,13 @@ import io.github.yusaka39.easySlackbot.bot.Bot
 import io.github.yusaka39.easySlackbot.router.HandlerPack
 import io.github.yusaka39.easySlackbot.router.actions.PostAction
 import io.github.yusaka39.easySlackbot.router.actions.PostWithChannelNameAction
-
+import io.github.yusaka39.easySlackbot.router.actions.PutReactionAction
+import io.github.yusaka39.easySlackbot.router.actions.putAttachmentToChannelAction
+import java.lang.management.ManagementFactory
+import java.util.concurrent.TimeUnit
 
 fun main(args: Array<String>) {
-    Bot(
+    Bot(
         /* Bot user token */ args[0],
         /* Package name to search handler functions */ "io.github.yusaka39.easySlackbot.sample"
     ).run()
@@ -66,6 +69,23 @@ class Handlers : HandlerPack() {
     @HandlerFunction("""^plus\s+(\d+)\s+(\d+)""")
     fun plus(@GroupParam(1) a: Int /* String will be converted automatically */, @GroupParam(2) b: Int) = 
         PostAction(this.receivedMessage.channel, "${ a + b }")
+
+    @HandlerFunction("^status$")
+    // See also AttachmentBuilder
+    fun showStatus() = putAttachmentToChannelAction(this.receivedMessage.channel) {
+        color = "#00AA99"
+        title = "Bot Status"
+        field {
+            title = "Status"
+            value = "I'm fine"
+            isShort = true
+        }
+        field {
+            title = "Uptime"
+            value = ManagementFactory.getRuntimeMXBean().uptime.toString()
+            isShort = true
+        }
+    }
 
     // The bot says "Are you still working? Would you like to take a nap?" every 00:00 UTC
     @get:RunWithInterval(0, 0, "UTC", 24, TimeUnit.HOURS)
