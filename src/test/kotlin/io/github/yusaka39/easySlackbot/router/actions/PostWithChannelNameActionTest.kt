@@ -5,6 +5,7 @@ import io.github.yusaka39.easySlackbot.slack.Message
 import io.github.yusaka39.easySlackbot.slack.Slack
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
 class PostWithChannelNameActionTest {
@@ -39,5 +40,9 @@ class PostWithChannelNameActionTest {
         }
         PostWithChannelNameAction("channelName", "text").run(slack)
         assertTrue(isCalled)
+
+        assertFailsWith<IllegalStateException> {
+            PostWithChannelNameAction("channelName2", "text").run(slack)
+        }
     }
 }
