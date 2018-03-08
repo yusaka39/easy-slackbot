@@ -42,7 +42,7 @@ class Bot internal constructor(
             this@Bot.logger.debug("Received message \"${message.text}\".")
             runActionForMessage(message, HandlerType.ListenTo)
         }
-        this.onReceiveRepliedMessage { message, _ ->
+        this.onReceiveReply { message, _ ->
             this@Bot.logger.debug("Received message \"${message.text}\".")
             runActionForMessage(message, HandlerType.RespondTo)
         }

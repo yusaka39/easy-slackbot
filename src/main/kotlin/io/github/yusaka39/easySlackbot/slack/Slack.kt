@@ -7,7 +7,7 @@ interface Slack {
     fun sendDirectMessageTo(username: String, text: String)
     fun onReceiveMessage(handler: (message: Message, slack: Slack) -> Unit)
     fun onReceiveDirectMessage(handler: (message: Message, slack: Slack) -> Unit)
-    fun onReceiveRepliedMessage(handler: (message: Message, slack: Slack) -> Unit)
+    fun onReceiveReply(handler: (message: Message, slack: Slack) -> Unit)
     fun getChannelIdOrNullByName(channelName: String): String?
     fun getDmChannelIdOrNullByUserName(username: String): String?
     fun startService()

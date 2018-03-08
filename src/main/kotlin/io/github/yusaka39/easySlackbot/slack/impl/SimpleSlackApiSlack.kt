@@ -2,7 +2,7 @@ package io.github.yusaka39.easySlackbot.slack.impl
 
 import com.ullink.slack.simpleslackapi.SlackPreparedMessage
 import com.ullink.slack.simpleslackapi.SlackSession
-import com.ullink.slack.simpleslackapi.events.EventType
+import com.ullink.slack.simpleslackapi.events.SlackEventType
 import com.ullink.slack.simpleslackapi.events.SlackMessagePosted
 import com.ullink.slack.simpleslackapi.impl.SlackSessionFactory
 import io.github.yusaka39.easySlackbot.lib.LazyMap
@@ -15,25 +15,38 @@ import io.github.yusaka39.easySlackbot.slack.Slack
 
 
 class SimpleSlackApiSlack(slackToken: String) : Slack {
+    private val myId by lazy {
+        this.session.sessionPersona().id
+    }
     private val session: SlackSession = SlackSessionFactory.createWebSocketSlackSession(slackToken).apply {
-        this.addMessagePostedListener { slackMessagePosted, slackSession ->
-            if (slackMessagePosted.eventType != EventType.MESSAGE) {
+        this.addMessagePostedListener { slackMessagePosted, _ ->
+            if (slackMessagePosted.eventType != SlackEventType.SLACK_MESSAGE_POSTED) {
+                return@addMessagePostedListener
+            }
+            if (this@SimpleSlackApiSlack.myId == slackMessagePosted.user.id) {
+                this@SimpleSlackApiSlack.logger.info("Ignore my post.")
                 return@addMessagePostedListener
             }
             val message = slackMessagePosted.toMessage()
-
             when {
-                slackMessagePosted.channel.id.startsWith("D") ->
+                slackMessagePosted.channel.id.startsWith("D") -> {
+                    this@SimpleSlackApiSlack.logger.info("Received DM.")
                     this@SimpleSlackApiSlack.onReceiveDirectMessage(message, this@SimpleSlackApiSlack)
-                slackMessagePosted.messageSubType == SlackMessagePosted.MessageSubType.MESSAGE_REPLIED ->
-                    this@SimpleSlackApiSlack.onReceiveRepliedMessage(message, this@SimpleSlackApiSlack)
-                else -> this@SimpleSlackApiSlack.onReceiveMessage(message, this@SimpleSlackApiSlack)
+                }
+                slackMessagePosted.messageSubType == SlackMessagePosted.MessageSubType.MESSAGE_REPLIED -> {
+                    this@SimpleSlackApiSlack.logger.info("Received a reply.")
+                    this@SimpleSlackApiSlack.onReceiveReply(message, this@SimpleSlackApiSlack)
+                }
+                else -> {
+                    this@SimpleSlackApiSlack.logger.info("Received a message.")
+                    this@SimpleSlackApiSlack.onReceiveMessage(message, this@SimpleSlackApiSlack)
+                }
             }
         }
     }
 
     private var onReceiveDirectMessage: (Message, Slack) -> Unit = { _, _ -> }
-    private var onReceiveRepliedMessage: (Message, Slack) -> Unit = { _, _ -> }
+    private var onReceiveReply: (Message, Slack) -> Unit = { _, _ -> }
     private var onReceiveMessage: (Message, Slack) -> Unit = { _, _ -> }
 
     private val logger by this.logger()
@@ -96,8 +109,8 @@ class SimpleSlackApiSlack(slackToken: String) : Slack {
         this.onReceiveDirectMessage = handler
     }
 
-    override fun onReceiveRepliedMessage(handler: (message: Message, slack: Slack) -> Unit) {
-        this.onReceiveRepliedMessage = handler
+    override fun onReceiveReply(handler: (message: Message, slack: Slack) -> Unit) {
+        this.onReceiveReply = handler
     }
 
     override fun getChannelIdOrNullByName(channelName: String): String? =

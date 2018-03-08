@@ -32,7 +32,7 @@ class PostWithChannelNameActionTest {
             override fun sendDirectMessageTo(username: String, text: String) {}
             override fun onReceiveMessage(handler: (message: Message, slack: Slack) -> Unit) {}
             override fun onReceiveDirectMessage(handler: (message: Message, slack: Slack) -> Unit) {}
-            override fun onReceiveRepliedMessage(handler: (message: Message, slack: Slack) -> Unit) {}
+            override fun onReceiveReply(handler: (message: Message, slack: Slack) -> Unit) {}
             override fun getDmChannelIdOrNullByUserName(username: String): String? = null
             override fun startService() {}
             override fun stopService() {}

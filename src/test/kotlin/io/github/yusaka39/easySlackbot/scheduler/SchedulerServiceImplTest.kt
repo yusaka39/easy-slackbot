@@ -52,7 +52,7 @@ class SchedulerServiceImplTest {
 
             override fun onReceiveDirectMessage(handler: (message: Message, slack: Slack) -> Unit) {}
 
-            override fun onReceiveRepliedMessage(handler: (message: Message, slack: Slack) -> Unit) {}
+            override fun onReceiveReply(handler: (message: Message, slack: Slack) -> Unit) {}
 
             override fun getChannelIdOrNullByName(channelName: String): String? = null
 

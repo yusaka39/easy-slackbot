@@ -32,7 +32,7 @@ class PostActionTest {
             TODO("not implemented")
         }
 
-        override fun onReceiveRepliedMessage(handler: (message: Message, slack: Slack) -> Unit) {
+        override fun onReceiveReply(handler: (message: Message, slack: Slack) -> Unit) {
             TODO("not implemented")
         }
 

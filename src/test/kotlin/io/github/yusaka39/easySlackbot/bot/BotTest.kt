@@ -51,7 +51,7 @@ class BotTest {
                 this@TestSlackFactory.onReceiveDirectMessage = handler
             }
 
-            override fun onReceiveRepliedMessage(handler: (message: Message, slack: Slack) -> Unit) {
+            override fun onReceiveReply(handler: (message: Message, slack: Slack) -> Unit) {
                 this@TestSlackFactory.onReceiveRepliedMessage = handler
             }
 
