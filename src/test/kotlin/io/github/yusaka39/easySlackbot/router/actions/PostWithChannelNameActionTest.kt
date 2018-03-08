@@ -27,12 +27,12 @@ class PostWithChannelNameActionTest {
                 }
             }
 
-            override fun putAttachmentTo(channelId: String, attachment: Attachment) {}
+            override fun putAttachmentTo(channelId: String, vararg attachment: Attachment) {}
             override fun putReactionTo(channelId: String, timestamp: String, emoticonName: String) {}
             override fun sendDirectMessageTo(username: String, text: String) {}
             override fun onReceiveMessage(handler: (message: Message, slack: Slack) -> Unit) {}
             override fun onReceiveDirectMessage(handler: (message: Message, slack: Slack) -> Unit) {}
-            override fun onReceiveRepliedMessage(handler: (message: Message, slack: Slack) -> Unit) {}
+            override fun onReceiveReply(handler: (message: Message, slack: Slack) -> Unit) {}
             override fun getDmChannelIdOrNullByUserName(username: String): String? = null
             override fun startService() {}
             override fun stopService() {}

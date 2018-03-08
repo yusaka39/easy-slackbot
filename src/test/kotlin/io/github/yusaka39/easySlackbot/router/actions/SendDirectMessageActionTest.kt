@@ -14,7 +14,7 @@ class SendDirectMessageActionTest {
             TODO("not implemented")
         }
 
-        override fun putAttachmentTo(channelId: String, attachment: Attachment) {
+        override fun putAttachmentTo(channelId: String, vararg attachments: Attachment) {
             TODO("not implemented")
         }
 
@@ -32,7 +32,7 @@ class SendDirectMessageActionTest {
             TODO("not implemented")
         }
 
-        override fun onReceiveRepliedMessage(handler: (message: Message, slack: Slack) -> Unit) {
+        override fun onReceiveReply(handler: (message: Message, slack: Slack) -> Unit) {
             TODO("not implemented")
         }
 

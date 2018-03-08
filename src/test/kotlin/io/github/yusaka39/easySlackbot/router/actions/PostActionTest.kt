@@ -12,7 +12,7 @@ class PostActionTest {
     private class PostHookSlack(private val hook: (String, String) -> Unit) : Slack {
         override fun sendTo(channelId: String, text: String) = this.hook(channelId, text)
 
-        override fun putAttachmentTo(channelId: String, attachment: Attachment) {
+        override fun putAttachmentTo(channelId: String, vararg attachment: Attachment) {
             TODO("not implemented")
         }
 
@@ -32,7 +32,7 @@ class PostActionTest {
             TODO("not implemented")
         }
 
-        override fun onReceiveRepliedMessage(handler: (message: Message, slack: Slack) -> Unit) {
+        override fun onReceiveReply(handler: (message: Message, slack: Slack) -> Unit) {
             TODO("not implemented")
         }
 

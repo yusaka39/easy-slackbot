@@ -42,7 +42,7 @@ class SchedulerServiceImplTest {
                 this@SchedulerServiceImplTest.latch.countDown()
             }
 
-            override fun putAttachmentTo(channelId: String, attachment: Attachment) {}
+            override fun putAttachmentTo(channelId: String, vararg attachments: Attachment) {}
 
             override fun putReactionTo(channelId: String, timestamp: String, emoticonName: String) {}
 
@@ -52,7 +52,7 @@ class SchedulerServiceImplTest {
 
             override fun onReceiveDirectMessage(handler: (message: Message, slack: Slack) -> Unit) {}
 
-            override fun onReceiveRepliedMessage(handler: (message: Message, slack: Slack) -> Unit) {}
+            override fun onReceiveReply(handler: (message: Message, slack: Slack) -> Unit) {}
 
             override fun getChannelIdOrNullByName(channelName: String): String? = null
 
