@@ -2,6 +2,7 @@ package io.github.yusaka39.easySlackbot.router
 
 import io.github.yusaka39.easySlackbot.annotations.GroupParam
 import io.github.yusaka39.easySlackbot.lib.convertTo
+import io.github.yusaka39.easySlackbot.lib.instantiateHandlerPack
 import io.github.yusaka39.easySlackbot.router.actions.Action
 import io.github.yusaka39.easySlackbot.slack.Message
 import kotlin.reflect.KCallable
@@ -26,22 +27,9 @@ internal class Handler(
     fun generateActionForMessage(message: Message): Action = this.kCallable.apply {
         this.isAccessible = true
     }.call(
-        instantiateWithPrimaryConstructor(this.kClass, message),
+        kClass.instantiateHandlerPack(message),
         *this.getArgumentsFromTargetMessage(message).toTypedArray()
     ) as? Action ?: throw IllegalStateException("Handler functions must return Action")
-
-    private fun instantiateWithPrimaryConstructor(kClass: KClass<*>, message: Message): Any {
-        if (!kClass.isSubclassOf(HandlerPack::class)) {
-            throw IllegalStateException("Classes contains handler must extends HandlerPack")
-        }
-        return kClass.constructors.firstOrNull { it.parameters.isEmpty() }?.apply {
-            this.isAccessible = true
-        }?.call()?.apply {
-            (this as HandlerPack)._receivedMessage = message
-        } ?: throw IllegalStateException(
-            "Classes contains handler function must have constructor with no args"
-        )
-    }
 
     private fun getArgumentsFromTargetMessage(message: Message): List<Any?> {
         val params = this.kCallable.valueParameters.map {

@@ -1,6 +1,9 @@
 package io.github.yusaka39.easySlackbot.bot
 
 import io.github.yusaka39.easySlackbot.router.AnnotationBasedMessageRouterFactory
+import io.github.yusaka39.easySlackbot.scheduler.SchedulerService
+import io.github.yusaka39.easySlackbot.scheduler.SchedulerServiceFactory
+import io.github.yusaka39.easySlackbot.scheduler.SchedulerServiceImpl
 import io.github.yusaka39.easySlackbot.slack.Attachment
 import io.github.yusaka39.easySlackbot.slack.Channel
 import io.github.yusaka39.easySlackbot.slack.Message
@@ -77,10 +80,27 @@ class BotTest {
     private val testMessageRouterFactory =
         AnnotationBasedMessageRouterFactory("io.github.yusaka39.easySlackbot.bot.testHandlerPack")
 
+    private val testSchedulerServiceFactory = object : SchedulerServiceFactory {
+        override fun create(): SchedulerService {
+            return object : SchedulerService {
+                override fun start(slack: Slack) {
+                }
+
+                override fun stop() {
+                }
+            }
+        }
+    }
+
+
     @Test
     fun startServiceCorrectly() {
         var isStartCalled = false
-        val bot = Bot("token", this.testMessageRouterFactory, TestSlackFactory(startHook = { isStartCalled = true }))
+        val bot = Bot(
+            "token",
+            this.testMessageRouterFactory,
+            this.testSchedulerServiceFactory,
+            TestSlackFactory(startHook = { isStartCalled = true }))
         bot.run()
         assertTrue(isStartCalled)
     }
@@ -88,7 +108,12 @@ class BotTest {
     @Test
     fun stopServiceCorrectly() {
         var isStopCalled = false
-        val bot = Bot("token", this.testMessageRouterFactory, TestSlackFactory(stopHook = { isStopCalled = true }))
+        val bot = Bot(
+            "token",
+            this.testMessageRouterFactory,
+            this.testSchedulerServiceFactory,
+            TestSlackFactory(stopHook = { isStopCalled = true })
+        )
         bot.kill()
         assertTrue(isStopCalled)
     }
@@ -104,7 +129,7 @@ class BotTest {
         val slack = slackFactory.instance
         val testMessage = Message(User("foo", "bar", "baz"), "foo", Channel("foo", "bar"), "1234")
 
-        Bot("token", this.testMessageRouterFactory, slackFactory).run {
+        Bot("token", this.testMessageRouterFactory, this.testSchedulerServiceFactory, slackFactory).run {
             slackFactory.onReceiveMessage(testMessage, slack)
             assertTrue(isHookCalled)
 

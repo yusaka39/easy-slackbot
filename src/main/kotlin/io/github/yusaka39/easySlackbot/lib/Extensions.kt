@@ -1,5 +1,6 @@
 package io.github.yusaka39.easySlackbot.lib
 
+import io.github.yusaka39.easySlackbot.router.HandlerPack
 import io.github.yusaka39.easySlackbot.slack.Attachment
 import io.github.yusaka39.easySlackbot.slack.Channel
 import io.github.yusaka39.easySlackbot.slack.Message
@@ -9,7 +10,10 @@ import org.riversun.xternal.simpleslackapi.SlackAttachment
 import org.riversun.xternal.simpleslackapi.SlackChannel
 import org.riversun.xternal.simpleslackapi.SlackUser
 import kotlin.reflect.KAnnotatedElement
+import kotlin.reflect.KClass
 import kotlin.reflect.KType
+import kotlin.reflect.full.isSubclassOf
+import kotlin.reflect.jvm.isAccessible
 
 private inline fun <reified T> T?.validateNullability(isNullable: Boolean): T? {
     if (this != null) {
@@ -74,4 +78,17 @@ internal fun Attachment.toSlackAttachment(): SlackAttachment {
         this.imageUrl = attachment.imageUrl
         this.color = attachment.color
     }
+}
+
+internal fun KClass<*>.instantiateHandlerPack(message: Message? = null): Any {
+    if (!this.isSubclassOf(HandlerPack::class)) {
+        throw IllegalStateException("Classes contains handler must extends HandlerPack")
+    }
+    return this.constructors.firstOrNull { it.parameters.isEmpty() }?.apply {
+        this.isAccessible = true
+    }?.call()?.apply {
+        (this as HandlerPack)._receivedMessage = message
+    } ?: throw IllegalStateException(
+        "Classes contains handler function must have constructor with no args"
+    )
 }
