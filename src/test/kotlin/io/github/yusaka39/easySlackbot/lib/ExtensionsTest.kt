@@ -275,7 +275,8 @@ class ExtensionsTest {
             ),
             listOf(
                 Attachment.Action("type", "text", "url")
-            )
+            ),
+            mapOf("misc" to "foobar")
         ).toSlackAttachment()
 
         assertEquals("fallback", slackAttachment.fallback)
@@ -305,6 +306,8 @@ class ExtensionsTest {
             assertEquals("text", it.text)
             assertEquals("url", it.value)
         }
+
+        assertEquals(mapOf("misc" to "foobar"), slackAttachment.miscRootFields)
     }
 
     @Test

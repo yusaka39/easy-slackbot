@@ -66,7 +66,9 @@ internal fun Attachment.toSlackAttachment(): SlackAttachment {
         attachment.fields.forEach {
             this.addField(it.title, it.value, it.isShort)
         }
-
+        attachment.misc.forEach { key, value ->
+            this.addMiscField(key, value)
+        }
         this.titleLink = attachment.titleLink
         this.thumbUrl = attachment.thumbnailUrl
         this.authorName = attachment.authorName
