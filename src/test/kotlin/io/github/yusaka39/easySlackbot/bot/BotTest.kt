@@ -31,7 +31,7 @@ class BotTest {
                 this@TestSlackFactory.sendHook(channelId, text)
             }
 
-            override fun putAttachmentTo(channelId: String, attachment: Attachment) {
+            override fun putAttachmentTo(channelId: String, vararg attachment: Attachment) {
                 TODO("not implemented")
             }
 

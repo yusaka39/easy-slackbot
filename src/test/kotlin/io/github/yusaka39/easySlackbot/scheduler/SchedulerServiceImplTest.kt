@@ -42,7 +42,7 @@ class SchedulerServiceImplTest {
                 this@SchedulerServiceImplTest.latch.countDown()
             }
 
-            override fun putAttachmentTo(channelId: String, attachment: Attachment) {}
+            override fun putAttachmentTo(channelId: String, vararg attachments: Attachment) {}
 
             override fun putReactionTo(channelId: String, timestamp: String, emoticonName: String) {}
 

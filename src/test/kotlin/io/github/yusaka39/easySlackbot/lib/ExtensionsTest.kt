@@ -1,24 +1,17 @@
 package io.github.yusaka39.easySlackbot.lib
 
+import com.ullink.slack.simpleslackapi.SlackChannel
+import com.ullink.slack.simpleslackapi.SlackPersona
+import com.ullink.slack.simpleslackapi.SlackUser
+import com.ullink.slack.simpleslackapi.events.SlackMessagePosted
 import io.github.yusaka39.easySlackbot.slack.Attachment
 import io.github.yusaka39.easySlackbot.slack.Channel
 import io.github.yusaka39.easySlackbot.slack.Message
 import io.github.yusaka39.easySlackbot.slack.User
-import org.riversun.slacklet.SlackletRequest
-import org.riversun.xternal.simpleslackapi.SlackAttachment
-import org.riversun.xternal.simpleslackapi.SlackBot
-import org.riversun.xternal.simpleslackapi.SlackChannel
-import org.riversun.xternal.simpleslackapi.SlackFile
-import org.riversun.xternal.simpleslackapi.SlackPersona
-import org.riversun.xternal.simpleslackapi.SlackUser
-import org.riversun.xternal.simpleslackapi.events.SlackEventType
-import org.riversun.xternal.simpleslackapi.events.SlackMessagePosted
-import java.util.ArrayList
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
 import kotlin.reflect.full.starProjectedType
 import kotlin.reflect.full.withNullability
-import kotlin.reflect.jvm.isAccessible
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -178,43 +171,11 @@ class ExtensionsTest {
         assertFalse { Bar::class.isAnnotatedWith<AnnotationForTesting2>() }
     }
 
-    private class TestChannel : SlackChannel {
-        override fun getPurpose(): String {
-            TODO("not implemented")
-        }
-
-        override fun isArchived(): Boolean {
-            TODO("not implemented")
-        }
-
-        override fun getName(): String = "general"
-
-        override fun getId(): String = "Cgeneral"
-
-        override fun getType(): SlackChannel.SlackChannelType {
-            TODO("not implemented")
-        }
-
-        override fun isDirect(): Boolean {
-            TODO("not implemented")
-        }
-
-        override fun getMembers(): MutableCollection<SlackUser> {
-            TODO("not implemented")
-        }
-
-        override fun isMember(): Boolean {
-            TODO("not implemented")
-        }
-
-        override fun getTopic(): String {
-            TODO("not implemented")
-        }
-    }
+    private val testChannel = SlackChannel("Cgeneral", "general", "", "", false, true, false)
 
     @Test
     fun toChannelConvertSlackChannelToChannel() {
-        val chan = TestChannel()
+        val chan = this.testChannel
         assertEquals(Channel("Cgeneral", "general"), chan.toChannel())
     }
 
@@ -347,60 +308,22 @@ class ExtensionsTest {
     }
 
     @Test
-    fun getMessageReturnsCorrectMessage() {
-        val postedMessage = object : SlackMessagePosted {
-            override fun getTimeStamp(): String = "12345678.123456"
+    fun toMessageReturnsCorrectMessage() {
+        val postedMessage = SlackMessagePosted(
+            "kotlin is awesome.",
+            null,
+            TestUser(),
+            this.testChannel,
+            "12345678.123456",
+            SlackMessagePosted.MessageSubType.UNKNOWN
+        )
 
-            override fun getSender(): SlackUser = TestUser()
-
-            override fun getMessageContent(): String = "kotlin is awesome."
-
-            override fun getChannel(): SlackChannel = TestChannel()
-
-            override fun getMessageSubType(): SlackMessagePosted.MessageSubType {
-                TODO("not implemented")
-            }
-
-            override fun getJsonSource(): String {
-                TODO("not implemented")
-            }
-
-            override fun getSlackFile(): SlackFile {
-                TODO("not implemented")
-            }
-
-            override fun getReactions(): MutableMap<String, Int> {
-                TODO("not implemented")
-            }
-
-            override fun getBot(): SlackBot {
-                TODO("not implemented")
-            }
-
-            override fun getEventType(): SlackEventType {
-                TODO("not implemented")
-            }
-
-            override fun getTimestamp(): String = this.timeStamp
-
-            override fun getTotalCountOfReactions(): Int {
-                TODO("not implemented")
-            }
-
-            override fun getAttachments(): ArrayList<SlackAttachment> {
-                TODO("not implemented")
-            }
-
-        }
-        val request = SlackletRequest::class.constructors.first().let {
-            it.isAccessible = true
-            it.call(null, postedMessage, null)
-        }
         assertEquals(
-            Message(TestUser().toUser(), "kotlin is awesome.", TestChannel().toChannel(), "12345678.123456"),
-            request.getMessage()
+            Message(TestUser().toUser(), "kotlin is awesome.", this.testChannel.toChannel(), "12345678.123456"),
+            postedMessage.toMessage()
         )
     }
 }
+
 
 

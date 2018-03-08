@@ -12,13 +12,13 @@ import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
 class PutAttachmentActionTest {
-    private class PutAttachmentHookSlack(private val hook: (String, Attachment) -> Unit) : Slack {
+    private class PutAttachmentHookSlack(private val hook: (String, Array<out Attachment>) -> Unit) : Slack {
         override fun sendTo(channelId: String, text: String) {
             TODO("not implemented")
         }
 
-        override fun putAttachmentTo(channelId: String, attachment: Attachment) =
-            this.hook(channelId, attachment)
+        override fun putAttachmentTo(channelId: String, vararg attachments: Attachment) =
+            this.hook(channelId, attachments)
 
         override fun putReactionTo(channelId: String, timestamp: String, emoticonName: String) {
             TODO("not implemented")
@@ -66,7 +66,7 @@ class PutAttachmentActionTest {
             TODO("not implemented")
         }
 
-        override fun putAttachmentTo(channelId: String, attachment: Attachment) {
+        override fun putAttachmentTo(channelId: String, vararg attachments: Attachment) {
             TODO("not implemented")
         }
 
@@ -119,7 +119,7 @@ class PutAttachmentActionTest {
         val hook = PutAttachmentHookSlack { channelId, attachment ->
             isHookCalled = true
             assertEquals("C123456", channelId)
-            assertEquals(testAttachment, attachment)
+            assertEquals(listOf(this.testAttachment), attachment.toList())
         }
 
         putAttachmentToUserAction("john") {
@@ -141,7 +141,7 @@ class PutAttachmentActionTest {
         val hook = PutAttachmentHookSlack { channelId, attachment ->
             isHookCalled = true
             assertEquals("C123456", channelId)
-            assertEquals(testAttachment, attachment)
+            assertEquals(listOf(this.testAttachment), attachment.toList())
         }
 
         putAttachmentToChannelAction("C123456") {
