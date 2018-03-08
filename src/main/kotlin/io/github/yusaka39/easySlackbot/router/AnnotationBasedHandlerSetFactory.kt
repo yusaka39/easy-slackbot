@@ -4,6 +4,7 @@ import com.google.common.reflect.ClassPath
 import io.github.yusaka39.easySlackbot.annotations.HandlerFunction
 import io.github.yusaka39.easySlackbot.lib.logger
 import kotlin.reflect.full.findAnnotation
+import kotlin.reflect.full.memberProperties
 
 internal class AnnotationBasedHandlerSetFactory(private val packageName: String) : HandlerSetFactory {
     private val logger by this.logger()
@@ -14,7 +15,7 @@ internal class AnnotationBasedHandlerSetFactory(private val packageName: String)
         }.flatMap {
             try {
                 val kClass = it.load().kotlin
-                kClass.members.flatMap inner@{ kCallable ->
+                (kClass.members + kClass.memberProperties.map { it.getter }).flatMap inner@{ kCallable ->
                     val annotation = kCallable.findAnnotation<HandlerFunction>()
                             ?: return@inner emptyList<Handler>()
                     annotation.type.map {
