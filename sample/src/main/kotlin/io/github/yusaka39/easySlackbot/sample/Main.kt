@@ -2,10 +2,15 @@ package io.github.yusaka39.easySlackbot.sample
 
 import io.github.yusaka39.easySlackbot.annotations.GroupParam
 import io.github.yusaka39.easySlackbot.annotations.HandlerFunction
+import io.github.yusaka39.easySlackbot.annotations.RunWithInterval
 import io.github.yusaka39.easySlackbot.bot.Bot
 import io.github.yusaka39.easySlackbot.router.HandlerPack
 import io.github.yusaka39.easySlackbot.router.actions.PostAction
+import io.github.yusaka39.easySlackbot.router.actions.PostWithChannelNameAction
 import io.github.yusaka39.easySlackbot.router.actions.PutReactionAction
+import io.github.yusaka39.easySlackbot.router.actions.putAttachmentToChannelAction
+import java.lang.management.ManagementFactory
+import java.util.concurrent.TimeUnit
 
 fun main(args: Array<String>) {
     Bot(args[0], "io.github.yusaka39.easySlackbot.sample").run()
@@ -22,4 +27,23 @@ class Handlers : HandlerPack() {
 
     @HandlerFunction("""^plus\s+(\d+)\s+(\d+)""")
     fun plus(@GroupParam(1) a: Int, @GroupParam(2) b: Int) = PostAction(this.receivedMessage.channel, "${ a + b }")
+
+    @HandlerFunction("^status$")
+    fun showStatus() = putAttachmentToChannelAction(this.receivedMessage.channel) {
+        color = "#00AA99"
+        title = "Bot Status"
+        field {
+            title = "Status"
+            value = "I'm fine"
+            isShort = true
+        }
+        field {
+            title = "Uptime"
+            value = ManagementFactory.getRuntimeMXBean().uptime.toString()
+            isShort = true
+        }
+    }
+
+    @get:RunWithInterval(0, 0, "UTC", 24, TimeUnit.HOURS)
+    val takeANap = PostWithChannelNameAction("general", "Are you still working? Would you like to take a nap?")
 }
