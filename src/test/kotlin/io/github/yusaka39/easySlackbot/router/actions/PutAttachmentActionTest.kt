@@ -113,24 +113,41 @@ class PutAttachmentActionTest {
         title = "title"
     }.build()
 
+    private val testAttachment2 = AttachmentBuilder {
+        text = "text2"
+        title = "title2"
+    }.build()
+
     @Test
     fun builderWithUserWorksFine() {
         var isHookCalled = false
-        val hook = PutAttachmentHookSlack { channelId, attachment ->
+        val hook = PutAttachmentHookSlack { channelId, attachments ->
             isHookCalled = true
             assertEquals("C123456", channelId)
-            assertEquals(listOf(this.testAttachment), attachment.toList())
+            assertEquals(listOf(this.testAttachment, this.testAttachment2), attachments.toList())
         }
 
         putAttachmentToUserAction("john") {
-            text = "text"
-            title = "title"
+            attachment {
+                text = "text"
+                title = "title"
+            }
+            attachment {
+                text = "text2"
+                title = "title2"
+            }
         }.run(hook)
         assertTrue(isHookCalled)
 
         putAttachmentToUserAction(User("foo", "john", "bar")) {
-            text = "text"
-            title = "title"
+            attachment {
+                text = "text"
+                title = "title"
+            }
+            attachment {
+                text = "text2"
+                title = "title2"
+            }
         }.run(hook)
         assertTrue(isHookCalled)
     }
@@ -138,21 +155,33 @@ class PutAttachmentActionTest {
     @Test
     fun builderWithChannelWorksFine() {
         var isHookCalled = false
-        val hook = PutAttachmentHookSlack { channelId, attachment ->
+        val hook = PutAttachmentHookSlack { channelId, attachments ->
             isHookCalled = true
             assertEquals("C123456", channelId)
-            assertEquals(listOf(this.testAttachment), attachment.toList())
+            assertEquals(listOf(this.testAttachment, this.testAttachment2), attachments.toList())
         }
 
         putAttachmentToChannelAction("C123456") {
-            text = "text"
-            title = "title"
+            attachment {
+                text = "text"
+                title = "title"
+            }
+            attachment {
+                text = "text2"
+                title = "title2"
+            }
         }.run(hook)
         assertTrue(isHookCalled)
 
         putAttachmentToChannelAction(Channel("C123456", "foo")) {
-            text = "text"
-            title = "title"
+            attachment {
+                text = "text"
+                title = "title"
+            }
+            attachment {
+                text = "text2"
+                title = "title2"
+            }
         }.run(hook)
         assertTrue(isHookCalled)
     }
@@ -160,13 +189,15 @@ class PutAttachmentActionTest {
     @Test
     fun putAttachmentActionFailsCorrectly() {
         assertFailsWith<IllegalStateException> {
-            PutAttachmentAction(null, null, this.testAttachment).run(NopSlack())
+            PutAttachmentAction(null, null, listOf(this.testAttachment)).run(NopSlack())
         }
 
         assertFailsWith<IllegalStateException> {
             putAttachmentToUserAction("jane") {
-                text = "text"
-                title = "title"
+                attachment {
+                    text = "text"
+                    title = "title"
+                }
             }.run(NopSlack())
         }
     }

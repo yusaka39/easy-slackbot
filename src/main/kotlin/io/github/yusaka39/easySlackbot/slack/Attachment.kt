@@ -15,7 +15,8 @@ data class Attachment(
     val footer: String?,
     val footerIcon: String?,
     val fields: List<Field>,
-    val actions: List<Action>
+    val actions: List<Action>,
+    val misc: Map<String, String>
 ) {
     data class Field(
         val title: String,
@@ -26,7 +27,8 @@ data class Attachment(
     data class Action(
         val type: String,
         val text: String,
-        val url: String
+        val url: String,
+        val style: String?
     )
 }
 
@@ -34,6 +36,21 @@ data class Attachment(
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.BINARY)
 internal annotation class Builder
+
+@Builder
+class AttachmentListBuilder internal constructor(initializer: AttachmentListBuilder.() -> Unit) {
+    private var attachments: List<Attachment> = listOf()
+
+    init {
+        this.initializer()
+    }
+
+    fun attachment(initializer: AttachmentBuilder.() -> Unit) {
+        this.attachments += AttachmentBuilder(initializer).build()
+    }
+
+    fun build(): List<Attachment> = this.attachments
+}
 
 @Builder
 class AttachmentBuilder internal constructor(initializer: AttachmentBuilder.() -> Unit) {
@@ -50,8 +67,9 @@ class AttachmentBuilder internal constructor(initializer: AttachmentBuilder.() -
     var thumbnailUrl: String? = null
     var footer: String? = null
     var footerIcon: String? = null
-    var fields: List<Attachment.Field> = emptyList()
-    var actions: List<Attachment.Action> = emptyList()
+    private var fields: List<Attachment.Field> = emptyList()
+    private var actions: List<Attachment.Action> = emptyList()
+    private var misc: Map<String, String> = mapOf()
 
     init {
         this.initializer()
@@ -65,10 +83,14 @@ class AttachmentBuilder internal constructor(initializer: AttachmentBuilder.() -
         actions += ActionBuilder(initializer).build()
     }
 
+    fun misc(key: String, value: String) {
+        misc += key to value
+    }
+
     fun build(): Attachment = Attachment(
         this.fallback, this.color, this.authorName, this.authorLink, this.authorIcon, this.title, this.titleLink,
         this.text, this.preText, this.imageUrl, this.thumbnailUrl, this.footer, this.footerIcon, this.fields,
-        this.actions
+        this.actions, this.misc
     )
 }
 
@@ -90,10 +112,11 @@ class ActionBuilder internal constructor(initializer: ActionBuilder.() -> Unit) 
     var type: String = ""
     var text: String = ""
     var url: String = ""
+    var style: String? = null
 
     init {
         this.initializer()
     }
 
-    fun build(): Attachment.Action = Attachment.Action(this.type, this.text, this.url)
+    fun build(): Attachment.Action = Attachment.Action(this.type, this.text, this.url, this.style)
 }

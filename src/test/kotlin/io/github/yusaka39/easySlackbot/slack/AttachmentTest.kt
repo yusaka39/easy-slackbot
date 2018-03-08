@@ -22,8 +22,9 @@ class AttachmentTest {
             Attachment.Field("title", "value", true)
         ),
         listOf(
-            Attachment.Action("type", "text", "url")
-        )
+            Attachment.Action("type", "text", "url", "style")
+        ),
+        mapOf("misc" to "foobar")
     )
 
     @Test
@@ -54,7 +55,10 @@ class AttachmentTest {
             assertEquals("type", it.type)
             assertEquals("text", it.text)
             assertEquals("url", it.url)
+            assertEquals("style", it.style)
         }
+
+        assertEquals(mapOf("misc" to "foobar"), this.testAttachment.misc)
     }
 
     @Test
@@ -84,7 +88,10 @@ class AttachmentTest {
                 type = "type"
                 text = "text"
                 url = "url"
+                style = "style"
             }
+
+            misc("misc", "foobar")
         }.build()
         assertEquals(this.testAttachment, attachment)
     }

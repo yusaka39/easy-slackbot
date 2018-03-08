@@ -30,17 +30,28 @@ class Handlers : HandlerPack() {
 
     @HandlerFunction("^status$")
     fun showStatus() = putAttachmentToChannelAction(this.receivedMessage.channel) {
-        color = "#00AA99"
-        title = "Bot Status"
-        field {
-            title = "Status"
-            value = "I'm fine"
-            isShort = true
+        attachment {
+            color = "#00AA99"
+            title = "Bot Status"
+            field {
+                title = "Status"
+                value = "I'm fine"
+                isShort = true
+            }
+            field {
+                title = "Uptime"
+                value = ManagementFactory.getRuntimeMXBean().uptime.toString()
+                isShort = true
+            }
         }
-        field {
-            title = "Uptime"
-            value = ManagementFactory.getRuntimeMXBean().uptime.toString()
-            isShort = true
+        attachment {
+            color = "#DD3333"
+            title = "Hanger"
+            field {
+                title = "Stomach"
+                value = "Stomach is grumbling"
+                isShort = false
+            }
         }
     }
 

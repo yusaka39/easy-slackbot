@@ -1,7 +1,7 @@
 package io.github.yusaka39.easySlackbot.router.actions
 
 import io.github.yusaka39.easySlackbot.slack.Attachment
-import io.github.yusaka39.easySlackbot.slack.AttachmentBuilder
+import io.github.yusaka39.easySlackbot.slack.AttachmentListBuilder
 import io.github.yusaka39.easySlackbot.slack.Channel
 import io.github.yusaka39.easySlackbot.slack.Slack
 import io.github.yusaka39.easySlackbot.slack.User
@@ -9,16 +9,16 @@ import io.github.yusaka39.easySlackbot.slack.User
 class PutAttachmentAction internal constructor(
     private val targetUserName: String?,
     private val targetChannelId: String?,
-    private val attachment: Attachment
+    private val attachments: List<Attachment>
 ) : Action {
     override fun run(slack: Slack) = when {
         this.targetUserName != null -> {
             val channelId = slack.getDmChannelIdOrNullByUserName(this.targetUserName)
                     ?: throw IllegalStateException("user ${this.targetUserName} does not exists")
-            slack.putAttachmentTo(channelId, this.attachment)
+            slack.putAttachmentTo(channelId, *this.attachments.toTypedArray())
         }
         this.targetChannelId != null -> {
-            slack.putAttachmentTo(this.targetChannelId, this.attachment)
+            slack.putAttachmentTo(this.targetChannelId, *this.attachments.toTypedArray())
         }
         else -> {
             throw IllegalStateException("no target specified")
@@ -26,22 +26,22 @@ class PutAttachmentAction internal constructor(
     }
 }
 
-fun putAttachmentToUserAction(targetUserName: String, initializer: AttachmentBuilder.() -> Unit) =
+fun putAttachmentToUserAction(targetUserName: String, initializer: AttachmentListBuilder.() -> Unit) =
     PutAttachmentAction(
         targetUserName,
         null,
-        AttachmentBuilder(initializer).build()
+        AttachmentListBuilder(initializer).build()
     )
 
-fun putAttachmentToUserAction(targetUser: User, initializer: AttachmentBuilder.() -> Unit) =
+fun putAttachmentToUserAction(targetUser: User, initializer: AttachmentListBuilder.() -> Unit) =
     putAttachmentToUserAction(targetUser.userName, initializer)
 
-fun putAttachmentToChannelAction(targetChannelId: String, initializer: AttachmentBuilder.() -> Unit) =
+fun putAttachmentToChannelAction(targetChannelId: String, initializer: AttachmentListBuilder.() -> Unit) =
     PutAttachmentAction(
         null,
         targetChannelId,
-        AttachmentBuilder(initializer).build()
+        AttachmentListBuilder(initializer).build()
     )
 
-fun putAttachmentToChannelAction(targetChannel: Channel, initializer: AttachmentBuilder.() -> Unit) =
+fun putAttachmentToChannelAction(targetChannel: Channel, initializer: AttachmentListBuilder.() -> Unit) =
     putAttachmentToChannelAction(targetChannel.id, initializer)
