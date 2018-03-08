@@ -9,7 +9,9 @@ import kotlin.test.assertEquals
 
 class MessageRouterTest {
     private class HandlerPackMock : HandlerPack() {
-        fun handler(): Action { TODO() }
+        fun handler(): Action {
+            TODO()
+        }
     }
 
     private val testMessage = Message(User("foo", "bar", "baz"), "foobar", Channel("foo", "bar"), "12345")

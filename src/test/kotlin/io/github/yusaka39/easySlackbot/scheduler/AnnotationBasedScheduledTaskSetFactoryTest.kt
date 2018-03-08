@@ -11,7 +11,7 @@ import kotlin.test.assertTrue
 
 class AnnotationBasedScheduledTaskSetFactoryTest {
 
-    private inline fun <reified T: Annotation> KAnnotatedElement.findAnnotationNotNull(): T =
+    private inline fun <reified T : Annotation> KAnnotatedElement.findAnnotationNotNull(): T =
         this.findAnnotation() ?: throw AssertionError()
 
     private fun ScheduledTask.isSameTo(task: ScheduledTask): Boolean {

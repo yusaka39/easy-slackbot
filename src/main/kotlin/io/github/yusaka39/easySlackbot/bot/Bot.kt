@@ -9,8 +9,7 @@ import io.github.yusaka39.easySlackbot.scheduler.SchedulerService
 import io.github.yusaka39.easySlackbot.scheduler.SchedulerServiceFactory
 import io.github.yusaka39.easySlackbot.slack.Message
 import io.github.yusaka39.easySlackbot.slack.SlackFactory
-import io.github.yusaka39.easySlackbot.slack.impl.SlackletSlackFactory
-import java.util.concurrent.CountDownLatch
+import io.github.yusaka39.easySlackbot.slack.impl.SimpleSlackApiSlackFactory
 
 
 class Bot internal constructor(
@@ -23,7 +22,8 @@ class Bot internal constructor(
         slackToken,
         AnnotationBasedMessageRouterFactory(searchPackage),
         AnnotationBasedSchedulerServiceFactory(searchPackage),
-        SlackletSlackFactory())
+        SimpleSlackApiSlackFactory()
+    )
 
     private val logger by this.logger()
 
@@ -42,7 +42,7 @@ class Bot internal constructor(
             this@Bot.logger.debug("Received message \"${message.text}\".")
             runActionForMessage(message, HandlerType.ListenTo)
         }
-        this.onReceiveRepliedMessage { message, _ ->
+        this.onReceiveReply { message, _ ->
             this@Bot.logger.debug("Received message \"${message.text}\".")
             runActionForMessage(message, HandlerType.RespondTo)
         }

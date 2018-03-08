@@ -1,7 +1,7 @@
 # easy-slackbot
  [![Release](https://img.shields.io/jitpack/v/yusaka39/easy-slackbot.svg)](https://jitpack.io/#yusaka39/easy-slackbot)
 [![CircleCI Build Status](https://img.shields.io/circleci/project/github/yusaka39/easy-slackbot/master.svg)](https://circleci.com/gh/yusaka39/easy-slackbot)
-![Codecov Coverage](https://img.shields.io/codecov/c/github/yusaka39/easy-slackbot/master.svg)
+[![Codecov Coverage](https://img.shields.io/codecov/c/github/yusaka39/easy-slackbot/develop.svg)](https://codecov.io/gh/yusaka39/easy-slackbot)
 
 An easy way to build your own slack bot.
 
@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.yusaka39:easy-slackbot:0.1.0'
+    compile 'com.github.yusaka39:easy-slackbot:0.1.1'
     compile 'org.slf4j:slf4j-api:1.7.25' // Required
     compile 'org.slf4j:slf4j-simple:1.7.25' // Optional
 }
@@ -36,12 +36,18 @@ package io.github.yusaka39.easySlackbot.sample
 
 import io.github.yusaka39.easySlackbot.annotations.GroupParam
 import io.github.yusaka39.easySlackbot.annotations.HandlerFunction
+import io.github.yusaka39.easySlackbot.annotations.RunWithInterval
 import io.github.yusaka39.easySlackbot.bot.Bot
 import io.github.yusaka39.easySlackbot.router.HandlerPack
 import io.github.yusaka39.easySlackbot.router.actions.PostAction
+import io.github.yusaka39.easySlackbot.router.actions.PostWithChannelNameAction
+import io.github.yusaka39.easySlackbot.router.actions.PutReactionAction
+import io.github.yusaka39.easySlackbot.router.actions.putAttachmentToChannelAction
+import java.lang.management.ManagementFactory
+import java.util.concurrent.TimeUnit
 
 fun main(args: Array<String>) {
-    Bot(
+    Bot(
         /* Bot user token */ args[0],
         /* Package name to search handler functions */ "io.github.yusaka39.easySlackbot.sample"
     ).run()
@@ -63,9 +69,41 @@ class Handlers : HandlerPack() {
     @HandlerFunction("""^plus\s+(\d+)\s+(\d+)""")
     fun plus(@GroupParam(1) a: Int /* String will be converted automatically */, @GroupParam(2) b: Int) = 
         PostAction(this.receivedMessage.channel, "${ a + b }")
+
+    // See also AttachmentListBuilder
+    @HandlerFunction("^status$")
+    fun showStatus() = putAttachmentToChannelAction(this.receivedMessage.channel) {
+        attachment {
+            color = "#00AA99"
+            title = "Bot Status"
+            field {
+                title = "Status"
+                value = "I'm fine"
+                isShort = true
+            }
+            field {
+                title = "Uptime"
+                value = ManagementFactory.getRuntimeMXBean().uptime.toString()
+                isShort = true
+            }
+        }
+        attachment {
+            color = "#DD3333"
+            title = "Hanger"
+            field {
+                title = "Stomach"
+                value = "Stomach is grumbling"
+                isShort = false
+            }
+        }
+    }
+
+    // The bot says "Are you still working? Would you like to take a nap?" every 00:00 UTC
+    @get:RunWithInterval(0, 0, "UTC", 24, TimeUnit.HOURS)
+    val takeANap = PostWithChannelNameAction("general", "Are you still working? Would you like to take a nap?")
 }
 ```
 
-![ScreenShot](./doc/screenshot.png)
+<img src="./doc/screenshot.png" width="400" />
 
 You can see more sample [here](./sample/src/main/kotlin/io/github/yusaka39/easySlackbot/sample/Main.kt)

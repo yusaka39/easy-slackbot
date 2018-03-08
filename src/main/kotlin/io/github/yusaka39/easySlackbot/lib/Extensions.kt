@@ -1,14 +1,15 @@
 package io.github.yusaka39.easySlackbot.lib
 
+import com.ullink.slack.simpleslackapi.SlackAction
+import com.ullink.slack.simpleslackapi.SlackAttachment
+import com.ullink.slack.simpleslackapi.SlackChannel
+import com.ullink.slack.simpleslackapi.SlackUser
+import com.ullink.slack.simpleslackapi.events.SlackMessagePosted
 import io.github.yusaka39.easySlackbot.router.HandlerPack
 import io.github.yusaka39.easySlackbot.slack.Attachment
 import io.github.yusaka39.easySlackbot.slack.Channel
 import io.github.yusaka39.easySlackbot.slack.Message
 import io.github.yusaka39.easySlackbot.slack.User
-import org.riversun.slacklet.SlackletRequest
-import org.riversun.xternal.simpleslackapi.SlackAttachment
-import org.riversun.xternal.simpleslackapi.SlackChannel
-import org.riversun.xternal.simpleslackapi.SlackUser
 import kotlin.reflect.KAnnotatedElement
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
@@ -50,24 +51,28 @@ internal fun SlackChannel.toChannel(): Channel = Channel(this.id, this.name)
 
 internal fun SlackUser.toUser(): User = User(this.id, this.userName, this.realName)
 
-internal fun SlackletRequest.getMessage(): Message {
-    val channel = this.channel.toChannel()
-    val text = this.content
-    val user = this.sender.toUser()
-    val timestamp = this.rawPostedMessage.timestamp
-    return Message(user, text, channel, timestamp)
-}
+internal fun SlackMessagePosted.toMessage(): Message = Message(
+    this.user.toUser(),
+    this.messageContent,
+    this.channel.toChannel(),
+    this.timestamp
+)
 
 internal fun Attachment.toSlackAttachment(): SlackAttachment {
     return SlackAttachment(this.title, this.fallback, this.text, this.preText).apply {
         val attachment = this@toSlackAttachment
         attachment.actions.forEach {
-            this.addAction(null, it.url, it.text, it.type)
+            val action = SlackAction(null, it.text, it.type, it.url).apply {
+                this.style = it.style
+            }
+            this.addAction(action)
         }
         attachment.fields.forEach {
             this.addField(it.title, it.value, it.isShort)
         }
-
+        attachment.misc.forEach { key, value ->
+            this.addMiscField(key, value)
+        }
         this.titleLink = attachment.titleLink
         this.thumbUrl = attachment.thumbnailUrl
         this.authorName = attachment.authorName
