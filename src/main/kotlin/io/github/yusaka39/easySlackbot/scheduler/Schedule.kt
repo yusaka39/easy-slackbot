@@ -11,7 +11,8 @@ internal class Schedule(
     val startMin: Int,
     tzName: String,
     interval: Long,
-    unit: TimeUnit
+    unit: TimeUnit,
+    private val intervalCalculationStrategy: Schedule.() -> Long = Schedule.defaultStrategy
 ) {
     constructor(annotation: RunWithInterval) : this(
         annotation.startHour,
@@ -24,18 +25,21 @@ internal class Schedule(
     private val zoneId: ZoneId = ZoneId.of(ZoneId.SHORT_IDS[tzName] ?: tzName)
     val intervalMillis: Long = TimeUnit.MILLISECONDS.convert(interval, unit)
 
-    fun getDelayToFirstExecution(): Long {
-        val targetTzNow = ZonedDateTime.now(this.zoneId)
-        val firstExecutionCandidate = ZonedDateTime.of(
-            targetTzNow.year, targetTzNow.monthValue, targetTzNow.dayOfMonth,
-            this.startHour, this.startMin, 0, 0, this.zoneId
-        )
-        val firstExecutionDatetime = if (targetTzNow > firstExecutionCandidate) {
-            firstExecutionCandidate.plusDays(1)
-        } else {
-            firstExecutionCandidate
-        }
+    fun getDelayToFirstExecution(): Long = this.intervalCalculationStrategy()
 
-        return firstExecutionDatetime.toInstant().toEpochMilli() - Instant.now().toEpochMilli()
+    companion object {
+        private val defaultStrategy: Schedule.() -> Long = {
+            val targetTzNow = ZonedDateTime.now(this.zoneId)
+            val firstExecutionCandidate = ZonedDateTime.of(
+                targetTzNow.year, targetTzNow.monthValue, targetTzNow.dayOfMonth,
+                this.startHour, this.startMin, 0, 0, this.zoneId
+            )
+            val firstExecutionDatetime = if (targetTzNow > firstExecutionCandidate) {
+                firstExecutionCandidate.plusDays(1)
+            } else {
+                firstExecutionCandidate
+            }
+            firstExecutionDatetime.toInstant().toEpochMilli() - Instant.now().toEpochMilli()
+        }
     }
 }
