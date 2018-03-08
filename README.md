@@ -70,20 +70,31 @@ class Handlers : HandlerPack() {
     fun plus(@GroupParam(1) a: Int /* String will be converted automatically */, @GroupParam(2) b: Int) = 
         PostAction(this.receivedMessage.channel, "${ a + b }")
 
+    // See also AttachmentListBuilder
     @HandlerFunction("^status$")
-    // See also AttachmentBuilder
     fun showStatus() = putAttachmentToChannelAction(this.receivedMessage.channel) {
-        color = "#00AA99"
-        title = "Bot Status"
-        field {
-            title = "Status"
-            value = "I'm fine"
-            isShort = true
+        attachment {
+            color = "#00AA99"
+            title = "Bot Status"
+            field {
+                title = "Status"
+                value = "I'm fine"
+                isShort = true
+            }
+            field {
+                title = "Uptime"
+                value = ManagementFactory.getRuntimeMXBean().uptime.toString()
+                isShort = true
+            }
         }
-        field {
-            title = "Uptime"
-            value = ManagementFactory.getRuntimeMXBean().uptime.toString()
-            isShort = true
+        attachment {
+            color = "#DD3333"
+            title = "Hanger"
+            field {
+                title = "Stomach"
+                value = "Stomach is grumbling"
+                isShort = false
+            }
         }
     }
 
