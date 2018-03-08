@@ -27,7 +27,8 @@ data class Attachment(
     data class Action(
         val type: String,
         val text: String,
-        val url: String
+        val url: String,
+        val style: String?
     )
 }
 
@@ -111,10 +112,11 @@ class ActionBuilder internal constructor(initializer: ActionBuilder.() -> Unit) 
     var type: String = ""
     var text: String = ""
     var url: String = ""
+    var style: String? = null
 
     init {
         this.initializer()
     }
 
-    fun build(): Attachment.Action = Attachment.Action(this.type, this.text, this.url)
+    fun build(): Attachment.Action = Attachment.Action(this.type, this.text, this.url, this.style)
 }

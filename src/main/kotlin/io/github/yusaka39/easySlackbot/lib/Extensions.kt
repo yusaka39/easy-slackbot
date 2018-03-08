@@ -1,5 +1,6 @@
 package io.github.yusaka39.easySlackbot.lib
 
+import com.ullink.slack.simpleslackapi.SlackAction
 import com.ullink.slack.simpleslackapi.SlackAttachment
 import com.ullink.slack.simpleslackapi.SlackChannel
 import com.ullink.slack.simpleslackapi.SlackUser
@@ -61,7 +62,10 @@ internal fun Attachment.toSlackAttachment(): SlackAttachment {
     return SlackAttachment(this.title, this.fallback, this.text, this.preText).apply {
         val attachment = this@toSlackAttachment
         attachment.actions.forEach {
-            this.addAction(null, it.url, it.text, it.type)
+            val action = SlackAction(null, it.text, it.type, it.url).apply {
+                this.style = it.style
+            }
+            this.addAction(action)
         }
         attachment.fields.forEach {
             this.addField(it.title, it.value, it.isShort)
