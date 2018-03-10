@@ -3,7 +3,7 @@
 [![CircleCI Build Status](https://img.shields.io/circleci/project/github/yusaka39/easy-slackbot/master.svg)](https://circleci.com/gh/yusaka39/easy-slackbot)
 [![Codecov Coverage](https://img.shields.io/codecov/c/github/yusaka39/easy-slackbot/develop.svg)](https://codecov.io/gh/yusaka39/easy-slackbot)
 
-An easy way to build your own slack bot.
+An easy way to build your own slack bot on Kotlin/JVM.
 
 # Getting started
 Buildable sample is [here](./sample)
