@@ -5,13 +5,13 @@
     <groupId>io.github.yusaka39.easy-slackbot</groupId>
     <artifactId>easy-slackbot</artifactId>
     <packaging>jar</packaging>
-    <version>0.1.2-SNAPSHOT</version>
+    <version>0.1.1-1</version>
     <name>easy-slackbot</name>
     <url>http://maven.apache.org</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <kotlin.version>1.2.30</kotlin.version>
+        <kotlin.version>1.2.31</kotlin.version>
     </properties>
 
 
