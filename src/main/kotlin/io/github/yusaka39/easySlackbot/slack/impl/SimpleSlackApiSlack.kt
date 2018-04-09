@@ -1,5 +1,6 @@
 package io.github.yusaka39.easySlackbot.slack.impl
 
+import com.ullink.slack.simpleslackapi.SlackChannel
 import com.ullink.slack.simpleslackapi.SlackPreparedMessage
 import com.ullink.slack.simpleslackapi.SlackSession
 import com.ullink.slack.simpleslackapi.events.SlackEventType
@@ -67,7 +68,10 @@ class SimpleSlackApiSlack(slackToken: String) : Slack {
 
     private val userNameToDmChannel by lazy {
         val createMap = {
-            this.session.users.map { it.userName }.zip(this.session.channels.filter { it.id.startsWith("D") }).toMap()
+            val direct = this.session.channels.filter(SlackChannel::isDirect)
+            direct.map {
+                it.members.first().userName to it
+            }.toMap()
         }
         LazyMap(
             createMap,
