@@ -120,6 +120,9 @@ class SimpleSlackApiSlack(slackToken: String) : Slack {
     override fun getChannelIdOrNullByName(channelName: String): String? =
         this.channelNameToChannel[channelName]?.id
 
+    override fun getUserIdByName(userName: String): String? =
+        this.session.users.firstOrNull { it.userName == userName }?.id
+
     override fun getDmChannelIdOrNullByUserName(username: String): String? =
         this.userNameToDmChannel[username]?.id
 
