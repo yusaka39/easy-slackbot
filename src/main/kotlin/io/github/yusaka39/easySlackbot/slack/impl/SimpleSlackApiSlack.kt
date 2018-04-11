@@ -55,14 +55,14 @@ class SimpleSlackApiSlack(slackToken: String) : Slack {
     private val channelIdToChannel by lazy {
         LazyMap(
             { this.session.channels.map { it.id to it }.toMap() },
-            { key -> this.session.channels.firstOrNull { it.id == key } }
+            { key -> this.session.findChannelById(key) }
         )
     }
 
     private val channelNameToChannel by lazy {
         LazyMap(
             { this.session.channels.map { it.name to it }.toMap() },
-            { key -> this.session.channels.firstOrNull { it.id == key } }
+            { key -> this.session.findChannelByName(key) }
         )
     }
 
