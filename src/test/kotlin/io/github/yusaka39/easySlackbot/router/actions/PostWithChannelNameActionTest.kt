@@ -1,5 +1,6 @@
 package io.github.yusaka39.easySlackbot.router.actions
 
+import io.github.yusaka39.easySlackbot.NopSlack
 import io.github.yusaka39.easySlackbot.slack.Attachment
 import io.github.yusaka39.easySlackbot.slack.Message
 import io.github.yusaka39.easySlackbot.slack.Slack
@@ -12,7 +13,8 @@ class PostWithChannelNameActionTest {
     @Test
     fun postActionWorksFine() {
         var isCalled = false
-        val slack = object : Slack {
+        val slack = object : NopSlack() {
+
             override fun sendTo(channelId: String, text: String) {
                 assertEquals("channelId", channelId)
                 assertEquals("text", text)
@@ -26,17 +28,6 @@ class PostWithChannelNameActionTest {
                     null
                 }
             }
-
-            override fun putAttachmentTo(channelId: String, vararg attachment: Attachment) {}
-            override fun putReactionTo(channelId: String, timestamp: String, emoticonName: String) {}
-            override fun sendDirectMessageTo(username: String, text: String) {}
-            override fun onReceiveMessage(handler: (message: Message, slack: Slack) -> Unit) {}
-            override fun onReceiveDirectMessage(handler: (message: Message, slack: Slack) -> Unit) {}
-            override fun onReceiveReply(handler: (message: Message, slack: Slack) -> Unit) {}
-            override fun getDmChannelIdOrNullByUserName(username: String): String? = null
-            override fun startService() {}
-            override fun stopService() {}
-
         }
         PostWithChannelNameAction("channelName", "text").run(slack)
         assertTrue(isCalled)
