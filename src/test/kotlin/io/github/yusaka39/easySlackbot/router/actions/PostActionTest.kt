@@ -1,5 +1,6 @@
 package io.github.yusaka39.easySlackbot.router.actions
 
+import io.github.yusaka39.easySlackbot.NotImplementedSlack
 import io.github.yusaka39.easySlackbot.slack.Attachment
 import io.github.yusaka39.easySlackbot.slack.Channel
 import io.github.yusaka39.easySlackbot.slack.Message
@@ -9,49 +10,10 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class PostActionTest {
-    private class PostHookSlack(private val hook: (String, String) -> Unit) : Slack {
+    private class PostHookSlack(
+            private val hook: (String, String) -> Unit
+    ) : NotImplementedSlack() {
         override fun sendTo(channelId: String, text: String) = this.hook(channelId, text)
-
-        override fun putAttachmentTo(channelId: String, vararg attachment: Attachment) {
-            TODO("not implemented")
-        }
-
-        override fun putReactionTo(channelId: String, timestamp: String, emoticonName: String) {
-            TODO("not implemented")
-        }
-
-        override fun sendDirectMessageTo(username: String, text: String) {
-            TODO("not implemented")
-        }
-
-        override fun onReceiveMessage(handler: (message: Message, slack: Slack) -> Unit) {
-            TODO("not implemented")
-        }
-
-        override fun onReceiveDirectMessage(handler: (message: Message, slack: Slack) -> Unit) {
-            TODO("not implemented")
-        }
-
-        override fun onReceiveReply(handler: (message: Message, slack: Slack) -> Unit) {
-            TODO("not implemented")
-        }
-
-        override fun getChannelIdOrNullByName(channelName: String): String? {
-            TODO("not implemented")
-        }
-
-        override fun getDmChannelIdOrNullByUserName(username: String): String? {
-            TODO("not implemented")
-        }
-
-        override fun startService() {
-            TODO("not implemented")
-        }
-
-        override fun stopService() {
-            TODO("not implemented")
-        }
-
     }
 
     @Test

@@ -1,5 +1,6 @@
 package io.github.yusaka39.easySlackbot.bot
 
+import io.github.yusaka39.easySlackbot.NotImplementedSlack
 import io.github.yusaka39.easySlackbot.router.AnnotationBasedMessageRouterFactory
 import io.github.yusaka39.easySlackbot.scheduler.SchedulerService
 import io.github.yusaka39.easySlackbot.scheduler.SchedulerServiceFactory
@@ -26,21 +27,9 @@ class BotTest {
             private set
         var onReceiveRepliedMessage: (message: Message, slack: Slack) -> Unit = { _, _ -> }
             private set
-        val instance = object : Slack {
+        val instance = object : NotImplementedSlack() {
             override fun sendTo(channelId: String, text: String) {
                 this@TestSlackFactory.sendHook(channelId, text)
-            }
-
-            override fun putAttachmentTo(channelId: String, vararg attachment: Attachment) {
-                TODO("not implemented")
-            }
-
-            override fun putReactionTo(channelId: String, timestamp: String, emoticonName: String) {
-                TODO("not implemented")
-            }
-
-            override fun sendDirectMessageTo(username: String, text: String) {
-                TODO("not implemented")
             }
 
             override fun onReceiveMessage(handler: (message: Message, slack: Slack) -> Unit) {
@@ -53,14 +42,6 @@ class BotTest {
 
             override fun onReceiveReply(handler: (message: Message, slack: Slack) -> Unit) {
                 this@TestSlackFactory.onReceiveRepliedMessage = handler
-            }
-
-            override fun getChannelIdOrNullByName(channelName: String): String? {
-                TODO("not implemented")
-            }
-
-            override fun getDmChannelIdOrNullByUserName(username: String): String? {
-                TODO("not implemented")
             }
 
             override fun startService() {

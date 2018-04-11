@@ -1,5 +1,6 @@
 package io.github.yusaka39.easySlackbot.scheduler
 
+import io.github.yusaka39.easySlackbot.NopSlack
 import io.github.yusaka39.easySlackbot.router.HandlerPack
 import io.github.yusaka39.easySlackbot.router.actions.Action
 import io.github.yusaka39.easySlackbot.router.actions.PostAction
@@ -34,33 +35,13 @@ class SchedulerServiceImplTest {
     @Test
     fun startWorksFine() {
         var isCalled = false
-        val slack = object : Slack {
+        val slack = object : NopSlack() {
             override fun sendTo(channelId: String, text: String) {
                 isCalled = true
                 assertEquals("channelId", channelId)
                 assertEquals("text", text)
                 this@SchedulerServiceImplTest.latch.countDown()
             }
-
-            override fun putAttachmentTo(channelId: String, vararg attachments: Attachment) {}
-
-            override fun putReactionTo(channelId: String, timestamp: String, emoticonName: String) {}
-
-            override fun sendDirectMessageTo(username: String, text: String) {}
-
-            override fun onReceiveMessage(handler: (message: Message, slack: Slack) -> Unit) {}
-
-            override fun onReceiveDirectMessage(handler: (message: Message, slack: Slack) -> Unit) {}
-
-            override fun onReceiveReply(handler: (message: Message, slack: Slack) -> Unit) {}
-
-            override fun getChannelIdOrNullByName(channelName: String): String? = null
-
-            override fun getDmChannelIdOrNullByUserName(username: String): String? = null
-
-            override fun startService() {}
-
-            override fun stopService() {}
         }
 
         val service = SchedulerServiceImpl(this.testTaskFactory)
