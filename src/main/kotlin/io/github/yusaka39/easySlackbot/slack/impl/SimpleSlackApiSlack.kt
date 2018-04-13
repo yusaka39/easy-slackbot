@@ -34,7 +34,7 @@ class SimpleSlackApiSlack(slackToken: String) : Slack {
                     this@SimpleSlackApiSlack.logger.info("Received DM.")
                     this@SimpleSlackApiSlack.onReceiveDirectMessage(message, this@SimpleSlackApiSlack)
                 }
-                slackMessagePosted.messageSubType == SlackMessagePosted.MessageSubType.MESSAGE_REPLIED -> {
+                slackMessagePosted.messageContent.contains("<@${this@SimpleSlackApiSlack.myId}>") -> {
                     this@SimpleSlackApiSlack.logger.info("Received a reply.")
                     this@SimpleSlackApiSlack.onReceiveReply(message, this@SimpleSlackApiSlack)
                 }
