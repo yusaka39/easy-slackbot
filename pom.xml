@@ -5,7 +5,7 @@
     <groupId>io.github.yusaka39.easy-slackbot</groupId>
     <artifactId>easy-slackbot</artifactId>
     <packaging>jar</packaging>
-    <version>0.3.0-1</version>
+    <version>0.3.1-SNAPSHOT</version>
     <name>easy-slackbot</name>
     <url>http://maven.apache.org</url>
 
