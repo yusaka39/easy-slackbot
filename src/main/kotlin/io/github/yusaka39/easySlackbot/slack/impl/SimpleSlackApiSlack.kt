@@ -4,13 +4,14 @@ import com.ullink.slack.simpleslackapi.SlackChannel
 import com.ullink.slack.simpleslackapi.SlackPreparedMessage
 import com.ullink.slack.simpleslackapi.SlackSession
 import com.ullink.slack.simpleslackapi.events.SlackEventType
-import com.ullink.slack.simpleslackapi.events.SlackMessagePosted
 import com.ullink.slack.simpleslackapi.impl.SlackSessionFactory
 import io.github.yusaka39.easySlackbot.lib.LazyMap
 import io.github.yusaka39.easySlackbot.lib.logger
+import io.github.yusaka39.easySlackbot.lib.toChannel
 import io.github.yusaka39.easySlackbot.lib.toMessage
 import io.github.yusaka39.easySlackbot.lib.toSlackAttachment
 import io.github.yusaka39.easySlackbot.slack.Attachment
+import io.github.yusaka39.easySlackbot.slack.Channel
 import io.github.yusaka39.easySlackbot.slack.Message
 import io.github.yusaka39.easySlackbot.slack.Slack
 
@@ -53,30 +54,47 @@ class SimpleSlackApiSlack(slackToken: String) : Slack {
     private val logger by this.logger()
 
     private val channelIdToChannel by lazy {
-        LazyMap(
-            { this.session.channels.map { it.id to it }.toMap() },
+        LazyMap<String, SlackChannel>(
+                {
+                    this.session.channels.fold(mutableMapOf()) { acc, c ->
+                        acc.apply { this[c.id] = c }
+                    }
+                },
             { key -> this.session.findChannelById(key) }
         )
     }
 
     private val channelNameToChannel by lazy {
-        LazyMap(
-            { this.session.channels.map { it.name to it }.toMap() },
+        LazyMap<String, SlackChannel>(
+                {
+                    this.session.channels.fold(mutableMapOf()) { acc, c ->
+                        acc.apply { this[c.name] = c }
+                    }
+                },
             { key -> this.session.findChannelByName(key) }
         )
     }
 
     private val userNameToDmChannel by lazy {
-        val createMap = {
-            val direct = this.session.channels.filter(SlackChannel::isDirect)
-            direct.map {
-                it.members.first().userName to it
-            }.toMap()
+        val createMap: () -> MutableMap<String, Channel> = {
+            this.session.channels.fold(mutableMapOf()) { acc, c ->
+                if (!c.isDirect) {
+                    return@fold acc
+                }
+                this.logger.info(c.members.toString())
+                acc.apply { this[c.members.first().userName] = c.toChannel() }
+            }
         }
-        LazyMap(
-            createMap,
-            { key -> createMap()[key] }
-        )
+
+        var cache: Map<String, Channel> = mapOf()
+
+        LazyMap(createMap) { key ->
+            val user = this.session.findUserByUserName(key) ?: return@LazyMap null
+            cache[user.id]?.let { return@LazyMap it }
+            this.session.openDirectMessageChannel(user)
+            cache = this.session.fetchDirectMessages(slackToken)
+            cache[user.id]
+        }
     }
 
     override fun sendTo(channelId: String, text: String) {
@@ -102,7 +120,9 @@ class SimpleSlackApiSlack(slackToken: String) : Slack {
     }
 
     override fun sendDirectMessageTo(username: String, text: String) {
-        this.session.sendMessage(this.userNameToDmChannel[username], text)
+        val id = this.userNameToDmChannel[username]?.id
+                ?: throw IllegalArgumentException("No dm channel for $username is found.")
+        this.session.sendMessage(SlackChannel(id, null, null, null, true, true, false), text)
     }
 
     override fun onReceiveMessage(handler: (message: Message, slack: Slack) -> Unit) {
