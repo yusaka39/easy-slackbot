@@ -5,7 +5,7 @@ internal class LazyMap<K, V> private constructor(
     private val getter: (key: K) -> V?
 ) : Map<K, V> by cache {
     constructor(cacheInitializer: () -> Map<K, V>, getter: (key: K) -> V?) :
-            this(cacheInitializer() as LinkedHashMap<K, V>, getter)
+            this(cacheInitializer().toMutableMap(), getter)
 
     constructor(getter: (key: K) -> V?) : this(mutableMapOf(), getter)
 
