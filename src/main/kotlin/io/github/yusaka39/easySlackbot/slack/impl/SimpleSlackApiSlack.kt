@@ -68,7 +68,7 @@ class SimpleSlackApiSlack(slackToken: String) : Slack {
         LazyMap<String, SlackChannel>(
                 {
                     this.session.channels.fold(mutableMapOf()) { acc, c ->
-                        acc.apply { this[c.name] = c }
+                        c.name?.let { acc.apply { this[c.name] = c } } ?: acc
                     }
                 },
             { key -> this.session.findChannelByName(key) }
