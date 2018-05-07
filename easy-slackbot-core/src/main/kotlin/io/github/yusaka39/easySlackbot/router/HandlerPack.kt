@@ -1,6 +1,6 @@
 package io.github.yusaka39.easySlackbot.router
 
-import io.github.yusaka39.easySlackbot.slack.Message
+import io.github.yusaka39.easySlackbot.api.entity.Message
 
 abstract class HandlerPack {
     internal var _receivedMessage: Message? = null

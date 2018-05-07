@@ -1,10 +1,10 @@
 package io.github.yusaka39.easySlackbot.router.actions
 
-import io.github.yusaka39.easySlackbot.slack.Attachment
+import io.github.yusaka39.easySlackbot.api.entity.Attachment
+import io.github.yusaka39.easySlackbot.api.entity.Channel
+import io.github.yusaka39.easySlackbot.api.entity.User
 import io.github.yusaka39.easySlackbot.slack.AttachmentListBuilder
-import io.github.yusaka39.easySlackbot.slack.Channel
 import io.github.yusaka39.easySlackbot.slack.Slack
-import io.github.yusaka39.easySlackbot.slack.User
 
 class PutAttachmentAction internal constructor(
     private val targetUserName: String?,

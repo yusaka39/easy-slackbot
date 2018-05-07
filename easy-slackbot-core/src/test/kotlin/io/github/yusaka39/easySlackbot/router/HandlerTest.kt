@@ -2,10 +2,10 @@ package io.github.yusaka39.easySlackbot.router
 
 import io.github.yusaka39.easySlackbot.annotations.GroupParam
 import io.github.yusaka39.easySlackbot.router.actions.Action
-import io.github.yusaka39.easySlackbot.slack.Channel
-import io.github.yusaka39.easySlackbot.slack.Message
+import io.github.yusaka39.easySlackbot.slack.ChannelImpl
+import io.github.yusaka39.easySlackbot.slack.MessageImpl
 import io.github.yusaka39.easySlackbot.slack.Slack
-import io.github.yusaka39.easySlackbot.slack.User
+import io.github.yusaka39.easySlackbot.slack.UserImpl
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -14,10 +14,10 @@ import kotlin.test.assertTrue
 
 class HandlerTest {
 
-    private val testMessage = Message(
-        User("U123456", "john", "John Doe"),
+    private val testMessage = MessageImpl(
+        UserImpl("U123456", "john", "John Doe"),
         "This is message",
-        Channel("C123456", "foobar"),
+        ChannelImpl("C123456", "foobar"),
         "12345678.123456"
     )
 

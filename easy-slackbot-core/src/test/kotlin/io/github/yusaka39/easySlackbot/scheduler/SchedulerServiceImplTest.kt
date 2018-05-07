@@ -4,9 +4,6 @@ import io.github.yusaka39.easySlackbot.NopSlack
 import io.github.yusaka39.easySlackbot.router.HandlerPack
 import io.github.yusaka39.easySlackbot.router.actions.Action
 import io.github.yusaka39.easySlackbot.router.actions.PostAction
-import io.github.yusaka39.easySlackbot.slack.Attachment
-import io.github.yusaka39.easySlackbot.slack.Message
-import io.github.yusaka39.easySlackbot.slack.Slack
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import kotlin.test.Test

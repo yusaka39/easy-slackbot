@@ -1,35 +1,37 @@
 package io.github.yusaka39.easySlackbot.slack
 
-data class Attachment(
-    val fallback: String?,
-    val color: String?,
-    val authorName: String?,
-    val authorLink: String?,
-    val authorIcon: String?,
-    val title: String?,
-    val titleLink: String?,
-    val text: String?,
-    val preText: String?,
-    val imageUrl: String?,
-    val thumbnailUrl: String?,
-    val footer: String?,
-    val footerIcon: String?,
-    val fields: List<Field>,
-    val actions: List<Action>,
-    val misc: Map<String, String>
-) {
+import io.github.yusaka39.easySlackbot.api.entity.Attachment
+
+data class AttachmentImpl(
+        override val fallback: String?,
+        override val color: String?,
+        override val authorName: String?,
+        override val authorLink: String?,
+        override val authorIcon: String?,
+        override val title: String?,
+        override val titleLink: String?,
+        override val text: String?,
+        override val preText: String?,
+        override val imageUrl: String?,
+        override val thumbnailUrl: String?,
+        override val footer: String?,
+        override val footerIcon: String?,
+        override val fields: List<Attachment.Field>,
+        override val actions: List<Attachment.Action>,
+        override val misc: Map<String, String>
+) : Attachment {
     data class Field(
-        val title: String,
-        val value: String,
-        val isShort: Boolean
-    )
+            override val title: String,
+            override val value: String,
+            override val isShort: Boolean
+    ) : Attachment.Field
 
     data class Action(
-        val type: String,
-        val text: String,
-        val url: String,
-        val style: String?
-    )
+            override val type: String,
+            override val text: String,
+            override val url: String,
+            override val style: String?
+    ) : Attachment.Action
 }
 
 @DslMarker
@@ -87,7 +89,7 @@ class AttachmentBuilder internal constructor(initializer: AttachmentBuilder.() -
         misc += key to value
     }
 
-    fun build(): Attachment = Attachment(
+    fun build(): Attachment = AttachmentImpl(
         this.fallback, this.color, this.authorName, this.authorLink, this.authorIcon, this.title, this.titleLink,
         this.text, this.preText, this.imageUrl, this.thumbnailUrl, this.footer, this.footerIcon, this.fields,
         this.actions, this.misc
@@ -104,7 +106,7 @@ class FieldBuilder internal constructor(initializer: FieldBuilder.() -> Unit) {
         this.initializer()
     }
 
-    fun build(): Attachment.Field = Attachment.Field(this.title, this.value, this.isShort)
+    fun build(): Attachment.Field = AttachmentImpl.Field(this.title, this.value, this.isShort)
 }
 
 @Builder
@@ -118,5 +120,5 @@ class ActionBuilder internal constructor(initializer: ActionBuilder.() -> Unit) 
         this.initializer()
     }
 
-    fun build(): Attachment.Action = Attachment.Action(this.type, this.text, this.url, this.style)
+    fun build(): Attachment.Action = AttachmentImpl.Action(this.type, this.text, this.url, this.style)
 }

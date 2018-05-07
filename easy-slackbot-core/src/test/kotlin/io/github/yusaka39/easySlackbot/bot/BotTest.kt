@@ -1,15 +1,15 @@
 package io.github.yusaka39.easySlackbot.bot
 
 import io.github.yusaka39.easySlackbot.NotImplementedSlack
+import io.github.yusaka39.easySlackbot.api.entity.Message
 import io.github.yusaka39.easySlackbot.router.AnnotationBasedMessageRouterFactory
 import io.github.yusaka39.easySlackbot.scheduler.SchedulerService
 import io.github.yusaka39.easySlackbot.scheduler.SchedulerServiceFactory
-import io.github.yusaka39.easySlackbot.slack.Attachment
-import io.github.yusaka39.easySlackbot.slack.Channel
-import io.github.yusaka39.easySlackbot.slack.Message
+import io.github.yusaka39.easySlackbot.slack.ChannelImpl
+import io.github.yusaka39.easySlackbot.slack.MessageImpl
 import io.github.yusaka39.easySlackbot.slack.Slack
 import io.github.yusaka39.easySlackbot.slack.SlackFactory
-import io.github.yusaka39.easySlackbot.slack.User
+import io.github.yusaka39.easySlackbot.slack.UserImpl
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -115,7 +115,7 @@ class BotTest {
             assertEquals("text", text)
         })
         val slack = slackFactory.instance
-        val testMessage = Message(User("foo", "bar", "baz"), "foo", Channel("foo", "bar"), "1234")
+        val testMessage = MessageImpl(UserImpl("foo", "bar", "baz"), "foo", ChannelImpl("foo", "bar"), "1234")
 
         Bot("token", this.testMessageRouterFactory, TestSchedulerFactory(), slackFactory).run {
             slackFactory.onReceiveMessage(testMessage, slack)

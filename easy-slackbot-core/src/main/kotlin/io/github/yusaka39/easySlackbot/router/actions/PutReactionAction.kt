@@ -1,6 +1,6 @@
 package io.github.yusaka39.easySlackbot.router.actions
 
-import io.github.yusaka39.easySlackbot.slack.Message
+import io.github.yusaka39.easySlackbot.api.entity.Message
 import io.github.yusaka39.easySlackbot.slack.Slack
 
 class PutReactionAction(

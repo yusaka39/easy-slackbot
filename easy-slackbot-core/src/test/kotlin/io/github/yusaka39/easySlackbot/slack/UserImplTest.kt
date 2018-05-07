@@ -3,8 +3,8 @@ package io.github.yusaka39.easySlackbot.slack
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class UserTest {
-    private val testUser = User("Uabcdefg", "awesomekotlin", "John Doe")
+class UserImplTest {
+    private val testUser = UserImpl("Uabcdefg", "awesomekotlin", "John Doe")
     @Test
     fun userReturnsCorrectReplyString() {
         assertEquals("<@${this.testUser.id}>", this.testUser.replyString)

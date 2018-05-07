@@ -5,14 +5,14 @@ import com.ullink.slack.simpleslackapi.SlackPreparedMessage
 import com.ullink.slack.simpleslackapi.SlackSession
 import com.ullink.slack.simpleslackapi.events.SlackEventType
 import com.ullink.slack.simpleslackapi.impl.SlackSessionFactory
+import io.github.yusaka39.easySlackbot.api.entity.Attachment
+import io.github.yusaka39.easySlackbot.api.entity.Channel
+import io.github.yusaka39.easySlackbot.api.entity.Message
 import io.github.yusaka39.easySlackbot.lib.LazyMap
 import io.github.yusaka39.easySlackbot.lib.logger
 import io.github.yusaka39.easySlackbot.lib.toChannel
 import io.github.yusaka39.easySlackbot.lib.toMessage
 import io.github.yusaka39.easySlackbot.lib.toSlackAttachment
-import io.github.yusaka39.easySlackbot.slack.Attachment
-import io.github.yusaka39.easySlackbot.slack.Channel
-import io.github.yusaka39.easySlackbot.slack.Message
 import io.github.yusaka39.easySlackbot.slack.Slack
 
 

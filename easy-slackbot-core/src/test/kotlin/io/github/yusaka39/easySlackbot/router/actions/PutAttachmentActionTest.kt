@@ -1,12 +1,10 @@
 package io.github.yusaka39.easySlackbot.router.actions
 
 import io.github.yusaka39.easySlackbot.NotImplementedSlack
-import io.github.yusaka39.easySlackbot.slack.Attachment
+import io.github.yusaka39.easySlackbot.api.entity.Attachment
 import io.github.yusaka39.easySlackbot.slack.AttachmentBuilder
-import io.github.yusaka39.easySlackbot.slack.Channel
-import io.github.yusaka39.easySlackbot.slack.Message
-import io.github.yusaka39.easySlackbot.slack.Slack
-import io.github.yusaka39.easySlackbot.slack.User
+import io.github.yusaka39.easySlackbot.slack.ChannelImpl
+import io.github.yusaka39.easySlackbot.slack.UserImpl
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -62,7 +60,7 @@ class PutAttachmentActionTest {
         }.run(hook)
         assertTrue(isHookCalled)
 
-        putAttachmentToUserAction(User("foo", "john", "bar")) {
+        putAttachmentToUserAction(UserImpl("foo", "john", "bar")) {
             attachment {
                 text = "text"
                 title = "title"
@@ -96,7 +94,7 @@ class PutAttachmentActionTest {
         }.run(hook)
         assertTrue(isHookCalled)
 
-        putAttachmentToChannelAction(Channel("C123456", "foo")) {
+        putAttachmentToChannelAction(ChannelImpl("C123456", "foo")) {
             attachment {
                 text = "text"
                 title = "title"

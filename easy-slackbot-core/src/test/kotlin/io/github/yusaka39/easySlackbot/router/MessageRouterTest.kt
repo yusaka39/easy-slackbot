@@ -1,9 +1,9 @@
 package io.github.yusaka39.easySlackbot.router
 
 import io.github.yusaka39.easySlackbot.router.actions.Action
-import io.github.yusaka39.easySlackbot.slack.Channel
-import io.github.yusaka39.easySlackbot.slack.Message
-import io.github.yusaka39.easySlackbot.slack.User
+import io.github.yusaka39.easySlackbot.slack.ChannelImpl
+import io.github.yusaka39.easySlackbot.slack.MessageImpl
+import io.github.yusaka39.easySlackbot.slack.UserImpl
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -14,7 +14,7 @@ class MessageRouterTest {
         }
     }
 
-    private val testMessage = Message(User("foo", "bar", "baz"), "foobar", Channel("foo", "bar"), "12345")
+    private val testMessage = MessageImpl(UserImpl("foo", "bar", "baz"), "foobar", ChannelImpl("foo", "bar"), "12345")
 
     @Test
     fun findHandlerForWorksCorrectly() {

@@ -3,8 +3,8 @@ package io.github.yusaka39.easySlackbot.slack
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class AttachmentTest {
-    private val testAttachment = Attachment(
+class AttachmentImplTest {
+    private val testAttachment = AttachmentImpl(
         "fallback",
         "color",
         "authorName",
@@ -19,10 +19,10 @@ class AttachmentTest {
         "footer",
         "footerIcon",
         listOf(
-            Attachment.Field("title", "value", true)
+            AttachmentImpl.Field("title", "value", true)
         ),
         listOf(
-            Attachment.Action("type", "text", "url", "style")
+            AttachmentImpl.Action("type", "text", "url", "style")
         ),
         mapOf("misc" to "foobar")
     )

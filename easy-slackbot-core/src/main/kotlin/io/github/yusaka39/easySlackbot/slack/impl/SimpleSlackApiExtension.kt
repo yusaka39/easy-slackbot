@@ -7,7 +7,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.ullink.slack.simpleslackapi.SlackSession
-import io.github.yusaka39.easySlackbot.slack.Channel
+import io.github.yusaka39.easySlackbot.api.entity.Channel
+import io.github.yusaka39.easySlackbot.slack.ChannelImpl
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.apache.commons.codec.net.URLCodec
@@ -41,7 +42,7 @@ internal fun SlackSession.fetchDirectMessages(token: String): Map<String, Channe
     } while (cursor != null)
     return lst.fold(mutableMapOf()) { acc, im ->
         acc.apply {
-            this[im.user] = Channel(im.id, null)
+            this[im.user] = ChannelImpl(im.id, null)
         }
     }
 }

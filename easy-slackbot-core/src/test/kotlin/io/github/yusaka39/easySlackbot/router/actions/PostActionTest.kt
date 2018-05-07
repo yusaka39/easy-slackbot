@@ -1,10 +1,7 @@
 package io.github.yusaka39.easySlackbot.router.actions
 
 import io.github.yusaka39.easySlackbot.NotImplementedSlack
-import io.github.yusaka39.easySlackbot.slack.Attachment
-import io.github.yusaka39.easySlackbot.slack.Channel
-import io.github.yusaka39.easySlackbot.slack.Message
-import io.github.yusaka39.easySlackbot.slack.Slack
+import io.github.yusaka39.easySlackbot.slack.ChannelImpl
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -29,7 +26,7 @@ class PostActionTest {
         assertTrue(isHookCalled)
 
         isHookCalled = false
-        PostAction(Channel("Cabcdefg", "abcdefg"), "foobar").run(hook)
+        PostAction(ChannelImpl("Cabcdefg", "abcdefg"), "foobar").run(hook)
         assertTrue(isHookCalled)
     }
 }

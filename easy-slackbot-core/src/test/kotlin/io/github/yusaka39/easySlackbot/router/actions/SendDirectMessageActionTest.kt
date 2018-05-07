@@ -1,10 +1,7 @@
 package io.github.yusaka39.easySlackbot.router.actions
 
 import io.github.yusaka39.easySlackbot.NotImplementedSlack
-import io.github.yusaka39.easySlackbot.slack.Attachment
-import io.github.yusaka39.easySlackbot.slack.Message
-import io.github.yusaka39.easySlackbot.slack.Slack
-import io.github.yusaka39.easySlackbot.slack.User
+import io.github.yusaka39.easySlackbot.slack.UserImpl
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -29,7 +26,7 @@ class SendDirectMessageActionTest {
         assertTrue(isHookCalled)
 
         isHookCalled = false
-        SendDirectMessageAction(User("john", "john", "John Doe"), "This is text").run(hook)
+        SendDirectMessageAction(UserImpl("john", "john", "John Doe"), "This is text").run(hook)
         assertTrue(isHookCalled)
     }
 }

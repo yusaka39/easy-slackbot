@@ -3,10 +3,10 @@ package io.github.yusaka39.easySlackbot.slack
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class MessageTest {
-    private val johnDoe = User("Uabcdefg", "awesomekotlin", "John Doe")
-    private val secretGroup = Channel("Cabcdefg", "secret_group")
-    private val testMessage = Message(
+class MessageImplTest {
+    private val johnDoe = UserImpl("Uabcdefg", "awesomekotlin", "John Doe")
+    private val secretGroup = ChannelImpl("Cabcdefg", "secret_group")
+    private val testMessage = MessageImpl(
         this.johnDoe,
         "kotlin is awesome.",
         this.secretGroup,

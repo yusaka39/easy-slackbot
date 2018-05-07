@@ -3,8 +3,8 @@ package io.github.yusaka39.easySlackbot.slack
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class ChannelTest {
-    private val testChannel = Channel("Cabcdefg", "secret_group")
+class ChannelImplTest {
+    private val testChannel = ChannelImpl("Cabcdefg", "secret_group")
 
     @Test
     fun channelReturnsCorrectId() {

@@ -1,10 +1,10 @@
 package io.github.yusaka39.easySlackbot.router
 
 import io.github.yusaka39.easySlackbot.annotations.GroupParam
+import io.github.yusaka39.easySlackbot.api.entity.Message
 import io.github.yusaka39.easySlackbot.lib.convertTo
 import io.github.yusaka39.easySlackbot.lib.instantiateHandlerPack
 import io.github.yusaka39.easySlackbot.router.actions.Action
-import io.github.yusaka39.easySlackbot.slack.Message
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
 import kotlin.reflect.full.findAnnotation

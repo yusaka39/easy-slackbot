@@ -4,10 +4,10 @@ import com.ullink.slack.simpleslackapi.SlackChannel
 import com.ullink.slack.simpleslackapi.SlackPersona
 import com.ullink.slack.simpleslackapi.SlackUser
 import com.ullink.slack.simpleslackapi.events.SlackMessagePosted
-import io.github.yusaka39.easySlackbot.slack.Attachment
-import io.github.yusaka39.easySlackbot.slack.Channel
-import io.github.yusaka39.easySlackbot.slack.Message
-import io.github.yusaka39.easySlackbot.slack.User
+import io.github.yusaka39.easySlackbot.slack.AttachmentImpl
+import io.github.yusaka39.easySlackbot.slack.ChannelImpl
+import io.github.yusaka39.easySlackbot.slack.MessageImpl
+import io.github.yusaka39.easySlackbot.slack.UserImpl
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
 import kotlin.reflect.full.starProjectedType
@@ -176,7 +176,7 @@ class ExtensionsTest {
     @Test
     fun toChannelConvertSlackChannelToChannel() {
         val chan = this.testChannel
-        assertEquals(Channel("Cgeneral", "general"), chan.toChannel())
+        assertEquals(ChannelImpl("Cgeneral", "general"), chan.toChannel())
     }
 
     private class TestUser : SlackUser {
@@ -251,12 +251,12 @@ class ExtensionsTest {
     @Test
     fun toUserConvertSlackUserToUser() {
         val user = TestUser()
-        assertEquals(User("Uabcdefg", "awesomekotlin", "John Doe"), user.toUser())
+        assertEquals(UserImpl("Uabcdefg", "awesomekotlin", "John Doe"), user.toUser())
     }
 
     @Test
     fun toSlackAttachmentConvertAttachmentToSlackAttachment() {
-        val slackAttachment = Attachment(
+        val slackAttachment = AttachmentImpl(
             "fallback",
             "color",
             "authorName",
@@ -271,10 +271,10 @@ class ExtensionsTest {
             "footer",
             "footerIcon",
             listOf(
-                Attachment.Field("title", "value", true)
+                AttachmentImpl.Field("title", "value", true)
             ),
             listOf(
-                Attachment.Action("type", "text", "url", "style")
+                AttachmentImpl.Action("type", "text", "url", "style")
             ),
             mapOf("misc" to "foobar")
         ).toSlackAttachment()
@@ -323,7 +323,7 @@ class ExtensionsTest {
         )
 
         assertEquals(
-            Message(TestUser().toUser(), "kotlin is awesome.", this.testChannel.toChannel(), "12345678.123456"),
+            MessageImpl(TestUser().toUser(), "kotlin is awesome.", this.testChannel.toChannel(), "12345678.123456"),
             postedMessage.toMessage()
         )
     }

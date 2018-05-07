@@ -1,7 +1,7 @@
 package io.github.yusaka39.easySlackbot
 
-import io.github.yusaka39.easySlackbot.slack.Attachment
-import io.github.yusaka39.easySlackbot.slack.Message
+import io.github.yusaka39.easySlackbot.api.entity.Attachment
+import io.github.yusaka39.easySlackbot.api.entity.Message
 import io.github.yusaka39.easySlackbot.slack.Slack
 
 open class NotImplementedSlack : Slack {
