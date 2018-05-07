@@ -8,6 +8,7 @@
   </parent>
 
   <artifactId>easy-slackbot-api</artifactId>
+  <version>1.0.0</version>
 
   <name>easy-slackbot-api</name>
 </project>

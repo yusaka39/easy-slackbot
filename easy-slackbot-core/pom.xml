@@ -55,5 +55,10 @@
             <version>1.7.25</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>io.github.yusaka39.easy-slackbot</groupId>
+            <artifactId>easy-slackbot-api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 </project>
