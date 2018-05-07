@@ -5,7 +5,6 @@
     <artifactId>easy-slackbot-core</artifactId>
     <packaging>jar</packaging>
     <name>easy-slackbot-core</name>
-    <url>http://maven.apache.org</url>
 
     <parent>
         <groupId>io.github.yusaka39.easy-slackbot</groupId>
