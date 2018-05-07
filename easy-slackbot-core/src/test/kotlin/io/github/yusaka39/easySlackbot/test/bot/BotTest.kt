@@ -8,7 +8,7 @@ import io.github.yusaka39.easySlackbot.scheduler.SchedulerService
 import io.github.yusaka39.easySlackbot.scheduler.SchedulerServiceFactory
 import io.github.yusaka39.easySlackbot.slack.ChannelImpl
 import io.github.yusaka39.easySlackbot.slack.MessageImpl
-import io.github.yusaka39.easySlackbot.slack.Slack
+import io.github.yusaka39.easySlackbot.api.entity.Slack
 import io.github.yusaka39.easySlackbot.slack.SlackFactory
 import io.github.yusaka39.easySlackbot.slack.UserImpl
 import kotlin.test.Test
@@ -59,7 +59,7 @@ class BotTest {
     }
 
     private val testMessageRouterFactory =
-        AnnotationBasedMessageRouterFactory("io.github.yusaka39.easySlackbot.bot.testHandlerPack")
+        AnnotationBasedMessageRouterFactory("io.github.yusaka39.easySlackbot.test.bot.testHandlerPack")
 
     private class TestSchedulerFactory(
         val startHook: () -> Unit = {},

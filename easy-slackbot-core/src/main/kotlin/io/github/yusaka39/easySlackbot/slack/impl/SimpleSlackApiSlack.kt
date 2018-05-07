@@ -13,7 +13,7 @@ import io.github.yusaka39.easySlackbot.lib.logger
 import io.github.yusaka39.easySlackbot.lib.toChannel
 import io.github.yusaka39.easySlackbot.lib.toMessage
 import io.github.yusaka39.easySlackbot.lib.toSlackAttachment
-import io.github.yusaka39.easySlackbot.slack.Slack
+import io.github.yusaka39.easySlackbot.api.entity.Slack
 
 
 class SimpleSlackApiSlack(slackToken: String) : Slack {

@@ -4,10 +4,10 @@ import io.github.yusaka39.easySlackbot.annotations.GroupParam
 import io.github.yusaka39.easySlackbot.router.Handler
 import io.github.yusaka39.easySlackbot.router.HandlerPack
 import io.github.yusaka39.easySlackbot.router.HandlerType
-import io.github.yusaka39.easySlackbot.router.actions.Action
+import io.github.yusaka39.easySlackbot.api.entity.Action
 import io.github.yusaka39.easySlackbot.slack.ChannelImpl
 import io.github.yusaka39.easySlackbot.slack.MessageImpl
-import io.github.yusaka39.easySlackbot.slack.Slack
+import io.github.yusaka39.easySlackbot.api.entity.Slack
 import io.github.yusaka39.easySlackbot.slack.UserImpl
 import kotlin.test.Test
 import kotlin.test.assertEquals

@@ -2,7 +2,7 @@ package io.github.yusaka39.easySlackbot.test.scheduler
 
 import io.github.yusaka39.easySlackbot.test.NopSlack
 import io.github.yusaka39.easySlackbot.router.HandlerPack
-import io.github.yusaka39.easySlackbot.router.actions.Action
+import io.github.yusaka39.easySlackbot.api.entity.Action
 import io.github.yusaka39.easySlackbot.router.actions.PostAction
 import io.github.yusaka39.easySlackbot.scheduler.Schedule
 import io.github.yusaka39.easySlackbot.scheduler.ScheduledTask

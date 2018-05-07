@@ -18,7 +18,7 @@ class AnnotationBasedHandlerSetFactoryTest {
         )
 
         val result = AnnotationBasedHandlerSetFactory(
-                "io.github.yusaka39.easySlackbot.router.testHandlerPack"
+                "io.github.yusaka39.easySlackbot.test.router.testHandlerPack"
         ).create().map {
             val regex = Handler::class.memberProperties.first { it.name == "regex" }.apply { this.isAccessible = true }
             val type =

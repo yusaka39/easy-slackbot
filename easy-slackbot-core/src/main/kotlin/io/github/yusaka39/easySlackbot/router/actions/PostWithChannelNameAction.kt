@@ -1,6 +1,7 @@
 package io.github.yusaka39.easySlackbot.router.actions
 
-import io.github.yusaka39.easySlackbot.slack.Slack
+import io.github.yusaka39.easySlackbot.api.entity.Action
+import io.github.yusaka39.easySlackbot.api.entity.Slack
 
 class PostWithChannelNameAction(private val channelName: String, private val text: String) : Action {
     override fun run(slack: Slack) {

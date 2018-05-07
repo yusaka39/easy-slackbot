@@ -1,7 +1,8 @@
 package io.github.yusaka39.easySlackbot.router.actions
 
+import io.github.yusaka39.easySlackbot.api.entity.Action
 import io.github.yusaka39.easySlackbot.api.entity.Message
-import io.github.yusaka39.easySlackbot.slack.Slack
+import io.github.yusaka39.easySlackbot.api.entity.Slack
 
 class PutReactionAction(
     private val channelId: String,

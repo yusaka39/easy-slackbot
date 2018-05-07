@@ -3,8 +3,8 @@ package io.github.yusaka39.easySlackbot.test.router.testHandlerPack
 import io.github.yusaka39.easySlackbot.annotations.HandlerFunction
 import io.github.yusaka39.easySlackbot.router.HandlerPack
 import io.github.yusaka39.easySlackbot.router.HandlerType
-import io.github.yusaka39.easySlackbot.router.actions.Action
-import io.github.yusaka39.easySlackbot.slack.Slack
+import io.github.yusaka39.easySlackbot.api.entity.Action
+import io.github.yusaka39.easySlackbot.api.entity.Slack
 
 class TestHandlerPack : HandlerPack() {
     private class NopAction : Action {

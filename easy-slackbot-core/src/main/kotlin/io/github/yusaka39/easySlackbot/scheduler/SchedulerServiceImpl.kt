@@ -1,7 +1,7 @@
 package io.github.yusaka39.easySlackbot.scheduler
 
 import io.github.yusaka39.easySlackbot.lib.logger
-import io.github.yusaka39.easySlackbot.slack.Slack
+import io.github.yusaka39.easySlackbot.api.entity.Slack
 import java.util.Timer
 import kotlin.concurrent.timer
 

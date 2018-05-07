@@ -1,8 +1,8 @@
 package io.github.yusaka39.easySlackbot.test.router.actions
 
-import io.github.yusaka39.easySlackbot.router.actions.Action
+import io.github.yusaka39.easySlackbot.api.entity.Action
 import io.github.yusaka39.easySlackbot.test.NotImplementedSlack
-import io.github.yusaka39.easySlackbot.slack.Slack
+import io.github.yusaka39.easySlackbot.api.entity.Slack
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue

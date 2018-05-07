@@ -1,7 +1,4 @@
-package io.github.yusaka39.easySlackbot.slack
-
-import io.github.yusaka39.easySlackbot.api.entity.Attachment
-import io.github.yusaka39.easySlackbot.api.entity.Message
+package io.github.yusaka39.easySlackbot.api.entity
 
 interface Slack {
     fun sendTo(channelId: String, text: String)

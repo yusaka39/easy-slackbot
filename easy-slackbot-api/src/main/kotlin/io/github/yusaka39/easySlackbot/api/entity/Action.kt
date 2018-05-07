@@ -1,6 +1,5 @@
-package io.github.yusaka39.easySlackbot.router.actions
+package io.github.yusaka39.easySlackbot.api.entity
 
-import io.github.yusaka39.easySlackbot.slack.Slack
 
 interface Action {
     companion object {

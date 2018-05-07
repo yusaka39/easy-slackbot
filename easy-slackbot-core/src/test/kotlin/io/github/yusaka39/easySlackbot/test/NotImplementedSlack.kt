@@ -2,7 +2,7 @@ package io.github.yusaka39.easySlackbot.test
 
 import io.github.yusaka39.easySlackbot.api.entity.Attachment
 import io.github.yusaka39.easySlackbot.api.entity.Message
-import io.github.yusaka39.easySlackbot.slack.Slack
+import io.github.yusaka39.easySlackbot.api.entity.Slack
 
 open class NotImplementedSlack : Slack {
     override fun sendTo(channelId: String, text: String) {

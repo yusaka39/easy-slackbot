@@ -1,7 +1,7 @@
 package io.github.yusaka39.easySlackbot.scheduler
 
 import io.github.yusaka39.easySlackbot.lib.instantiateHandlerPack
-import io.github.yusaka39.easySlackbot.router.actions.Action
+import io.github.yusaka39.easySlackbot.api.entity.Action
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.isAccessible
