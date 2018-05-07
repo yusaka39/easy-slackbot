@@ -1,6 +1,5 @@
 package io.github.yusaka39.easySlackbot.test.router.actions
 
-import io.github.yusaka39.easySlackbot.test.NotImplementedSlack
 import io.github.yusaka39.easySlackbot.api.entity.Attachment
 import io.github.yusaka39.easySlackbot.router.actions.PutAttachmentAction
 import io.github.yusaka39.easySlackbot.router.actions.putAttachmentToChannelAction
@@ -8,6 +7,7 @@ import io.github.yusaka39.easySlackbot.router.actions.putAttachmentToUserAction
 import io.github.yusaka39.easySlackbot.slack.AttachmentBuilder
 import io.github.yusaka39.easySlackbot.slack.ChannelImpl
 import io.github.yusaka39.easySlackbot.slack.UserImpl
+import io.github.yusaka39.easySlackbot.test.NotImplementedSlack
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -18,7 +18,7 @@ class PutAttachmentActionTest {
             private val hook: (String, Array<out Attachment>) -> Unit
     ) : NotImplementedSlack() {
         override fun putAttachmentTo(channelId: String, vararg attachments: Attachment) =
-            this.hook(channelId, attachments)
+                this.hook(channelId, attachments)
 
         override fun getDmChannelIdOrNullByUserName(username: String): String? {
             if (username == "john") {

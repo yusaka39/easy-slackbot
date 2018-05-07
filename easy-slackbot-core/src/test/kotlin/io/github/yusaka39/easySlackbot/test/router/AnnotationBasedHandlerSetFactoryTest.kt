@@ -13,8 +13,8 @@ class AnnotationBasedHandlerSetFactoryTest {
     @Test
     fun handlerSetFactoryWorksFine() {
         val set = setOf(
-            "foo" to HandlerType.ListenTo, "foo" to HandlerType.RespondTo,
-            "bar" to HandlerType.ListenTo, "foobar" to HandlerType.RespondTo
+                "foo" to HandlerType.ListenTo, "foo" to HandlerType.RespondTo,
+                "bar" to HandlerType.ListenTo, "foobar" to HandlerType.RespondTo
         )
 
         val result = AnnotationBasedHandlerSetFactory(
@@ -22,7 +22,7 @@ class AnnotationBasedHandlerSetFactoryTest {
         ).create().map {
             val regex = Handler::class.memberProperties.first { it.name == "regex" }.apply { this.isAccessible = true }
             val type =
-                Handler::class.memberProperties.first { it.name == "handlerType" }.apply { this.isAccessible = true }
+                    Handler::class.memberProperties.first { it.name == "handlerType" }.apply { this.isAccessible = true }
             regex.call(it).toString() to (type.call(it) as HandlerType)
         }
         assertTrue(result.containsAll(set) && set.containsAll(result))

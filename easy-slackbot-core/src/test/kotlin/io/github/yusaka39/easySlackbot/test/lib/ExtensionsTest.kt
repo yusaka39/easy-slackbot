@@ -263,26 +263,26 @@ class ExtensionsTest {
     @Test
     fun toSlackAttachmentConvertAttachmentToSlackAttachment() {
         val slackAttachment = AttachmentImpl(
-            "fallback",
-            "color",
-            "authorName",
-            "authorLink",
-            "authorIcon",
-            "title",
-            "titleLink",
-            "text",
-            "preText",
-            "imageUrl",
-            "thumbnailUrl",
-            "footer",
-            "footerIcon",
-            listOf(
-                AttachmentImpl.Field("title", "value", true)
-            ),
-            listOf(
-                AttachmentImpl.Action("type", "text", "url", "style")
-            ),
-            mapOf("misc" to "foobar")
+                "fallback",
+                "color",
+                "authorName",
+                "authorLink",
+                "authorIcon",
+                "title",
+                "titleLink",
+                "text",
+                "preText",
+                "imageUrl",
+                "thumbnailUrl",
+                "footer",
+                "footerIcon",
+                listOf(
+                        AttachmentImpl.Field("title", "value", true)
+                ),
+                listOf(
+                        AttachmentImpl.Action("type", "text", "url", "style")
+                ),
+                mapOf("misc" to "foobar")
         ).toSlackAttachment()
 
         assertEquals("fallback", slackAttachment.fallback)
@@ -320,17 +320,17 @@ class ExtensionsTest {
     @Test
     fun toMessageReturnsCorrectMessage() {
         val postedMessage = SlackMessagePosted(
-            "kotlin is awesome.",
-            null,
+                "kotlin is awesome.",
+                null,
                 TestUser(),
-            this.testChannel,
-            "12345678.123456",
-            SlackMessagePosted.MessageSubType.UNKNOWN
+                this.testChannel,
+                "12345678.123456",
+                SlackMessagePosted.MessageSubType.UNKNOWN
         )
 
         assertEquals(
-            MessageImpl(TestUser().toUser(), "kotlin is awesome.", this.testChannel.toChannel(), "12345678.123456"),
-            postedMessage.toMessage()
+                MessageImpl(TestUser().toUser(), "kotlin is awesome.", this.testChannel.toChannel(), "12345678.123456"),
+                postedMessage.toMessage()
         )
     }
 }

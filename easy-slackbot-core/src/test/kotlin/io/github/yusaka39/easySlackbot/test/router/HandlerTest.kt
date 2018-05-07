@@ -1,13 +1,13 @@
 package io.github.yusaka39.easySlackbot.test.router
 
 import io.github.yusaka39.easySlackbot.annotations.GroupParam
+import io.github.yusaka39.easySlackbot.api.entity.Action
+import io.github.yusaka39.easySlackbot.api.entity.Slack
 import io.github.yusaka39.easySlackbot.router.Handler
 import io.github.yusaka39.easySlackbot.router.HandlerPack
 import io.github.yusaka39.easySlackbot.router.HandlerType
-import io.github.yusaka39.easySlackbot.api.entity.Action
 import io.github.yusaka39.easySlackbot.slack.ChannelImpl
 import io.github.yusaka39.easySlackbot.slack.MessageImpl
-import io.github.yusaka39.easySlackbot.api.entity.Slack
 import io.github.yusaka39.easySlackbot.slack.UserImpl
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -18,10 +18,10 @@ import kotlin.test.assertTrue
 class HandlerTest {
 
     private val testMessage = MessageImpl(
-        UserImpl("U123456", "john", "John Doe"),
-        "This is message",
-        ChannelImpl("C123456", "foobar"),
-        "12345678.123456"
+            UserImpl("U123456", "john", "John Doe"),
+            "This is message",
+            ChannelImpl("C123456", "foobar"),
+            "12345678.123456"
     )
 
     @Test
@@ -42,9 +42,9 @@ class HandlerTest {
                 "^This.*".toRegex(), HandlerType.ListenTo
         )
         assertEquals(
-            "Handler[regex: ^This.*, function: " +
-                    "fun io.github.yusaka39.easySlackbot.test.router.HandlerTest.toStringWorksFine(): kotlin.Unit]",
-            handler.toString()
+                "Handler[regex: ^This.*, function: " +
+                        "fun io.github.yusaka39.easySlackbot.test.router.HandlerTest.toStringWorksFine(): kotlin.Unit]",
+                handler.toString()
         )
         handler.toString()
     }

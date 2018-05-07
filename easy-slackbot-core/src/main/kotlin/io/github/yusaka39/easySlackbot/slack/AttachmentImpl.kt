@@ -90,9 +90,9 @@ class AttachmentBuilder internal constructor(initializer: AttachmentBuilder.() -
     }
 
     fun build(): Attachment = AttachmentImpl(
-        this.fallback, this.color, this.authorName, this.authorLink, this.authorIcon, this.title, this.titleLink,
-        this.text, this.preText, this.imageUrl, this.thumbnailUrl, this.footer, this.footerIcon, this.fields,
-        this.actions, this.misc
+            this.fallback, this.color, this.authorName, this.authorLink, this.authorIcon, this.title, this.titleLink,
+            this.text, this.preText, this.imageUrl, this.thumbnailUrl, this.footer, this.footerIcon, this.fields,
+            this.actions, this.misc
     )
 }
 

@@ -10,21 +10,21 @@ internal class AnnotationBasedHandlerSetFactory(private val packageName: String)
     private val logger by this.logger()
     @Suppress("unchecked_cast")
     override fun create(): Set<Handler> =
-        ClassPath.from(ClassLoader.getSystemClassLoader()).allClasses.filter {
-            it.packageName.startsWith(this.packageName)
-        }.flatMap {
-            try {
-                val kClass = it.load().kotlin
-                (kClass.members + kClass.memberProperties.map { it.getter }).flatMap inner@{ kCallable ->
-                    val annotation = kCallable.findAnnotation<HandlerFunction>()
-                            ?: return@inner emptyList<Handler>()
-                    annotation.type.map {
-                        Handler(kClass, kCallable, annotation.regex.toRegex(annotation.regexOption.toSet()), it)
+            ClassPath.from(ClassLoader.getSystemClassLoader()).allClasses.filter {
+                it.packageName.startsWith(this.packageName)
+            }.flatMap {
+                try {
+                    val kClass = it.load().kotlin
+                    (kClass.members + kClass.memberProperties.map { it.getter }).flatMap inner@{ kCallable ->
+                        val annotation = kCallable.findAnnotation<HandlerFunction>()
+                                ?: return@inner emptyList<Handler>()
+                        annotation.type.map {
+                            Handler(kClass, kCallable, annotation.regex.toRegex(annotation.regexOption.toSet()), it)
+                        }
                     }
+                } catch (e: UnsupportedOperationException) {
+                    this.logger.warn("Failed to parse class ${it.name}.", e)
+                    emptyList<Handler>()
                 }
-            } catch (e: UnsupportedOperationException) {
-                this.logger.warn("Failed to parse class ${it.name}.", e)
-                emptyList<Handler>()
-            }
-        }.toSet()
+            }.toSet()
 }

@@ -1,10 +1,10 @@
 package io.github.yusaka39.easySlackbot.test.router.actions
 
 import io.github.yusaka39.easySlackbot.router.actions.PutReactionAction
-import io.github.yusaka39.easySlackbot.test.NotImplementedSlack
 import io.github.yusaka39.easySlackbot.slack.ChannelImpl
 import io.github.yusaka39.easySlackbot.slack.MessageImpl
 import io.github.yusaka39.easySlackbot.slack.UserImpl
+import io.github.yusaka39.easySlackbot.test.NotImplementedSlack
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -14,7 +14,7 @@ class PutReactionActionTest {
             private val hook: (String, String, String) -> Unit
     ) : NotImplementedSlack() {
         override fun putReactionTo(channelId: String, timestamp: String, emoticonName: String) =
-            this.hook(channelId, timestamp, emoticonName)
+                this.hook(channelId, timestamp, emoticonName)
     }
 
     @Test

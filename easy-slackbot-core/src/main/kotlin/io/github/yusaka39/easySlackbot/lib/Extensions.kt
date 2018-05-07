@@ -132,6 +132,6 @@ internal fun KClass<*>.instantiateHandlerPack(message: Message? = null): Any {
     }?.call()?.apply {
         (this as HandlerPack)._receivedMessage = message
     } ?: throw IllegalStateException(
-        "Classes contains handler function must have constructor with no args"
+            "Classes contains handler function must have constructor with no args"
     )
 }

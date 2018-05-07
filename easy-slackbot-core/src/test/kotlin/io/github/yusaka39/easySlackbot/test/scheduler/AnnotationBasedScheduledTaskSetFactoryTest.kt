@@ -15,13 +15,17 @@ import kotlin.test.assertTrue
 class AnnotationBasedScheduledTaskSetFactoryTest {
 
     private inline fun <reified T : Annotation> KAnnotatedElement.findAnnotationNotNull(): T =
-        this.findAnnotation() ?: throw AssertionError()
+            this.findAnnotation() ?: throw AssertionError()
 
     private fun ScheduledTask.isSameTo(task: ScheduledTask): Boolean {
-        val kClass = ScheduledTask::class.memberProperties.first { it.name == "kClass" }.getter.apply {
+        val kClass = ScheduledTask::class.memberProperties.first {
+            it.name == "kClass"
+        }.getter.apply {
             this.isAccessible = true
         }
-        val kCallable = ScheduledTask::class.memberProperties.first { it.name == "kCallable" }.getter.apply {
+        val kCallable = ScheduledTask::class.memberProperties.first {
+            it.name == "kCallable"
+        }.getter.apply {
             this.isAccessible = true
         }
         val zoneId = Schedule::class.memberProperties.first { it.name == "zoneId" }.getter.apply {
@@ -40,13 +44,16 @@ class AnnotationBasedScheduledTaskSetFactoryTest {
     fun factoryReturnsExpectedSet() {
         val expected = setOf(
                 ScheduledTask(
-                        TestTaskHolder::class, TestTaskHolder::foo, Schedule(TestTaskHolder::foo.findAnnotationNotNull())
+                        TestTaskHolder::class, TestTaskHolder::foo,
+                        Schedule(TestTaskHolder::foo.findAnnotationNotNull())
                 ),
                 ScheduledTask(
-                        TestTaskHolder::class, TestTaskHolder::bar, Schedule(TestTaskHolder::bar.findAnnotationNotNull())
+                        TestTaskHolder::class, TestTaskHolder::bar,
+                        Schedule(TestTaskHolder::bar.findAnnotationNotNull())
                 ),
                 ScheduledTask(
-                        TestTaskHolder::class, TestTaskHolder::baz, Schedule(TestTaskHolder::baz.findAnnotationNotNull())
+                        TestTaskHolder::class, TestTaskHolder::baz,
+                        Schedule(TestTaskHolder::baz.findAnnotationNotNull())
                 )
         )
         val actual = AnnotationBasedScheduledTaskSetFactory(

@@ -37,7 +37,8 @@ class ScheduleTest {
 
     @Test
     fun scheduleConstructorWorksFine() {
-        val annotation = TestClass::testProperty.getter.findAnnotation<RunWithInterval>() ?: throw AssertionError()
+        val annotation = TestClass::testProperty.getter.findAnnotation<RunWithInterval>()
+                ?: throw AssertionError()
         val schedule = Schedule(annotation)
         assertEquals(12, schedule.startHour)
         assertEquals(30, schedule.startMin)

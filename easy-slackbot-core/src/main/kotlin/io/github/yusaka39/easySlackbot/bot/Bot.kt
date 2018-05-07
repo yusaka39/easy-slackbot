@@ -13,16 +13,16 @@ import io.github.yusaka39.easySlackbot.slack.impl.SimpleSlackApiSlackFactory
 
 
 class Bot internal constructor(
-    slackToken: String,
-    messageRouterFactory: MessageRouterFactory,
-    schedulerServiceFactory: SchedulerServiceFactory,
-    slackFactory: SlackFactory
+        slackToken: String,
+        messageRouterFactory: MessageRouterFactory,
+        schedulerServiceFactory: SchedulerServiceFactory,
+        slackFactory: SlackFactory
 ) {
     constructor(slackToken: String, searchPackage: String) : this(
-        slackToken,
-        AnnotationBasedMessageRouterFactory(searchPackage),
-        AnnotationBasedSchedulerServiceFactory(searchPackage),
-        SimpleSlackApiSlackFactory()
+            slackToken,
+            AnnotationBasedMessageRouterFactory(searchPackage),
+            AnnotationBasedSchedulerServiceFactory(searchPackage),
+            SimpleSlackApiSlackFactory()
     )
 
     private val logger by this.logger()

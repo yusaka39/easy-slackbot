@@ -1,11 +1,11 @@
 package io.github.yusaka39.easySlackbot.test.router
 
+import io.github.yusaka39.easySlackbot.api.entity.Action
 import io.github.yusaka39.easySlackbot.router.Handler
 import io.github.yusaka39.easySlackbot.router.HandlerPack
 import io.github.yusaka39.easySlackbot.router.HandlerSetFactory
 import io.github.yusaka39.easySlackbot.router.HandlerType
 import io.github.yusaka39.easySlackbot.router.MessageRouter
-import io.github.yusaka39.easySlackbot.api.entity.Action
 import io.github.yusaka39.easySlackbot.slack.ChannelImpl
 import io.github.yusaka39.easySlackbot.slack.MessageImpl
 import io.github.yusaka39.easySlackbot.slack.UserImpl

@@ -8,12 +8,12 @@ import com.ullink.slack.simpleslackapi.impl.SlackSessionFactory
 import io.github.yusaka39.easySlackbot.api.entity.Attachment
 import io.github.yusaka39.easySlackbot.api.entity.Channel
 import io.github.yusaka39.easySlackbot.api.entity.Message
+import io.github.yusaka39.easySlackbot.api.entity.Slack
 import io.github.yusaka39.easySlackbot.lib.LazyMap
 import io.github.yusaka39.easySlackbot.lib.logger
 import io.github.yusaka39.easySlackbot.lib.toChannel
 import io.github.yusaka39.easySlackbot.lib.toMessage
 import io.github.yusaka39.easySlackbot.lib.toSlackAttachment
-import io.github.yusaka39.easySlackbot.api.entity.Slack
 
 
 class SimpleSlackApiSlack(slackToken: String) : Slack {
@@ -60,7 +60,7 @@ class SimpleSlackApiSlack(slackToken: String) : Slack {
                         acc.apply { this[c.id] = c }
                     }
                 },
-            { key -> this.session.findChannelById(key) }
+                { key -> this.session.findChannelById(key) }
         )
     }
 
@@ -71,7 +71,7 @@ class SimpleSlackApiSlack(slackToken: String) : Slack {
                         c.name?.let { acc.apply { this[c.name] = c } } ?: acc
                     }
                 },
-            { key -> this.session.findChannelByName(key) }
+                { key -> this.session.findChannelByName(key) }
         )
     }
 
@@ -99,23 +99,23 @@ class SimpleSlackApiSlack(slackToken: String) : Slack {
 
     override fun sendTo(channelId: String, text: String) {
         val message = SlackPreparedMessage.Builder()
-            .withMessage(text)
-            .build()
+                .withMessage(text)
+                .build()
         this.session.sendMessage(this.channelIdToChannel[channelId], message)
     }
 
     override fun putAttachmentTo(channelId: String, vararg attachments: Attachment) {
         val message = SlackPreparedMessage.Builder()
-            .withAttachments(attachments.map { it.toSlackAttachment() })
-            .build()
+                .withAttachments(attachments.map { it.toSlackAttachment() })
+                .build()
         this.session.sendMessage(this.channelIdToChannel[channelId], message)
     }
 
     override fun putReactionTo(channelId: String, timestamp: String, emoticonName: String) {
         this.session.addReactionToMessage(
-            this.channelIdToChannel[channelId],
-            timestamp,
-            emoticonName
+                this.channelIdToChannel[channelId],
+                timestamp,
+                emoticonName
         )
     }
 
@@ -138,13 +138,13 @@ class SimpleSlackApiSlack(slackToken: String) : Slack {
     }
 
     override fun getChannelIdOrNullByName(channelName: String): String? =
-        this.channelNameToChannel[channelName]?.id
+            this.channelNameToChannel[channelName]?.id
 
     override fun getUserIdByName(userName: String): String? =
-        this.session.users.firstOrNull { it.userName == userName }?.id
+            this.session.users.firstOrNull { it.userName == userName }?.id
 
     override fun getDmChannelIdOrNullByUserName(username: String): String? =
-        this.userNameToDmChannel[username]?.id
+            this.userNameToDmChannel[username]?.id
 
     override fun startService() {
         this.logger.info("Connecting to slack.")

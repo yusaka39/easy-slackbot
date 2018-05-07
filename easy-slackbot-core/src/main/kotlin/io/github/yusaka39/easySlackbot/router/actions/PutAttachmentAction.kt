@@ -3,14 +3,14 @@ package io.github.yusaka39.easySlackbot.router.actions
 import io.github.yusaka39.easySlackbot.api.entity.Action
 import io.github.yusaka39.easySlackbot.api.entity.Attachment
 import io.github.yusaka39.easySlackbot.api.entity.Channel
+import io.github.yusaka39.easySlackbot.api.entity.Slack
 import io.github.yusaka39.easySlackbot.api.entity.User
 import io.github.yusaka39.easySlackbot.slack.AttachmentListBuilder
-import io.github.yusaka39.easySlackbot.api.entity.Slack
 
 class PutAttachmentAction internal constructor(
-    private val targetUserName: String?,
-    private val targetChannelId: String?,
-    private val attachments: List<Attachment>
+        private val targetUserName: String?,
+        private val targetChannelId: String?,
+        private val attachments: List<Attachment>
 ) : Action {
     override fun run(slack: Slack) = when {
         this.targetUserName != null -> {
@@ -28,21 +28,21 @@ class PutAttachmentAction internal constructor(
 }
 
 fun putAttachmentToUserAction(targetUserName: String, initializer: AttachmentListBuilder.() -> Unit) =
-    PutAttachmentAction(
-        targetUserName,
-        null,
-        AttachmentListBuilder(initializer).build()
-    )
+        PutAttachmentAction(
+                targetUserName,
+                null,
+                AttachmentListBuilder(initializer).build()
+        )
 
 fun putAttachmentToUserAction(targetUser: User, initializer: AttachmentListBuilder.() -> Unit) =
-    putAttachmentToUserAction(targetUser.userName, initializer)
+        putAttachmentToUserAction(targetUser.userName, initializer)
 
 fun putAttachmentToChannelAction(targetChannelId: String, initializer: AttachmentListBuilder.() -> Unit) =
-    PutAttachmentAction(
-        null,
-        targetChannelId,
-        AttachmentListBuilder(initializer).build()
-    )
+        PutAttachmentAction(
+                null,
+                targetChannelId,
+                AttachmentListBuilder(initializer).build()
+        )
 
 fun putAttachmentToChannelAction(targetChannel: Channel, initializer: AttachmentListBuilder.() -> Unit) =
-    putAttachmentToChannelAction(targetChannel.id, initializer)
+        putAttachmentToChannelAction(targetChannel.id, initializer)

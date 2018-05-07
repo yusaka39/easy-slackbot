@@ -1,8 +1,8 @@
 package io.github.yusaka39.easySlackbot.test.router.actions
 
 import io.github.yusaka39.easySlackbot.router.actions.SendDirectMessageAction
-import io.github.yusaka39.easySlackbot.test.NotImplementedSlack
 import io.github.yusaka39.easySlackbot.slack.UserImpl
+import io.github.yusaka39.easySlackbot.test.NotImplementedSlack
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue

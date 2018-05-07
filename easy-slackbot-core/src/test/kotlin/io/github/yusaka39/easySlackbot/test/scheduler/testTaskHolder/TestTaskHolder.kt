@@ -1,9 +1,9 @@
 package io.github.yusaka39.easySlackbot.test.scheduler.testTaskHolder
 
 import io.github.yusaka39.easySlackbot.annotations.RunWithInterval
-import io.github.yusaka39.easySlackbot.router.HandlerPack
 import io.github.yusaka39.easySlackbot.api.entity.Action
 import io.github.yusaka39.easySlackbot.api.entity.Slack
+import io.github.yusaka39.easySlackbot.router.HandlerPack
 import java.util.concurrent.TimeUnit
 
 private val nop = object : Action {

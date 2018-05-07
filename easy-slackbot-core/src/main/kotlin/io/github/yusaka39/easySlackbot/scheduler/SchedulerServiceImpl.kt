@@ -1,7 +1,7 @@
 package io.github.yusaka39.easySlackbot.scheduler
 
-import io.github.yusaka39.easySlackbot.lib.logger
 import io.github.yusaka39.easySlackbot.api.entity.Slack
+import io.github.yusaka39.easySlackbot.lib.logger
 import java.util.Timer
 import kotlin.concurrent.timer
 
@@ -14,8 +14,8 @@ internal class SchedulerServiceImpl(scheduledTaskSetFactory: ScheduledTaskSetFac
         this.logger.info("Starting scheduled service.")
         this.runningTask = this.tasks.map {
             timer(
-                initialDelay = it.schedule.getDelayToFirstExecution(),
-                period = it.schedule.intervalMillis
+                    initialDelay = it.schedule.getDelayToFirstExecution(),
+                    period = it.schedule.intervalMillis
             ) {
                 this@SchedulerServiceImpl.logger.info("Calling $it.")
                 it.getAction().run(slack)

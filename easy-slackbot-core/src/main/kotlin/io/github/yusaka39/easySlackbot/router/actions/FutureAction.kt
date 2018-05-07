@@ -7,6 +7,7 @@ import kotlin.concurrent.thread
 class FutureAction private constructor(private val procedure: (Slack) -> Unit) : Action {
     constructor(actionProvider: () -> Action) :
             this({ slack: Slack -> actionProvider().run(slack) })
+
     override fun run(slack: Slack) {
         thread {
             this.procedure(slack)

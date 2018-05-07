@@ -12,10 +12,10 @@ class HandlerPackTest {
     @Test
     fun gettingMessageWorksCorrectly() {
         val testMessage = MessageImpl(
-            UserImpl("Uabcdefg", "awesomekotlin", "John Doe"),
-            "kotlin is awesome.",
-            ChannelImpl("Cabcdefg", "secret_group"),
-            "12345678.123456"
+                UserImpl("Uabcdefg", "awesomekotlin", "John Doe"),
+                "kotlin is awesome.",
+                ChannelImpl("Cabcdefg", "secret_group"),
+                "12345678.123456"
         )
         object : HandlerPack() {
             init {

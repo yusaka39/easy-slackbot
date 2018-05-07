@@ -1,16 +1,16 @@
 package io.github.yusaka39.easySlackbot.test.bot
 
-import io.github.yusaka39.easySlackbot.test.NotImplementedSlack
 import io.github.yusaka39.easySlackbot.api.entity.Message
+import io.github.yusaka39.easySlackbot.api.entity.Slack
 import io.github.yusaka39.easySlackbot.bot.Bot
 import io.github.yusaka39.easySlackbot.router.AnnotationBasedMessageRouterFactory
 import io.github.yusaka39.easySlackbot.scheduler.SchedulerService
 import io.github.yusaka39.easySlackbot.scheduler.SchedulerServiceFactory
 import io.github.yusaka39.easySlackbot.slack.ChannelImpl
 import io.github.yusaka39.easySlackbot.slack.MessageImpl
-import io.github.yusaka39.easySlackbot.api.entity.Slack
 import io.github.yusaka39.easySlackbot.slack.SlackFactory
 import io.github.yusaka39.easySlackbot.slack.UserImpl
+import io.github.yusaka39.easySlackbot.test.NotImplementedSlack
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -18,9 +18,9 @@ import kotlin.test.assertTrue
 
 class BotTest {
     private class TestSlackFactory(
-        private val sendHook: (String, String) -> Unit = { _, _ -> },
-        private val startHook: () -> Unit = {},
-        private val stopHook: () -> Unit = {}
+            private val sendHook: (String, String) -> Unit = { _, _ -> },
+            private val startHook: () -> Unit = {},
+            private val stopHook: () -> Unit = {}
     ) : SlackFactory {
         var onReceiveMessage: (message: Message, slack: Slack) -> Unit = { _, _ -> }
             private set
@@ -59,11 +59,11 @@ class BotTest {
     }
 
     private val testMessageRouterFactory =
-        AnnotationBasedMessageRouterFactory("io.github.yusaka39.easySlackbot.test.bot.testHandlerPack")
+            AnnotationBasedMessageRouterFactory("io.github.yusaka39.easySlackbot.test.bot.testHandlerPack")
 
     private class TestSchedulerFactory(
-        val startHook: () -> Unit = {},
-        val stopHook: () -> Unit = {}
+            val startHook: () -> Unit = {},
+            val stopHook: () -> Unit = {}
     ) : SchedulerServiceFactory {
         override fun create(): SchedulerService = object : SchedulerService {
             override fun start(slack: Slack) {

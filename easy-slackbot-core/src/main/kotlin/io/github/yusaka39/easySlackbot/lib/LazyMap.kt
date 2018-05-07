@@ -1,8 +1,8 @@
 package io.github.yusaka39.easySlackbot.lib
 
 internal class LazyMap<K, V> private constructor(
-    private val cache: MutableMap<K, V>,
-    private val getter: (key: K) -> V?
+        private val cache: MutableMap<K, V>,
+        private val getter: (key: K) -> V?
 ) : Map<K, V> by cache {
     constructor(cacheInitializer: () -> Map<K, V>, getter: (key: K) -> V?) :
             this(cacheInitializer().toMutableMap(), getter)
