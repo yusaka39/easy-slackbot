@@ -4,7 +4,7 @@
 
     <groupId>io.github.yusaka39.easy-slackbot</groupId>
     <artifactId>easy-slackbot</artifactId>
-    <version>0.3.2-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
 
     <name>easy-slackbot</name>
     <url>https://yusaka39.github.io/</url>
