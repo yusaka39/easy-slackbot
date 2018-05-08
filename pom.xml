@@ -12,6 +12,7 @@
     <modules>
         <module>easy-slackbot-core</module>
     <module>easy-slackbot-api</module>
+    <module>easy-slackbot-standard-plugin</module>
   </modules>
 
     <packaging>pom</packaging>
