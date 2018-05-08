@@ -1,9 +1,0 @@
-package io.github.yusaka39.easySlackbot.router
-
-import io.github.yusaka39.easySlackbot.api.entity.Message
-
-abstract class HandlerPack {
-    internal var _receivedMessage: Message? = null
-    protected val receivedMessage: Message
-        get() = this._receivedMessage ?: throw IllegalStateException("Backing property is null")
-}

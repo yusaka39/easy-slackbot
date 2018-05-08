@@ -5,5 +5,5 @@ import io.github.yusaka39.easySlackbot.api.entity.Message
 
 interface Handler {
     fun createActionProvider(message: Message): () -> Action
-    fun isMatchedTo(message: Message): Boolean
+    fun isMatchedTo(message: Message, isReplyMessage: Boolean): Boolean
 }

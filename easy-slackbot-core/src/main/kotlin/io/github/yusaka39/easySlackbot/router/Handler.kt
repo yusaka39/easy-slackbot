@@ -30,17 +30,7 @@ internal class Handler(
             *this.getArgumentsFromTargetMessage(message).toTypedArray()
     ) as? Action ?: throw IllegalStateException("Handler functions must return Action")
 
-    private fun getArgumentsFromTargetMessage(message: Message): List<Any?> {
-        val params = this.kCallable.valueParameters.map {
-            it to (it.findAnnotation<GroupParam>()?.group ?: throw IllegalStateException(
-                    "All params of methods annotated by ListenTo or RespondTo must be annotated by GroupParam."
-            ))
-        }
-        val group = this.regex.find(message.text)?.groupValues ?: throw IllegalStateException(
-                "Given message $message is not match to $this"
-        )
-        return params.map { (param, index) -> group[index].convertTo(param.type) }
-    }
+
 
     override fun toString(): String = "Handler[regex: $regex, function: $kCallable]"
 }

@@ -9,45 +9,15 @@ import io.github.yusaka39.easySlackbot.api.entity.Attachment
 import io.github.yusaka39.easySlackbot.api.entity.Channel
 import io.github.yusaka39.easySlackbot.api.entity.Message
 import io.github.yusaka39.easySlackbot.api.entity.User
-import io.github.yusaka39.easySlackbot.router.HandlerPack
 import io.github.yusaka39.easySlackbot.slack.AttachmentBuilder
 import io.github.yusaka39.easySlackbot.slack.ChannelImpl
 import io.github.yusaka39.easySlackbot.slack.MessageImpl
 import io.github.yusaka39.easySlackbot.slack.UserImpl
 import kotlin.reflect.KAnnotatedElement
-import kotlin.reflect.KClass
 import kotlin.reflect.KType
-import kotlin.reflect.full.isSubclassOf
-import kotlin.reflect.jvm.isAccessible
 
-private inline fun <reified T> T?.validateNullability(isNullable: Boolean): T? {
-    if (this != null) {
-        return this
-    }
-    if (isNullable) {
-        return null
-    }
-    throw IllegalArgumentException("$this cannot convert to ${T::class.simpleName}.")
-}
 
-internal fun String.convertTo(kType: KType): Any? {
-    val isNullable = kType.isMarkedNullable
-    return when (kType.classifier) {
-        Byte::class -> this.toByteOrNull().validateNullability(isNullable)
-        Short::class -> this.toShortOrNull().validateNullability(isNullable)
-        Int::class -> this.toIntOrNull().validateNullability(isNullable)
-        Long::class -> this.toLongOrNull().validateNullability(isNullable)
-        Float::class -> this.toFloatOrNull().validateNullability(isNullable)
-        Double::class -> this.toDoubleOrNull().validateNullability(isNullable)
-        Boolean::class -> when (this) {
-            "true" -> true
-            "false" -> false
-            else -> null
-        }.validateNullability(isNullable)
-        String::class -> this
-        else -> throw IllegalArgumentException("${kType.classifier} is not allowed as parameter")
-    }
-}
+
 
 internal inline fun <reified T : Annotation> KAnnotatedElement.isAnnotatedWith() = this.annotations.any { it is T }
 
@@ -123,15 +93,3 @@ internal fun Attachment.toSlackAttachment(): SlackAttachment {
     }
 }
 
-internal fun KClass<*>.instantiateHandlerPack(message: Message? = null): Any {
-    if (!this.isSubclassOf(HandlerPack::class)) {
-        throw IllegalStateException("Classes contains handler must extends HandlerPack")
-    }
-    return this.constructors.firstOrNull { it.parameters.isEmpty() }?.apply {
-        this.isAccessible = true
-    }?.call()?.apply {
-        (this as HandlerPack)._receivedMessage = message
-    } ?: throw IllegalStateException(
-            "Classes contains handler function must have constructor with no args"
-    )
-}
