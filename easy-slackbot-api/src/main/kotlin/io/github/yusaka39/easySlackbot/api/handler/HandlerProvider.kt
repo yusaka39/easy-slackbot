@@ -1,6 +1,6 @@
 package io.github.yusaka39.easySlackbot.api.handler
 
-import javax.swing.Action
+import io.github.yusaka39.easySlackbot.api.entity.Action
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
 

@@ -3,7 +3,6 @@ package io.github.yusaka39.easySlackbot.test.bot
 import io.github.yusaka39.easySlackbot.api.entity.Message
 import io.github.yusaka39.easySlackbot.api.entity.Slack
 import io.github.yusaka39.easySlackbot.bot.Bot
-import io.github.yusaka39.easySlackbot.router.AnnotationBasedMessageRouterFactory
 import io.github.yusaka39.easySlackbot.scheduler.SchedulerService
 import io.github.yusaka39.easySlackbot.scheduler.SchedulerServiceFactory
 import io.github.yusaka39.easySlackbot.slack.ChannelImpl

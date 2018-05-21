@@ -1,28 +1,27 @@
-package io.github.yusaka39.easySlackbot.scheduler
+package io.github.yusaka39.easySlackbot.api.handler
 
 import io.github.yusaka39.easySlackbot.api.entity.Action
 import io.github.yusaka39.easySlackbot.api.entity.Message
-import io.github.yusaka39.easySlackbot.api.handler.HandlerPack
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
 import kotlin.reflect.full.isSubclassOf
 import kotlin.reflect.jvm.isAccessible
 
-internal class ScheduledTask(
-        private val kClass: KClass<*>,
-        private val kCallable: KCallable<*>,
-        val schedule: Schedule
-) {
-    fun getAction(): Action = (this.kCallable.apply {
-        this.isAccessible = true
-    }.call(this.kClass.instantiateHandlerPack()) as? Action) ?: throw IllegalStateException(
-            "Functions annotated with RunWithInterval must return Action"
-    )
+abstract class HandlerPackHandler : Handler {
+    protected abstract val kCallable: KCallable<*>
+    protected abstract val kClass: KClass<*>
 
-    override fun toString(): String = "ScheduledTask[ startedAt: %02d:%02d, function: $kCallable ]"
-            .format(this.schedule.startHour, this.schedule.startMin)
+    override fun createActionProvider(message: Message): () -> Action = {
+        this.kCallable.apply {
+            this.isAccessible = true
+        }.call(
+                this.kClass.instantiateHandlerPack(message),
+                *this.getArgumentsFromTargetMessage(message)
+        ) as? Action ?: throw IllegalStateException("Handler functions must return Action")
+    }
 
-    // TODO: duplicate definition
+    protected abstract fun getArgumentsFromTargetMessage(message: Message): Array<Any?>
+
     private fun KClass<*>.instantiateHandlerPack(message: Message? = null): Any {
         if (!this.isSubclassOf(HandlerPack::class)) {
             throw IllegalStateException("Classes contains handler must extends HandlerPack")

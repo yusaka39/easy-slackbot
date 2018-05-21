@@ -1,9 +1,9 @@
 package io.github.yusaka39.easySlackbot.stdplugin.handler
 
+import io.github.yusaka39.easySlackbot.api.entity.Action
 import io.github.yusaka39.easySlackbot.api.handler.Handler
 import io.github.yusaka39.easySlackbot.api.handler.HandlerProvider
 import io.github.yusaka39.easySlackbot.stdplugin.handler.annotations.HandlerFunction
-import javax.swing.Action
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
 

@@ -1,11 +1,8 @@
 package io.github.yusaka39.easySlackbot.test.router
 
-import io.github.yusaka39.easySlackbot.router.AnnotationBasedHandlerSetFactory
 import io.github.yusaka39.easySlackbot.router.Handler
 import io.github.yusaka39.easySlackbot.router.HandlerType
 import org.junit.Test
-import kotlin.reflect.full.memberProperties
-import kotlin.reflect.jvm.isAccessible
 import kotlin.test.assertTrue
 
 class AnnotationBasedHandlerSetFactoryTest {

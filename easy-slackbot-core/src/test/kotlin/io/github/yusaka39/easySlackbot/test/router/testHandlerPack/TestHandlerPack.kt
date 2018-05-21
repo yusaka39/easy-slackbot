@@ -1,6 +1,5 @@
 package io.github.yusaka39.easySlackbot.test.router.testHandlerPack
 
-import io.github.yusaka39.easySlackbot.annotations.HandlerFunction
 import io.github.yusaka39.easySlackbot.api.entity.Action
 import io.github.yusaka39.easySlackbot.api.entity.Slack
 import io.github.yusaka39.easySlackbot.router.HandlerPack
