@@ -44,7 +44,7 @@
         <dependency>
             <groupId>com.github.yusaka39</groupId>
             <artifactId>easy-slackbot-api</artifactId>
-            <version>0.0.1-DRAFT</version>
+            <version>92ef73ce96</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
