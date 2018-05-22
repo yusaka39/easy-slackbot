@@ -42,7 +42,7 @@ internal fun SlackAttachment.toAttachment(): Attachment {
         this.footerIcon = attachment.footerIcon
         this.imageUrl = attachment.imageUrl
         this.color = attachment.color
-        attachment.actions.forEach {
+        (attachment.actions ?: emptyList()).forEach {
             action {
                 this.url = it.value
                 this.type = it.type
@@ -50,14 +50,14 @@ internal fun SlackAttachment.toAttachment(): Attachment {
                 this.text = it.text
             }
         }
-        attachment.fields.forEach {
+        (attachment.fields ?: emptyList()).forEach {
             field {
                 this.title = it.title
                 this.value = it.value
                 this.isShort = it.isShort
             }
         }
-        attachment.miscRootFields.forEach { k, v ->
+        (attachment.miscRootFields ?: emptyMap()).forEach { k, v ->
             misc(k, v)
         }
     }.build()

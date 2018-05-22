@@ -1,19 +1,55 @@
 package io.github.yusaka39.easySlackbot.sample
 
-import io.github.yusaka39.easySlackbot.annotations.GroupParam
-import io.github.yusaka39.easySlackbot.annotations.HandlerFunction
-import io.github.yusaka39.easySlackbot.annotations.RunWithInterval
-import io.github.yusaka39.easySlackbot.bot.Bot
-import io.github.yusaka39.easySlackbot.router.HandlerPack
-import io.github.yusaka39.easySlackbot.router.actions.PostAction
-import io.github.yusaka39.easySlackbot.router.actions.PostWithChannelNameAction
-import io.github.yusaka39.easySlackbot.router.actions.PutReactionAction
-import io.github.yusaka39.easySlackbot.router.actions.putAttachmentToChannelAction
+import com.github.yusaka39.slackbot.api.entity.Action
+import com.github.yusaka39.slackbot.api.entity.Message
+import com.github.yusaka39.slackbot.api.handler.Handler
+import com.github.yusaka39.slackbot.api.handler.HandlerPack
+import com.github.yusaka39.slackbot.api.handler.HandlerPackHandler
+import com.github.yusaka39.slackbot.api.handler.HandlerProvider
+import com.github.yusaka39.slackbot.core.annotations.RunWithInterval
+import com.github.yusaka39.slackbot.core.bot.BotBuilder
+import com.github.yusaka39.slackbot.stdplugin.actions.PostAction
+import com.github.yusaka39.slackbot.stdplugin.actions.PostWithChannelNameAction
+import com.github.yusaka39.slackbot.stdplugin.actions.PutReactionAction
+import com.github.yusaka39.slackbot.stdplugin.actions.putAttachmentToChannelAction
+import com.github.yusaka39.slackbot.stdplugin.handler.HandlerFunctionHandlerProvider
+import com.github.yusaka39.slackbot.stdplugin.handler.annotations.GroupParam
+import com.github.yusaka39.slackbot.stdplugin.handler.annotations.HandlerFunction
 import java.lang.management.ManagementFactory
 import java.util.concurrent.TimeUnit
+import kotlin.reflect.KCallable
+import kotlin.reflect.KClass
 
 fun main(args: Array<String>) {
-    Bot(args[0], "io.github.yusaka39.easySlackbot.sample").run()
+    BotBuilder {
+        setToken(args[0])
+        setHandlerPackage("io.github.yusaka39.easySlackbot.sample")
+        addFeature(HandlerFunctionHandlerProvider())
+    }.build().run()
+}
+
+annotation class Hoge
+
+class AttachmentHandlerProvider : HandlerProvider {
+    override fun createHandlerOrNull(annotations: List<Annotation>, kClass: KClass<*>, callable: KCallable<Action>): Handler? {
+        val anno = annotations.firstOrNull { it is Hoge } ?: return null
+
+        return object : HandlerPackHandler() {
+            override val kCallable: KCallable<*>
+                get() = callable
+            override val kClass: KClass<*>
+                get() = kClass
+
+            override fun getArgumentsFromTargetMessage(message: Message): Array<Any?> {
+                return emptyArray()
+            }
+
+            override fun isMatchedTo(message: Message, isReplyMessage: Boolean): Boolean {
+                return message.attachments.isNotEmpty()
+            }
+
+        }
+    }
 }
 
 class Handlers : HandlerPack() {
@@ -55,6 +91,6 @@ class Handlers : HandlerPack() {
         }
     }
 
-    @get:RunWithInterval(0, 0, "UTC", 24, TimeUnit.HOURS)
-    val takeANap = PostWithChannelNameAction("general", "Are you still working? Would you like to take a nap?")
+    @Hoge
+    fun hoge() = PostAction(this.receivedMessage.channel, "attach!")
 }
