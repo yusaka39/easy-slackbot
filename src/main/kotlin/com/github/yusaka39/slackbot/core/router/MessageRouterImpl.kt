@@ -12,11 +12,11 @@ internal class MessageRouterImpl(handlerSetFactory: HandlerSetFactory): MessageR
     override fun findHandlersFor(message: Message, isRepliedMessage: Boolean): List<Handler> {
         val handlers = this.handlers.filter { it.isMatchedTo(message, isRepliedMessage) }
         if (handlers.isEmpty()) {
-            this.logger.info("Message \"${message.text}\" is matched to ${
-                handlers.joinToString(", ") { it.javaClass.simpleName }
-            }.")
-        } else {
             this.logger.info("Message \"${message.text}\" is not matched to any handler.")
+        } else {
+            this.logger.info("Message \"${message.text}\" is matched to ${
+            handlers.joinToString(", ") { it.javaClass.simpleName }
+            }.")
         }
         return handlers
     }

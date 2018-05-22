@@ -15,12 +15,13 @@ apply plugin: "kotlin"
 
 repositories {
     maven { url 'https://jitpack.io' }
+    mavenLocal()
     mavenCentral()
 }
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    compile 'com.github.yusaka39:easy-slackbot:feature~customize-api-SNAPSHOT'
+    compile 'com.github.yusaka39:easy-slackbot:1.0.0-SNAPSHOT'
     compile 'com.github.yusaka39:easy-slackbot-api:92ef73ce96'
     compile 'org.slf4j:slf4j-api:1.7.25'
     compile 'org.slf4j:slf4j-simple:1.7.25'

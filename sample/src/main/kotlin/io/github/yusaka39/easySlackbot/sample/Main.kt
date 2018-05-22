@@ -6,17 +6,14 @@ import com.github.yusaka39.slackbot.api.handler.Handler
 import com.github.yusaka39.slackbot.api.handler.HandlerPack
 import com.github.yusaka39.slackbot.api.handler.HandlerPackHandler
 import com.github.yusaka39.slackbot.api.handler.HandlerProvider
-import com.github.yusaka39.slackbot.core.annotations.RunWithInterval
 import com.github.yusaka39.slackbot.core.bot.BotBuilder
 import com.github.yusaka39.slackbot.stdplugin.actions.PostAction
-import com.github.yusaka39.slackbot.stdplugin.actions.PostWithChannelNameAction
 import com.github.yusaka39.slackbot.stdplugin.actions.PutReactionAction
 import com.github.yusaka39.slackbot.stdplugin.actions.putAttachmentToChannelAction
 import com.github.yusaka39.slackbot.stdplugin.handler.HandlerFunctionHandlerProvider
 import com.github.yusaka39.slackbot.stdplugin.handler.annotations.GroupParam
 import com.github.yusaka39.slackbot.stdplugin.handler.annotations.HandlerFunction
 import java.lang.management.ManagementFactory
-import java.util.concurrent.TimeUnit
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
 
@@ -25,6 +22,7 @@ fun main(args: Array<String>) {
         setToken(args[0])
         setHandlerPackage("io.github.yusaka39.easySlackbot.sample")
         addFeature(HandlerFunctionHandlerProvider())
+        addFeature(AttachmentHandlerProvider())
     }.build().run()
 }
 
