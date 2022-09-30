@@ -1,7 +1,7 @@
 package io.github.yusaka39.easySlackbot.lib
 
 import com.ullink.slack.simpleslackapi.SlackChannel
-import com.ullink.slack.simpleslackapi.SlackPersona
+import com.ullink.slack.simpleslackapi.SlackPresence
 import com.ullink.slack.simpleslackapi.SlackUser
 import com.ullink.slack.simpleslackapi.events.SlackMessagePosted
 import io.github.yusaka39.easySlackbot.slack.Attachment
@@ -236,7 +236,7 @@ class ExtensionsTest {
             TODO("not implemented")
         }
 
-        override fun getPresence(): SlackPersona.SlackPresence {
+        override fun getPresence(): SlackPresence {
             TODO("not implemented")
         }
 

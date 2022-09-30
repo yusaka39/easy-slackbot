@@ -19,3 +19,5 @@ internal class LazyMap<K, V> private constructor(
 
     override fun getOrDefault(key: K, defaultValue: V): V = this[key] ?: defaultValue
 }
+
+internal fun <K, V> memoize(getter: (K) -> V) = LazyMap(getter)

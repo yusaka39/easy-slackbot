@@ -1,5 +1,6 @@
 package io.github.yusaka39.easySlackbot.bot
 
+import RtmApiSlackFactory
 import io.github.yusaka39.easySlackbot.lib.logger
 import io.github.yusaka39.easySlackbot.router.AnnotationBasedMessageRouterFactory
 import io.github.yusaka39.easySlackbot.router.HandlerType
@@ -9,7 +10,6 @@ import io.github.yusaka39.easySlackbot.scheduler.SchedulerService
 import io.github.yusaka39.easySlackbot.scheduler.SchedulerServiceFactory
 import io.github.yusaka39.easySlackbot.slack.Message
 import io.github.yusaka39.easySlackbot.slack.SlackFactory
-import io.github.yusaka39.easySlackbot.slack.impl.SimpleSlackApiSlackFactory
 
 
 class Bot internal constructor(
@@ -22,7 +22,7 @@ class Bot internal constructor(
         slackToken,
         AnnotationBasedMessageRouterFactory(searchPackage),
         AnnotationBasedSchedulerServiceFactory(searchPackage),
-        SimpleSlackApiSlackFactory()
+        RtmApiSlackFactory()
     )
 
     private val logger by this.logger()

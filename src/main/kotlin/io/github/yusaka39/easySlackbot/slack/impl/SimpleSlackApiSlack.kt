@@ -98,15 +98,15 @@ class SimpleSlackApiSlack(slackToken: String) : Slack {
     }
 
     override fun sendTo(channelId: String, text: String) {
-        val message = SlackPreparedMessage.Builder()
-            .withMessage(text)
+        val message = SlackPreparedMessage.builder()
+            .message(text)
             .build()
         this.session.sendMessage(this.channelIdToChannel[channelId], message)
     }
 
     override fun putAttachmentTo(channelId: String, vararg attachments: Attachment) {
-        val message = SlackPreparedMessage.Builder()
-            .withAttachments(attachments.map { it.toSlackAttachment() })
+        val message = SlackPreparedMessage.builder()
+            .attachments(attachments.map { it.toSlackAttachment() })
             .build()
         this.session.sendMessage(this.channelIdToChannel[channelId], message)
     }

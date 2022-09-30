@@ -23,10 +23,14 @@ class Handlers : HandlerPack() {
 
     @HandlerFunction("is released", regexOption = [RegexOption.IGNORE_CASE])
     fun congrats() =
-        PutReactionAction(this.receivedMessage, "tada") compose PostAction(this.receivedMessage.channel, "Congrats!")
+        PutReactionAction(
+            this.receivedMessage,
+            "tada"
+        ) compose PostAction(this.receivedMessage.channel, "Congrats!")
 
     @HandlerFunction("""^plus\s+(\d+)\s+(\d+)""")
-    fun plus(@GroupParam(1) a: Int, @GroupParam(2) b: Int) = PostAction(this.receivedMessage.channel, "${ a + b }")
+    fun plus(@GroupParam(1) a: Int, @GroupParam(2) b: Int) =
+        PostAction(this.receivedMessage.channel, "${a + b}")
 
     @HandlerFunction("^status$")
     fun showStatus() = putAttachmentToChannelAction(this.receivedMessage.channel) {
@@ -56,5 +60,6 @@ class Handlers : HandlerPack() {
     }
 
     @get:RunWithInterval(0, 0, "UTC", 24, TimeUnit.HOURS)
-    val takeANap = PostWithChannelNameAction("general", "Are you still working? Would you like to take a nap?")
+    val takeANap =
+        PostWithChannelNameAction("general", "Are you still working? Would you like to take a nap?")
 }
