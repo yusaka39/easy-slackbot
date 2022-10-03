@@ -174,6 +174,7 @@ class RtmApiSlack(private val token: String) : S {
                                     .build()
                             }
                         )
+                        .title(it.title)
                         .titleLink(it.titleLink)
                         .thumbUrl(it.thumbnailUrl)
                         .authorName(it.authorName)
