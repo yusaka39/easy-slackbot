@@ -21,9 +21,13 @@ import io.github.yusaka39.easySlackbot.slack.Attachment
 import io.github.yusaka39.easySlackbot.slack.Channel
 import io.github.yusaka39.easySlackbot.slack.Message
 import io.github.yusaka39.easySlackbot.slack.User
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
 import io.github.yusaka39.easySlackbot.slack.Slack as S
 
 class RtmApiSlack(private val token: String) : S {
+    private val stateLock = ReentrantLock()
+    private var isRunning = false
     private val logger by this.logger()
 
     private val slack by lazy {
@@ -41,9 +45,13 @@ class RtmApiSlack(private val token: String) : S {
                 val msg = mapper.readValue(it, RtmMessage::class.java)
                 when (msg) {
                     is RtmMessage.ChatMessage -> processMessage(msg.toMessage())
+                    is RtmMessage.GoodbyeMessage -> stateLock.withLock {
+                        if (isRunning) rtm.reconnect()
+                    }
                     else -> Unit
                 }
             }
+            rtm.addCloseHandler { it.closeCode }
         }
     }
 
@@ -74,16 +82,18 @@ class RtmApiSlack(private val token: String) : S {
                 p.use {
                     val node: JsonNode = p.codec.readTree(p)
                     val type: String = node.get("type").asText()
-                    if (type == "message") {
-                        return ObjectMapper().readValue(
+                    return when (type) {
+                        "message" -> ObjectMapper().readValue(
                             node.toString(), ChatMessage::class.java
                         )
+                        "goodbye" -> GoodbyeMessage()
+                        else -> UnknownMessage(type)
                     }
-                    return UnknownMessage(type)
                 }
         }
 
         class UnknownMessage(type: String) : RtmMessage(type)
+        class GoodbyeMessage : RtmMessage("goodbye")
 
         @JsonDeserialize(using = None::class)
         @JsonIgnoreProperties(ignoreUnknown = true)
@@ -227,7 +237,8 @@ class RtmApiSlack(private val token: String) : S {
             }.channel.id
         }
 
-    override fun startService() {
+    override fun startService() = this.stateLock.withLock {
+        this.isRunning = true
         this.logger.info("Connecting to slack.")
         this.logger.info("Creating user cache......")
         val _user = users
@@ -239,7 +250,8 @@ class RtmApiSlack(private val token: String) : S {
         this.logger.info("Connected")
     }
 
-    override fun stopService() {
+    override fun stopService() = this.stateLock.withLock {
+        this.isRunning = false
         this.logger.info("Disconnecting from slack.")
         this.rtm.disconnect()
         this.logger.info("Disconnected")
