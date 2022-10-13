@@ -45,13 +45,18 @@ class RtmApiSlack(private val token: String) : S {
                 val msg = mapper.readValue(it, RtmMessage::class.java)
                 when (msg) {
                     is RtmMessage.ChatMessage -> processMessage(msg.toMessage())
-                    is RtmMessage.GoodbyeMessage -> stateLock.withLock {
-                        if (isRunning) rtm.reconnect()
-                    }
+                    is RtmMessage.GoodbyeMessage -> this@RtmApiSlack.logger.info(
+                        "RtmMessage(Goodbye)"
+                    )
                     else -> Unit
                 }
             }
-            rtm.addCloseHandler { it.closeCode }
+            rtm.addCloseHandler {
+                stateLock.withLock {
+                    this@RtmApiSlack.logger.info("Rtm connection is closed")
+                    if (isRunning) rtm.reconnect()
+                }
+            }
         }
     }
 
