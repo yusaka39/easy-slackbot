@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.slack.api.Slack
 import com.slack.api.bolt.App
 import com.slack.api.bolt.AppConfig
+import com.slack.api.methods.SlackApiException
 import com.slack.api.model.Action
 import com.slack.api.model.ConversationType
 import com.slack.api.model.Field
@@ -118,11 +119,21 @@ class RtmApiSlack(private val token: String) : S {
         mutableListOf<com.slack.api.model.User>().apply {
             var cur: String? = null
             do {
-                slack.client.usersList {
-                    it.limit(100).cursor(cur)
-                }.let {
-                    cur = it.responseMetadata.nextCursor
-                    this.addAll(it.members)
+                try {
+                    slack.client.usersList {
+                        it.limit(100).cursor(cur)
+                    }.let {
+                        cur = it.responseMetadata.nextCursor
+                        this.addAll(it.members)
+                    }
+                } catch (e: SlackApiException) {
+                    if (e.error.error.equals("ratelimited")) {
+                        logger.info("Rete limit exceeded. Waiting 60 seconds......")
+                        Thread.sleep(60 * 1000)
+                        logger.info("Retrying......")
+                    } else {
+                        throw e
+                    }
                 }
             } while (!cur.isNullOrEmpty())
         }
@@ -132,11 +143,21 @@ class RtmApiSlack(private val token: String) : S {
         mutableListOf<com.slack.api.model.Conversation>().apply {
             var cur: String? = null
             do {
-                slack.client.conversationsList {
-                    it.cursor(cur).types(ConversationType.values().toList())
-                }.let {
-                    cur = it.responseMetadata.nextCursor
-                    this.addAll(it.channels)
+                try {
+                    slack.client.conversationsList {
+                        it.cursor(cur).limit(1000).types(ConversationType.values().toList())
+                    }.let {
+                        cur = it.responseMetadata.nextCursor
+                        this.addAll(it.channels)
+                    }
+                } catch (e: SlackApiException) {
+                    if (e.error.error.equals("ratelimited")) {
+                        logger.info("Rete limit exceeded. Waiting 60 seconds......")
+                        Thread.sleep(60 * 1000)
+                        logger.info("Retrying......")
+                    } else {
+                        throw e
+                    }
                 }
             } while (!cur.isNullOrEmpty())
         }
